@@ -1,0 +1,7 @@
+.diaries-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  margin: 20px auto;
+}

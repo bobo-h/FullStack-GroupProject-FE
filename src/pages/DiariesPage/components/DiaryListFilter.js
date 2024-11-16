@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Form, Row, Col } from "react-bootstrap";
 import Button from "./../../../common/components/Button";
+import "../style/diaryListFilter.style.css";
 
 const DiaryListFilter = ({ onFilterChange }) => {
   const [year, setYear] = useState("");
@@ -12,16 +13,19 @@ const DiaryListFilter = ({ onFilterChange }) => {
 
   return (
     <Form>
-      <Row>
-        <Col>
-          <Form.Group controlId="year">
-            <Form.Label>Year</Form.Label>
+      <Row className="diary-list-filter__row">
+        <Col className="diary-list-filter__col">
+          <Form.Group
+            controlId="year"
+            className="diary-list-filter__group year"
+          >
             <Form.Control
               as="select"
               value={year}
               onChange={(e) => setYear(e.target.value)}
+              className="diary-list-filter__select"
             >
-              <option value="">Select Year</option>
+              <option value="">Year</option>
               <option value="2024">2024</option>
               <option value="2023">2023</option>
               <option value="2022">2022</option>
@@ -30,15 +34,18 @@ const DiaryListFilter = ({ onFilterChange }) => {
           </Form.Group>
         </Col>
 
-        <Col>
-          <Form.Group controlId="month">
-            <Form.Label>Month</Form.Label>
+        <Col className="diary-list-filter__col">
+          <Form.Group
+            controlId="month"
+            className="diary-list-filter__group month"
+          >
             <Form.Control
               as="select"
               value={month}
               onChange={(e) => setMonth(e.target.value)}
+              className="diary-list-filter__select"
             >
-              <option value="">Select Month</option>
+              <option value="">Month</option>
               <option value="01">January</option>
               <option value="02">February</option>
               <option value="03">March</option>
@@ -56,7 +63,12 @@ const DiaryListFilter = ({ onFilterChange }) => {
         </Col>
 
         <Col>
-          <Button onClick={handleFilterChange}>Apply Filters</Button>
+          <Button
+            onClick={handleFilterChange}
+            className="diary-list-filter__button"
+          >
+            Apply
+          </Button>
         </Col>
       </Row>
     </Form>

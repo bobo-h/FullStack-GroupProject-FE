@@ -52,6 +52,48 @@ export const loginWithGoogle = createAsyncThunk(
     }
   }
 );
+
+// 토큰으로 로그인
+export const loginWithToken = createAsyncThunk(
+  "user/loginWithToken",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get("/user/me");
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// 마이페이지 회원정보 수정
+export const editUserInfo = createAsyncThunk(
+  "user/editUserInfo",
+  async ({ id, formData }, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await api.put(`/user/${id}`, formData);
+      // 수정된 내용 바로 갱신
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+//회원탈퇴
+export const deleteUserInfo = createAsyncThunk(
+  "user/deleteUserInfo",
+  async ({ id, navigate }, { rejectWithValue }) => {
+    try {
+      const response = await api.delete(`/user/${id}`);
+      // navigate -> login page로 이동하는 거
+      navigate("/login");
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -59,12 +101,16 @@ const userSlice = createSlice({
     loading: false,
     loginError: null,
     registrationError: null,
+    editError: null,
+    deleteError: null,
     success: false,
   },
   reducers: {
     clearErrors: (state) => {
       state.loginError = null;
       state.registrationError = null;
+      state.editError = null;
+      state.deleteError = null;
     },
   },
   extraReducers: (builder) => {
@@ -103,6 +149,31 @@ const userSlice = createSlice({
       .addCase(loginWithGoogle.rejected, (state, action) => {
         state.loading = false;
         state.loginError = action.payload;
+      })
+      .addCase(loginWithToken.fulfilled, (state, action) => {
+        state.user = action.payload.data.user;
+      })
+      .addCase(editUserInfo.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(editUserInfo.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(editUserInfo.rejected, (state, action) => {
+        state.loading = false;
+        state.editError = action.payload;
+      })
+      .addCase(deleteUserInfo.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteUserInfo.fulfilled, (state) => {
+        state.loading = false;
+        state.user = null;
+      })
+      .addCase(deleteUserInfo.rejected, (state, action) => {
+        state.loading = false;
+        state.deleteError = action.payload;
       });
   },
 });

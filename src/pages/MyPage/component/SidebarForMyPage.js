@@ -17,7 +17,7 @@ const SidebarForMyPage = () => {
     return (
       <div>
         <Link to="/">
-          <img width={150} src={sidebarForMyPageLogo} alt="catlog-logo.png" />
+          <img width={120} src={sidebarForMyPageLogo} alt="catlog-logo.png" />
         </Link>
         <div className="sidebar-item">My Page</div>
         <ul className="sidebar-area">
