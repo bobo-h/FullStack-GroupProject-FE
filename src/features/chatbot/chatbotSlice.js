@@ -3,17 +3,24 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const createChatbot = createAsyncThunk(
     'chatbot/createChatbot',
-    async({ name, personality }, { rejectWithValue }) => {
+    async({ name, personality }, dispatch) => {
         try {
-            const response = await api.post('/chatbot', { name, personality }); // API request
-            return response.data;
-        } catch (error) {
-            return rejectWithValue(error.response.data.message || '챗봇 생성 실패');
-        }
+            const response = await api.post("/chatbot", { name, personality });
+            dispatch({
+              type: "CREATE_CHATBOT_SUCCESS",
+              payload: response.data,
+            });
+            return Promise.resolve();  
+          } catch (error) {
+            dispatch({
+              type: "CREATE_CHATBOT_FAILURE",
+              payload: error.response?.data || error.message,
+            });
+            return Promise.reject(error);  
+          }
     }
 );
 
-// Chatbot slice
 const chatbotSlice = createSlice({
     name: "chatbot",
     initialState: {

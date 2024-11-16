@@ -4,12 +4,14 @@ import "../../common/style/alert.style.css";
 import { useNavigate } from "react-router-dom";
 
 
-const Alert = ({ children, onClose, redirectTo }) => {
+const Alert = ({ message, onClose, redirectTo }) => {
 
   const navigate = useNavigate();
 
   const handleConfirm = () => {
-    onClose();
+    if (onClose) {
+      onClose();
+    }
     navigate(redirectTo || "/");
   };
 
@@ -19,7 +21,7 @@ const Alert = ({ children, onClose, redirectTo }) => {
         <div className="alert-container">
           <button className="alert-close-button" onClick={handleConfirm}>X</button>
           <h4 className="alert-title">MeowMemo</h4>
-          <div className="alert-content">{children}</div>
+          <div className="alert-content">{message}</div>
           <Button onClick={handleConfirm} className="alert-button">
             확인
           </Button>
