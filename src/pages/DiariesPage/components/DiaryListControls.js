@@ -1,10 +1,11 @@
 import React from "react";
 import DiaryListFilter from "./DiaryListFilter";
+import "../style/diaryListControls.style.css";
 
 const DiaryListControls = ({ onFilterChange }) => {
   return (
-    <div>
-      검색은 공통 컴포넌트로 생성 예정
+    <div className="diary-list-controls">
+      <div>검색 기능</div>
       <DiaryListFilter onFilterChange={onFilterChange} />
     </div>
   );

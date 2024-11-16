@@ -1,0 +1,23 @@
+.diary-detail__date {
+  font-size: 1rem;
+}
+
+.diary-detail__mood {
+  font-size: 1rem;
+  padding: 0.5em 1em;
+}
+
+.diary-detail__photo {
+  max-height: 400px;
+  object-fit: cover;
+}
+
+.diary-detail__title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.diary-detail__text {
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
