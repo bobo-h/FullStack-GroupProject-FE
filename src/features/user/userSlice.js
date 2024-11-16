@@ -79,6 +79,21 @@ export const editUserInfo = createAsyncThunk(
     }
   }
 );
+
+//회원탈퇴
+export const deleteUserInfo = createAsyncThunk(
+  "user/deleteUserInfo",
+  async ({ id, navigate }, { rejectWithValue }) => {
+    try {
+      const response = await api.delete(`/user/${id}`);
+      // navigate -> login page로 이동하는 거
+      navigate("/login");
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -87,6 +102,7 @@ const userSlice = createSlice({
     loginError: null,
     registrationError: null,
     editError: null,
+    deleteError: null,
     success: false,
   },
   reducers: {
@@ -94,6 +110,7 @@ const userSlice = createSlice({
       state.loginError = null;
       state.registrationError = null;
       state.editError = null;
+      state.deleteError = null;
     },
   },
   extraReducers: (builder) => {
@@ -146,6 +163,17 @@ const userSlice = createSlice({
       .addCase(editUserInfo.rejected, (state, action) => {
         state.loading = false;
         state.editError = action.payload;
+      })
+      .addCase(deleteUserInfo.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteUserInfo.fulfilled, (state) => {
+        state.loading = false;
+        state.user = null;
+      })
+      .addCase(deleteUserInfo.rejected, (state, action) => {
+        state.loading = false;
+        state.deleteError = action.payload;
       });
   },
 });

@@ -4,14 +4,20 @@ import Button from "../../../common/components/Button";
 import { useDispatch, useSelector } from "react-redux";
 import Alert from "../../../common/components/Alert";
 import Alert3 from "../../../common/components/Alert3";
-import { editUserInfo, clearErrors } from "../../../features/user/userSlice";
+import {
+  editUserInfo,
+  clearErrors,
+  deleteUserInfo,
+} from "../../../features/user/userSlice";
 import CloudinaryUploadWidget from "../../../utils/CloudinaryUploadWidget";
 import userDefaultLogo from "../../../assets/userDefaultLogo.png";
 import "../style/userInfo.style.css";
+import { useNavigate } from "react-router-dom";
 
 const UserInfo = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user, editError } = useSelector((state) => state.user);
+  const { user, editError, deleteError } = useSelector((state) => state.user);
 
   // 상태 변수 정의
   // const [name, setName] = useState("");
@@ -75,6 +81,13 @@ const UserInfo = () => {
 
   const handleDelete = () => {
     setDeleteShowAlert(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (user && user._id) {
+      dispatch(deleteUserInfo({ id: user?._id, navigate }));
+    }
+    setDeleteShowAlert(false);
   };
 
   return (
@@ -164,7 +177,11 @@ const UserInfo = () => {
       {editError && <Alert onClose={handleCloseAlert}>{editError}</Alert>}
 
       {deleteShowAlert && (
-        <Alert3 onClose={handleCloseAlert} buttonText="확인">
+        <Alert3
+          onClose={handleCloseAlert}
+          buttonText="확인"
+          onButtonClick={handleConfirmDelete}
+        >
           <p>
             회원 탈퇴를 하면 90일 동안 해당 이메일을 사용하실 수 없습니다.
             정말로 탈퇴하시겠습니까?
