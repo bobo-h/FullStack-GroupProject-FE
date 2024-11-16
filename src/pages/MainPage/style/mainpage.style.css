@@ -62,9 +62,11 @@
 }
 
 .navigate-admin-button {
+  height: 70px;
+  width: 70px;
   position: absolute;
   top: 12px;
-  right: 110px;
+  right: 100px;
 }
 /*
  #5F6F52

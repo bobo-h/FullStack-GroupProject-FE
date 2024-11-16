@@ -1,24 +1,24 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import Button2 from '../../../../common/components/Button2';
+
 
 const PersonalityBtn = ({ onPersonalitySelect }) => {
     const personalities = [
-        'ISFP', 'ENTP', 'INFJ', 'INTP', 'ENFJ', 'INFP', 'ISTJ', 'ISFJ',
-        'ESTP', 'ESFP', 'ENTJ', 'INTJ', 'ESTJ', 'ESFJ', 'ISFP', 'ENFP'
-      ];
-      
+      'ENTP', 'ENFP', 'ENFJ', 'ENTJ', 'ESTP', 'ESFP', 'ESFJ', 'ESTJ', 
+      'ISFP', 'ISFP', 'ISFJ', 'ISTJ', 'INFJ', 'INFP', 'INTJ', 'INTP'
+    ];
 
   return (
     <div className="d-flex flex-wrap">
       {personalities.map((personality, index) => (
-        <Button 
+        <Button2
           key={index}
           variant="outline-primary" 
           onClick={() => onPersonalitySelect(personality)} 
           className="m-2"
         >
           {personality}
-        </Button>
+        </Button2>
       ))}
     </div>
   );

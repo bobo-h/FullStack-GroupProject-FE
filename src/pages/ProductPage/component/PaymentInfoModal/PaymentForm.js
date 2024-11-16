@@ -2,6 +2,7 @@ import React from "react";
 import { Col, Form, Row, Container } from "react-bootstrap";
 import Cards from "react-credit-cards-2";
 import "react-credit-cards-2/dist/es/styles-compiled.css";
+import "./style/paymentInfoModal.style.css"
 
 const PaymentForm = ({
   handleInputFocus,

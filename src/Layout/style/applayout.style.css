@@ -37,9 +37,7 @@
 
 /* 수빈님 */
 
-.app-layout.no-flex {
-  display: block;
-} /*admin 페이지에서 flex를 없애는 방식 */
+
 
 /* 미디어 쿼리 */
 @media (max-width: 700px) {

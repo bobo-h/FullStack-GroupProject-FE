@@ -175,3 +175,4 @@ const ToggleButton = ({ toggleSidebar }) => {
 };
 
 export default SideBar;
+

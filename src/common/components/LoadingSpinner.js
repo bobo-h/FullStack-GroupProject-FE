@@ -1,6 +1,6 @@
 import "../style/lodingspinner.style.css";
 
-const LodingSpinner = () => {
+const LoadingSpinner = () => {
   return (
     <div className="loging-container ">
       <div className="piano">
@@ -14,4 +14,4 @@ const LodingSpinner = () => {
   );
 };
 
-export default LodingSpinner;
+export default LoadingSpinner;
