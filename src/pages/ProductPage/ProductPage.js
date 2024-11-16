@@ -26,6 +26,7 @@ const ProductPage = () => {
     // 결제 모달 열기
     const handleOpenPaymentModal = (product) => {
         dispatch(setSelectedProduct(product)); // Redux에 선택한 상품 저장
+        console.log("product??", product)
         setShowPaymentModal(true);
     };
 
@@ -73,12 +74,12 @@ const ProductPage = () => {
             {/* 결제 모달 */}
             <Modal show={showPaymentModal} onHide={handleClosePaymentModal} size="sm" centered contentClassName="custom-modal" animation={false}>
                 <Modal.Header closeButton>
-                    <Modal.Title> 입양하기(1000원) </Modal.Title>
+                    <Modal.Title> 입양하기({selectedProduct?.price || 0}원) </Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="custom-modal-body">
                     {selectedProduct && (
                         <div className="text-center">
-                            <img src={selectedProduct.imageUrl} alt={selectedProduct.name} className="img-fluid mb-3" />
+                            <img src={selectedProduct.image} alt={selectedProduct.name} className="img-fluid mb-3" />
                         </div>
                     )}
                 </Modal.Body>

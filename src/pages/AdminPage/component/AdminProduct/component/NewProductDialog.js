@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Form, Modal, Button, Row, Col, Alert } from "react-bootstrap";
+import { Form, Modal, Row, Col, Alert } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import CloudinaryUploadWidget from "../../../../../utils/CloudinaryUploadWidget";
 import { CATEGORY, IS_ACTIVE } from "../../../../../constants/product.constants";
 import "../style/adminProduct.style.css";
+import Button from '../../../../../common/components/Button';
 import {
   clearError,
   createProduct,
@@ -83,8 +84,6 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
       return { ...prevFormData, category: updatedCategory };
     });
   };
-
-
 
   const uploadImage = (url) => {
     //이미지 업로드
