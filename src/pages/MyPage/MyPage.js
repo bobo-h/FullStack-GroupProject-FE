@@ -1,6 +1,6 @@
 import React from "react";
 import SidebarForMyPage from "./component/SidebarForMyPage";
-import UserInfoPage from "./component/UserInfoPage";
+import UserInfo from "./component/UserInfo";
 import { Col, Container, Row } from "react-bootstrap";
 import "./style/sidebarForMyPage.style.css";
 
@@ -15,11 +15,15 @@ const MyPage = () => {
           </Col>
 
           {/* 콘텐츠: 사이드바 옆으로 오프셋 적용 */}
-          <Col xs={12} md={{ span: 9, offset: 3 }} className="userInfo-area">
+          <Col
+            xs={12}
+            md={{ span: 9, offset: 3 }}
+            className="userInfo-area fixed-offset"
+          >
             {/* 유저 정보 섹션 */}
             <Row className="mt-4">
               <Col>
-                <UserInfoPage />
+                <UserInfo />
               </Col>
             </Row>
 
