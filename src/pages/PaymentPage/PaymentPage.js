@@ -21,7 +21,7 @@ const PaymentPage = () => {
     number: "",
   });
 
-  const [orderInfo, setOrderInfo] = useState({
+  const [orderPersonInfo, setOrderPersonInfo] = useState({
     name: "",
     email: "",
     phoneNumber: "",
@@ -48,11 +48,17 @@ const PaymentPage = () => {
 
     // 선택한 상품 정보를 사용하여 주문 생성
     dispatch(createOrder({
-      productId: selectedProduct.id,
+      name: orderPersonInfo.name,
+      email: orderPersonInfo.email,
+      phone: orderPersonInfo.phoneNumber,
+      productId: selectedProduct._id,
       price: selectedProduct.price,
-      name: selectedProduct.name,
-      imgUrl: selectedProduct.imageUrl,
+      productName: selectedProduct.name,
+      productCategory: selectedProduct.category,
+      img: selectedProduct.image,
     }));
+
+    // navigate("/chatbot")
 
   };
 
@@ -60,7 +66,7 @@ const PaymentPage = () => {
 
     // 이름, 이메일 주소 입력 
     const { name, value } = event.target;
-    setOrderInfo({ ...orderInfo, [name]: value }); // 입력 필드 업데이트
+    setOrderPersonInfo({ ...orderPersonInfo, [name]: value }); // 입력 필드 업데이트
   };
 
   const handlePaymentInfoChange = (event) => {
@@ -78,14 +84,6 @@ const PaymentPage = () => {
     setCardValue({ ...cardValue, focus: e.target.name });
   };
 
-  const proceedToPayment = () => {
-    navigate("/chatbot")
-  }
-
-  const stopPayment = () => {
-    navigate("/shop")
-  }
-
   return (
     <Container fluid className="payment-page">
       <Row>
@@ -100,20 +98,26 @@ const PaymentPage = () => {
           {selectedProduct ? (
             <div className="payment-product-card">
               <img
-                src={selectedProduct.imageUrl}
+                src={selectedProduct.image}
                 alt={selectedProduct.name}
                 className="img-fluid product-image"
               />
+              <Row className="mt-3 justify-content-center text-center">
+                {/* 결제 금액 표시 */}
+                <Col>
+                  <h5>결제 금액: {selectedProduct.price}₩ </h5>
+                </Col>
+              </Row>
             </div>
+
           ) : (
             <p>상품 정보를 불러올 수 없습니다.</p>
           )}
-          <Row className="mt-3 justify-content-center text-center">
-            {/* 결제 금액 표시 */}
+          {/* <Row className="mt-3 justify-content-center text-center">
             <Col>
-              <h5>결제 금액: 1,000₩ </h5>
+              <h5>결제 금액: {selectedProduct.price}₩ </h5>
             </Col>
-          </Row>
+          </Row> */}
         </Col>
 
         {/* 구매자, 카드 정보 */}
@@ -129,7 +133,7 @@ const PaymentPage = () => {
                   onChange={handleFormChange}
                   required
                   name="name"
-                  value={orderInfo.name}
+                  value={orderPersonInfo.name}
                 />
               </Form.Group>
             </Row>
@@ -143,7 +147,7 @@ const PaymentPage = () => {
                   onChange={handleFormChange}
                   required
                   name="email"
-                  value={orderInfo.email}
+                  value={orderPersonInfo.email}
                   placeholder="example@example.com"
                 />
               </Form.Group>
@@ -157,8 +161,8 @@ const PaymentPage = () => {
                   type="tel"
                   onChange={handleFormChange}
                   required
-                  name="phone-number"
-                  value={orderInfo.phoneNumber}
+                  name="phoneNumber"
+                  value={orderPersonInfo.phoneNumber}
                   placeholder="010-XXXX-XXXX"
                 />
               </Form.Group>
@@ -174,11 +178,8 @@ const PaymentPage = () => {
 
             {/* 결제 버튼 */}
             <div className="text-center mt-4">
-              <Button variant="primary" onClick={proceedToPayment} className="payment-button mx-2">
+              <Button variant="primary" className="payment-button mx-2" type="submit">
                 결제하기
-              </Button>
-              <Button variant="secondary" onClick={stopPayment} className="cancel-button mx-2">
-                취소
               </Button>
             </div>
           </Form>

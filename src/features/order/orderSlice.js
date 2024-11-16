@@ -20,22 +20,9 @@ export const createOrder = createAsyncThunk(
     async (payload, { dispatch, rejectWithValue }) => {
         try {
 
-            // 백엔드 연결 나중에 (TODO HERE!!)
-            // const response = await api.post("/order", payload)
-            // if (response.status !== 200) throw new Error(response.error)
-
-            const response = {
-                data: {
-                    orderNum: "ORD123456", // 예시 주문 번호
-                    item: {
-                        id: payload.id, // 단품 상품 ID
-                        name: payload.name, // 단품 상품 이름
-                        imgUrl: payload.imgUrl,
-                        price: payload.price, // 가격
-                        
-                    },
-                },
-            };
+            console.log("payload??", payload)
+            const response = await api.post("/order", payload)
+            if (response.status !== 200) throw new Error(response.error)
 
             return response.data.orderNum
         } catch (error) {
@@ -43,6 +30,36 @@ export const createOrder = createAsyncThunk(
             return rejectWithValue(errorMessage)
         }
 
+    }
+);
+
+export const getOrder = createAsyncThunk(
+    "order/getOrder",
+    async (page = 1, { rejectWithValue, dispatch }) => {
+        try {
+            const response = await api.get(`/order/me?page=${page}`);
+            if (response.status !== 200) throw new Error(response.error)
+
+            return response.data
+        } catch (error) {
+            return rejectWithValue(error.error)
+        }
+    }
+);
+
+export const getOrderList = createAsyncThunk(
+    "order/getOrderList",
+    async (query, { rejectWithValue, dispatch }) => {
+        try {
+            const response = await api.get("/order", {
+                params: { ...query },
+            });
+
+            if (response.status !== 200) throw new Error(response.error)
+            return response.data
+        } catch (error) {
+            return rejectWithValue(error.error)
+        }
     }
 );
 
@@ -70,7 +87,33 @@ const orderSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-
+            .addCase(getOrder.pending, (state, action) => {
+                state.loading = true;
+              })
+              .addCase(getOrder.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = "";
+        
+                state.orderList = action.payload.data; // 전체 주문 리스트 상태에 반영
+                state.totalPageNum = action.payload.totalPageNum || 1; // 페이지 정보 상태에 반영
+              })
+              .addCase(getOrder.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+              })
+              .addCase(getOrderList.pending, (state, action) => {
+                state.loading = true;
+              })
+              .addCase(getOrderList.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = "";
+                state.orderList = action.payload.data; // 전체 주문 리스트 상태에 반영
+                state.totalPageNum = action.payload.totalPageNum || 1; // 페이지 정보 상태에 반영
+              })
+              .addCase(getOrderList.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+              })
     },
 });
 
