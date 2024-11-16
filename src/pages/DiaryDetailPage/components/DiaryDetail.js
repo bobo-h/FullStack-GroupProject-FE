@@ -10,11 +10,7 @@ const DiaryDetail = ({ diaryEntry }) => {
 
   return (
     <Container className="diary-detail">
-      <Button
-        variant="secondary"
-        className="diary-detail__back-btn mb-3"
-        onClick={() => navigate(-1)}
-      >
+      <Button className="diary-detail__back-btn" onClick={() => navigate(-1)}>
         &larr; Back
       </Button>
       <Row className="justify-content-between align-items-center mb-4">
@@ -45,6 +41,14 @@ const DiaryDetail = ({ diaryEntry }) => {
       <Row>
         <Col>
           <p className="diary-detail__text">{content}</p>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Button className="diary-detail__edit-btn">Edit</Button>
+        </Col>
+        <Col>
+          <Button className="diary-detail__delete-btn">Delete</Button>
         </Col>
       </Row>
     </Container>
