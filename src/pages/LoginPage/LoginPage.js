@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Container, Form, Button, Alert } from "react-bootstrap";
+import { Container, Form, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginWithEmail, loginWithGoogle } from "../../features/user/userSlice";
+import {
+  clearErrors,
+  loginWithEmail,
+  loginWithGoogle,
+} from "../../features/user/userSlice";
 import "./style/login.style.css";
 import { GoogleLogin } from "@react-oauth/google";
+import Alert from "./../../common/components/Alert";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -25,11 +30,17 @@ const LoginPage = () => {
   if (user) {
     navigate("/");
   }
+  // 에러 초기화
+  const onClose = () => {
+    dispatch(clearErrors());
+  };
   return (
     <Container className="login-area">
       {loginError && (
         <div className="error-message">
-          <Alert variant="danger">{loginError}</Alert>
+          <Alert variant="danger" onClose={onClose}>
+            {loginError}
+          </Alert>
         </div>
       )}
       <Form className="login-form" onSubmit={handleLoginWithEmail}>
