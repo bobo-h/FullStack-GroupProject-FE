@@ -7,6 +7,9 @@ import testCatImage4 from "../../../assets/test_cats/cat_4.png";
 import testCatImage5 from "../../../assets/test_cats/cat_5.png";
 import testCatImage6 from "../../../assets/test_cats/cat_6.png";
 import testCatImage7 from "../../../assets/test_cats/cat_7.png";
+import testCatImage8 from "../../../assets/test_cats/cat_8.png";
+import testCatImage9 from "../../../assets/test_cats/cat_9.png";
+import testCatImage10 from "../../../assets/test_cats/cat_10.png";
 
 function MyCatsComponent() {
   const [cats, setCats] = useState([
@@ -67,6 +70,33 @@ function MyCatsComponent() {
     {
       id: "cat7",
       image: testCatImage7,
+      defaultPosition: { x: 0, y: 0 },
+      zIndex: 2,
+      showInput: false,
+      positionPercentage: { x: 20, y: 0 },
+      flipped: false, // 좌우반전
+    },
+    {
+      id: "cat8",
+      image: testCatImage8,
+      defaultPosition: { x: 0, y: 0 },
+      zIndex: 2,
+      showInput: false,
+      positionPercentage: { x: 20, y: 0 },
+      flipped: false, // 좌우반전
+    },
+    {
+      id: "cat9",
+      image: testCatImage9,
+      defaultPosition: { x: 0, y: 0 },
+      zIndex: 2,
+      showInput: false,
+      positionPercentage: { x: 20, y: 0 },
+      flipped: false, // 좌우반전
+    },
+    {
+      id: "cat10",
+      image: testCatImage10,
       defaultPosition: { x: 0, y: 0 },
       zIndex: 2,
       showInput: false,
