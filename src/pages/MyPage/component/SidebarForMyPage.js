@@ -2,7 +2,7 @@ import { set } from "@cloudinary/url-gen/actions/variable";
 import React, { useState } from "react";
 import { Offcanvas, Navbar, Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import sidebarForMyPageLogo from "../../../assets/sidebarForMyPageLogo_1.png";
+import sidebarForMyPageLogo from "../../../assets/sidebarForMyPageLogo.png";
 
 const SidebarForMyPage = () => {
   const navigate = useNavigate();
