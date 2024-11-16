@@ -2,15 +2,24 @@
   height: 100vh;
   width: calc(100vw - 100px);
   margin-left: 100px;
-  overflow: auto;
+  overflow: auto; /* 내용이 넘칠 때 스크롤 바를 표시 */
 }
 
 /* 사이드바가 활성화되었을 때의 .app-layout */
-.app-layout.sidebar-active {
+.app-layout.sidebar-active-right {
   width: calc(
     100vw - 100px - 400px
   ); /* navbar와 사이드바의 너비를 제외한 나머지 화면 */
 }
+/* 사이드바가 활성화되었을 때의 .app-layout */
+.app-layout.sidebar-active-left {
+  width: calc(
+    100vw - 100px - 400px
+  ); /* navbar와 사이드바의 너비를 제외한 나머지 화면 */
+  /* 사이드바가 왼쪽에 활성화 될때  margin-left: 500px;*/
+  margin-left: 500px;
+}
+
 /* 화면 너비가 700px 미만일 때 레이아웃 조정 */
 @media (max-width: 700px) {
   .app-layout {
@@ -19,24 +28,27 @@
     height: calc(100vh - 60px); /* navbar 높이를 제외한 나머지 화면 높이 */
   }
   /* 사이드바 활성화 시 작은 화면에서는 레이아웃을 다르게 설정 */
-  .app-layout.sidebar-active {
+  .app-layout.sidebar-active-right,
+  .app-layout.sidebar-active-left {
     width: 100vw; /* 사이드바가 활성화되어도 본문 너비를 그대로 유지 */
+    margin-left: 0; /* 왼쪽 여백 제거 */
   }
 }
 
 /* 수빈님 */
 
-/* .app-layout.no-flex {
-  display: block; }/admin 페이지에서 flex를 없애는 방식 */
+.app-layout.no-flex {
+  display: block;
+} /*admin 페이지에서 flex를 없애는 방식 */
 
 /* 미디어 쿼리 */
-/* @media (max-width: 700px) {
+@media (max-width: 700px) {
   .app-layout {
     width: 100vw;
     margin-left: 0;
     height: calc(100vh - 60px);
-    padding-bottom: 60px;  } */
+  }
+  /*paddin-bottom: 60px 넣어놨었는데 갑자기 의미 없어짐. 왜 인지는 모르겠음*/
+}
 
-/* .app-layout.no-flex {
-    display: block; 
-}/* 모바일에서도 /admin 페이지에서 flex를 제거하려면 display: block */
+/* 모바일에서도 /admin 페이지에서 flex를 제거하려면 display: block*/

@@ -4,7 +4,7 @@ import Button2 from "../../common/components/Button2";
 import { Row, Col } from "react-bootstrap";
 import "../../common/style/alert.style.css";
 
-const Alert2 = ({ children, onClose }) => {
+const Alert3 = ({ children, onClose, buttonText = "확인", onButtonClick }) => {
   return (
     <div className="alert">
       <div className="alert-overlay">
@@ -16,8 +16,8 @@ const Alert2 = ({ children, onClose }) => {
           <div className="alert-content">{children}</div>
           <Row>
             <Col className="btn-gap">
-              <Button onClick={onClose} className="alert-button">
-                수정
+              <Button onClick={onButtonClick} className="alert-button">
+                {buttonText}
               </Button>
               <Button2 onClick={onClose} className="alert-button">
                 취소
@@ -30,4 +30,4 @@ const Alert2 = ({ children, onClose }) => {
   );
 };
 
-export default Alert2;
+export default Alert3;
