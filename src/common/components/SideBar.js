@@ -5,7 +5,58 @@ import debounce from "lodash.debounce";
 // 하위 컴포넌트로 분리하여 코드 가독성 및 재사용성을 높이자.
 const SideBar = ({ currentPage, isSidebarActive, setIsSidebarActive }) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
+  const [cats, setCats] = useState([
+    {
+      id: "cat1",
+      name: "미유",
+      personality: "활발하고 장난기가 많음",
+    },
+    {
+      id: "cat2",
+      name: "루나",
+      personality: "조용하고 신비로운 성격",
+    },
+    {
+      id: "cat3",
+      name: "모카",
+      personality: "다정하고 사람을 좋아함",
+    },
+    {
+      id: "cat4",
+      name: "초코",
+      personality: "탐험을 좋아하는 호기심 많은 성격",
+    },
+    {
+      id: "cat5",
+      name: "나비",
+      personality: "온순하고 애교가 많음",
+    },
+    {
+      id: "cat6",
+      name: "소이",
+      personality: "까칠하지만 속은 따뜻함",
+    },
+    {
+      id: "cat7",
+      name: "구름",
+      personality: "느긋하고 차분한 성격",
+    },
+    {
+      id: "cat8",
+      name: "별이",
+      personality: "활달하고 빛나는 에너지를 가짐",
+    },
+    {
+      id: "cat9",
+      name: "보리",
+      personality: "먹을 것을 좋아하는 푸근한 성격",
+    },
+    {
+      id: "cat10",
+      name: "쥬니",
+      personality: "영리하고 호기심이 넘침",
+    },
+  ]);
   // 화면 크기 변경 감지
   useEffect(() => {
     const handleResize = debounce(() => {
@@ -64,6 +115,7 @@ const SideBar = ({ currentPage, isSidebarActive, setIsSidebarActive }) => {
         windowWidth={windowWidth}
         isSidebarActive={isSidebarActive}
         currentPage={currentPage}
+        cats={cats}
       />
     </>
   );
@@ -76,6 +128,7 @@ const SidebarContainer = ({
   windowWidth,
   isSidebarActive,
   currentPage,
+  cats,
 }) => {
   return (
     <>
@@ -88,7 +141,18 @@ const SidebarContainer = ({
         <div className="user-image" />
         <div className="user-info">개인정보</div>
         <div className="cat-list-container">
-          <h2 className="cat-list-title">고양이 리스트</h2>
+          {cats.map((cat) => (
+            <div
+              className="my-cats-info"
+              key={cat.id}
+              id={cat.id}
+              showInput={cat.showInput}
+            >
+              <div className="cat-list-image" />
+              <span className="cat-list-title">{cat.name}</span>
+              <span className="cat-list-discript">{cat.personality}</span>
+            </div>
+          ))}
         </div>
       </div>
 
