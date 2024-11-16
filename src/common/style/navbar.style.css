@@ -50,6 +50,8 @@
 .app-item-text {
   font-size: 20px;
   font-weight: bold; /* 텍스트를 굵게 설정 */
+  cursor: pointer;
+  user-select: none; /* 텍스트나 이미지를 선택할 수 없도록 설정 [마우스로 긁을때 파래지는거 막음]*/
 }
 
 /* 모바일 환경에서 스타일 변경 */

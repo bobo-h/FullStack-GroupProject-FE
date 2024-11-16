@@ -6,7 +6,7 @@ import "./style/sidebarForMyPage.style.css";
 
 const MyPage = () => {
   return (
-    <div>
+    <div className="my-page-toptop">
       <Container fluid className="mypage-style">
         <Row>
           {/* 사이드바: 화면 높이에 고정 */}
