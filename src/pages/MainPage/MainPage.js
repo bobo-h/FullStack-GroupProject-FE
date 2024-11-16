@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ReactComponent as CalendarIcon } from "../../assets/calendar.svg";
 import { ReactComponent as AdminIcon } from "../../assets/admin_info.svg";
 import CalendarComponent from "./components/CalendarComponent";
+import MyCatsComponent from "./components/MyCatsComponent";
 import "./style/mainpage.style.css";
 
 const MainPage = () => {
@@ -45,9 +46,11 @@ const MainPage = () => {
 
   return (
     <div className="main-container">
-      <img className="cats-room" src="backgroundimage.webp" alt="cats room" />
+      <img className="cats-room" src="backgroundimage.png" alt="cats room" />
+      <MyCatsComponent />
+
       <AdminIcon
-        className="navigate-admin-button"
+        className="main-opt navigate-admin-button"
         onClick={() => navigate(`/admin`)}
       />
 

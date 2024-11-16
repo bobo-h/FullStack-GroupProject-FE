@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import DiaryListControls from "./components/DiaryListControls";
 import DiaryList from "./components/DiaryList";
+import "./style/diariesPage.style.css";
 
 const DiariesPage = () => {
   const [filter, setFilter] = useState({ year: "", month: "" });
@@ -22,7 +23,7 @@ const DiariesPage = () => {
   };
 
   return (
-    <div>
+    <div className="diaries-page">
       <DiaryListControls onFilterChange={handleFilterChange} />
       <DiaryList fetchData={fetchData} />
     </div>

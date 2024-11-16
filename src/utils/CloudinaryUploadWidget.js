@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Button } from "react-bootstrap";
+import Button2 from "../common/components/Button2";
 
 const CLOUDNAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
 const UPLOADPRESET = process.env.REACT_APP_CLOUDINARY_PRESET;
@@ -32,9 +33,9 @@ class CloudinaryUploadWidget extends Component {
 
   render() {
     return (
-      <Button id="upload_widget" size="sm" className="ml-2">
+      <Button2 id="upload_widget" size="sm" className="ml-2">
         사진 업로드 +
-      </Button>
+      </Button2>
     );
   }
 }

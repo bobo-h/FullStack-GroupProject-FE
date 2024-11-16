@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "../../common/components/Button";
 import Button2 from "../../common/components/Button2";
-import { Row, Col } from "react-bootstrap";  
+import { Row, Col } from "react-bootstrap";
 import "../../common/style/alert.style.css";
 import { useNavigate } from "react-router-dom";
 
@@ -18,9 +18,11 @@ const Alert2 = ({ message, onClose, redirectTo }) => {
     <div className="alert">
       <div className="alert-overlay">
         <div className="alert-container">
-        <button className="alert-close-button" onClick={handleConfirm}>X</button>
-          <h4 className="alert-title">MeowMemo</h4>
-          <div className="alert-content">{message}</div>
+          <button className="alert-close-button" onClick={onClose}>
+            ×
+          </button>
+          <h4 className="alert-title">프로젝트</h4>
+          <div className="alert-content">{children}</div>
           <Row>
             <Col className="btn-gap">
               <Button onClick={handleConfirm} className="alert-button">

@@ -1,0 +1,5 @@
+.diary-list-filter__row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

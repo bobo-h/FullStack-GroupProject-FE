@@ -2,7 +2,7 @@
 .cat-calendar-container {
   position: absolute;
   top: 10px;
-  right: 10px;
+  right: 20px;
   width: 650px; /* 전체 달력의 너비 고정 */
   height: 650px; /* 전체 달력의 높이 고정 */
   background-color: var(
@@ -12,6 +12,8 @@
   justify-content: center;
   align-items: center;
   border-radius: 10px;
+  box-shadow: 0px 0px 20px 7px rgba(0, 0, 0, 0.4);
+  z-index: 31;
 }
 
 /*캘린더 UI고정 */
@@ -65,16 +67,17 @@
 .fc-button.fc-today-button:hover,
 .fc-button.fc-prev-button:hover,
 .fc-button.fc-next-button:hover {
-  background-color: var(--primary-color-brown);
-  border-color: var(--primary-color-brown);
+  background-color: var(--primary-color-deepGreen);
+  border-color: var(--primary-color-deepGreen);
+  opacity: 0.6;
 }
 
 .fc-button.fc-today-button.fc-button-primary:active,
 .fc-button.fc-prev-button.fc-button-primary:active,
 .fc-button.fc-next-button.fc-button-primary:active {
-  background-color: var(--primary-color-brown);
-  border-color: var(--primary-color-brown);
-  opacity: 0.6;
+  background-color: var(--primary-color-deepGreen);
+  border-color: var(--primary-color-deepGreen);
+  opacity: 1;
 }
 
 .day-cell-content {

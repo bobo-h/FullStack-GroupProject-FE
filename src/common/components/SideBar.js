@@ -1,12 +1,62 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import "../style/sidebar.style.css";
 import debounce from "lodash.debounce";
 
+// 하위 컴포넌트로 분리하여 코드 가독성 및 재사용성을 높이자.
 const SideBar = ({ currentPage, isSidebarActive, setIsSidebarActive }) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const location = useLocation();
-
+  const [cats, setCats] = useState([
+    {
+      id: "cat1",
+      name: "미유",
+      personality: "활발하고 장난기가 많음",
+    },
+    {
+      id: "cat2",
+      name: "루나",
+      personality: "조용하고 신비로운 성격",
+    },
+    {
+      id: "cat3",
+      name: "모카",
+      personality: "다정하고 사람을 좋아함",
+    },
+    {
+      id: "cat4",
+      name: "초코",
+      personality: "탐험을 좋아하는 호기심 많은 성격",
+    },
+    {
+      id: "cat5",
+      name: "나비",
+      personality: "온순하고 애교가 많음",
+    },
+    {
+      id: "cat6",
+      name: "소이",
+      personality: "까칠하지만 속은 따뜻함",
+    },
+    {
+      id: "cat7",
+      name: "구름",
+      personality: "느긋하고 차분한 성격",
+    },
+    {
+      id: "cat8",
+      name: "별이",
+      personality: "활달하고 빛나는 에너지를 가짐",
+    },
+    {
+      id: "cat9",
+      name: "보리",
+      personality: "먹을 것을 좋아하는 푸근한 성격",
+    },
+    {
+      id: "cat10",
+      name: "쥬니",
+      personality: "영리하고 호기심이 넘침",
+    },
+  ]);
   // 화면 크기 변경 감지
   useEffect(() => {
     const handleResize = debounce(() => {
@@ -17,9 +67,24 @@ const SideBar = ({ currentPage, isSidebarActive, setIsSidebarActive }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // 토글 함수
+  // 토글 함수 및 사이드바 닫을때
   const toggleSidebar = () => {
-    setIsSidebarActive((prev) => !prev);
+    if (isSidebarActive) {
+      // 닫히는 애니메이션 적용
+      const sidebar = document.querySelector(".sidebar-container");
+      sidebar.classList.add("closing");
+      const overlay = document.querySelector(".overlay");
+      overlay.classList.add("closing");
+
+      // 애니메이션이 완료된 후 상태 업데이트
+      setTimeout(() => {
+        setIsSidebarActive(false);
+        sidebar.classList.remove("closing");
+        overlay.classList.remove("closing");
+      }, 500); // 애니메이션 시간(0.5초)와 같게
+    } else {
+      setIsSidebarActive(true);
+    }
   };
 
   const animationClass =
@@ -29,11 +94,14 @@ const SideBar = ({ currentPage, isSidebarActive, setIsSidebarActive }) => {
       ? "slide-in-left"
       : "";
 
+  const isDesktop = windowWidth >= 700;
+  const isMobileActive = windowWidth < 700 && isSidebarActive;
+
   // 모든 조건을 배열로 관리하여 클래스 이름 설정
   const sidebarClasses = [
     "sidebar-container", // 기본 클래스
-    windowWidth >= 700 ? "desktop-sidebar" : "", // 데스크탑 모드에서 항상 보이도록 설정
-    windowWidth < 700 && isSidebarActive ? "active" : "", // 모바일 모드에서 활성 상태일 때 추가
+    isDesktop ? "desktop-sidebar" : "", // 데스크탑 모드에서 항상 보이도록 설정
+    isMobileActive ? "active" : "", // 모바일 모드에서 활성 상태일 때 추가
     isSidebarActive && animationClass ? animationClass : "hidden", // 애니메이션 클래스 또는 숨김 상태
   ]
     .filter(Boolean) // 빈 문자열 또는 false 값 제거
@@ -41,27 +109,68 @@ const SideBar = ({ currentPage, isSidebarActive, setIsSidebarActive }) => {
 
   return (
     <>
+      <SidebarContainer
+        sidebarClasses={sidebarClasses}
+        toggleSidebar={toggleSidebar}
+        windowWidth={windowWidth}
+        isSidebarActive={isSidebarActive}
+        currentPage={currentPage}
+        cats={cats}
+      />
+    </>
+  );
+};
+
+// SidebarContainer 하위 컴포넌트
+const SidebarContainer = ({
+  sidebarClasses,
+  toggleSidebar,
+  windowWidth,
+  isSidebarActive,
+  currentPage,
+  cats,
+}) => {
+  return (
+    <>
+      {/* 사이드바가 활성화된 경우에만 오버레이 표시 */}
+      {isSidebarActive && windowWidth < 700 && (
+        <div className="overlay" onClick={toggleSidebar}></div>
+      )}
       <div className={sidebarClasses}>
-        <h1 className="project-title">MeowMemo</h1>
+        <img className="project-title" src="logo1.png" alt="project-title" />
         <div className="user-image" />
         <div className="user-info">개인정보</div>
         <div className="cat-list-container">
-          <h2 className="cat-list-title">고양이 리스트</h2>
-          {/* 고양이 리스트 아이템들 */}
+          {cats.map((cat) => (
+            <div
+              className="my-cats-info"
+              key={cat.id}
+              id={cat.id}
+              showInput={cat.showInput}
+            >
+              <div className="cat-list-image" />
+              <span className="cat-list-title">{cat.name}</span>
+              <span className="cat-list-discript">{cat.personality}</span>
+            </div>
+          ))}
         </div>
       </div>
-      {/* 700px 미만에서만 표시되는 토글 버튼 */}
-      {windowWidth < 700 && isSidebarActive ? (
-        <div className="sidebar-toggle" onClick={toggleSidebar}>
-          ☰
-        </div>
-      ) : (
-        <></>
-        // <button className={`sidebar-toggle-close`} onClick={""}>
-        //   ✖
-        // </button>
-      )}
+
+      {windowWidth < 700 &&
+      !isSidebarActive &&
+      (currentPage === "home" || currentPage === "diary") ? (
+        <ToggleButton toggleSidebar={toggleSidebar} />
+      ) : null}
     </>
+  );
+};
+
+// ToggleButton 컴포넌트
+const ToggleButton = ({ toggleSidebar }) => {
+  return (
+    <div className="sidebar-toggle" onClick={toggleSidebar}>
+      ☰
+    </div>
   );
 };
 

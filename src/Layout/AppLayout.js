@@ -2,11 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import NavBar from "../common/components/NavBar";
 import SideBar from "../common/components/SideBar";
+import { loginWithToken } from "../features/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 import LoadingSpinner from "../common/components/LoadingSpinner";
 import "./style/applayout.style.css";
 
 const AppLayout = ({ children }) => {
   const location = useLocation();
+  const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => state.user);
+
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState("");
   const [isSidebarActive, setIsSidebarActive] = useState(false);
@@ -19,6 +25,11 @@ const AppLayout = ({ children }) => {
     { path: "/my-page", page: "my", sidebar: false },
     { path: "/admin", page: "admin", sidebar: false },
   ];
+
+  // 토큰으로 로그인
+  useEffect(() => {
+    dispatch(loginWithToken());
+  }, []);
 
   useEffect(() => {
     // 현재 경로와 일치하는 페이지 찾기
