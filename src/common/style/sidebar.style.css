@@ -67,8 +67,9 @@
 
 /* ====================== 추가 UI 스타일 ======================================= */
 .project-title {
-  width: 350;
-  height: 100;
+  width: 300px;
+  height: 100px;
+  margin-bottom: 20px;
 }
 
 .user-image {

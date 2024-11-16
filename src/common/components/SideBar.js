@@ -137,7 +137,7 @@ const SidebarContainer = ({
         <div className="overlay" onClick={toggleSidebar}></div>
       )}
       <div className={sidebarClasses}>
-        <h1 className="project-title">MeowMemo</h1>
+        <img className="project-title" src="logo1.png" alt="project-title" />
         <div className="user-image" />
         <div className="user-info">개인정보</div>
         <div className="cat-list-container">
