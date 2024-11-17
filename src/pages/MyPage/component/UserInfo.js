@@ -19,11 +19,6 @@ const UserInfo = () => {
   const dispatch = useDispatch();
   const { user, editError, deleteError } = useSelector((state) => state.user);
 
-  // 상태 변수 정의
-  // const [name, setName] = useState("");
-  // const [birthDate, setBirthDate] = useState("");
-  // const [profileImage, setProfileImage] = useState(null);
-
   // formData 상태 초기화
   const [formData, setFormData] = useState({
     name: "",
