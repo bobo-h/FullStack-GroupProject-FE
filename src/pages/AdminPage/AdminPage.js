@@ -4,11 +4,14 @@ import AdminProduct from './component/AdminProduct/AdminProduct';
 import AdminUser from './component/AdminUser/AdminUser';
 import AdminMenu from './component/AdminMenu/AdminMenu';
 import AdminPayment from './component/AdminPayment/AdminPayment'
+import AdminDiary from './component/AdminDiary/AdminDiary'
 import Button2 from '../../common/components/Button2';
+import { useNavigate } from 'react-router-dom';
 
 
 const AdminPage = () => {
   const [selectedComponent, setSelectedComponent] = useState('products');
+  const navigate = useNavigate();
 
   const renderSelectedComponent = () => {
     switch (selectedComponent) {
@@ -18,10 +21,16 @@ const AdminPage = () => {
         return <AdminUser />;
       case 'payment':
         return <AdminPayment />;
+      case 'diary':
+        return <AdminDiary />;
       default:
         return <div>Select a menu item</div>;
     }
   };
+
+  const goToMainPage = () => {
+    navigate("/")
+  }
 
   return (
     <div className="admin-page">
@@ -33,7 +42,7 @@ const AdminPage = () => {
       </div>
       <div className="admin-content">
         <div className="home-btn">
-          <Button2>메인으로</Button2>
+          <Button2 onClick={goToMainPage}>메인으로</Button2>
         </div>
         <div className="content-component">
           {renderSelectedComponent()}

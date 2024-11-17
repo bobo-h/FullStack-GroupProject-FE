@@ -10,13 +10,14 @@ const uiSlice = createSlice({
   initialState,
   reducers: {
     showToastMessage(state, action) {
+      console.log("excuted here!!!")
       state.toastMessage = {
         message: action.payload.message,
         status: action.payload.status,
       };
     },
     hideToastMessage(state) {
-      state.open = false;
+      state.toastMessage = { message: "", status: "" }; // 메시지 초기화
     },
   },
 });
