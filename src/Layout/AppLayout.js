@@ -11,8 +11,6 @@ const AppLayout = ({ children }) => {
   const location = useLocation();
   const dispatch = useDispatch();
 
-  const { user } = useSelector((state) => state.user);
-
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState("");
   const [isSidebarActive, setIsSidebarActive] = useState(false);
@@ -26,6 +24,7 @@ const AppLayout = ({ children }) => {
     { path: "/admin", page: "admin", sidebar: false },
   ];
 
+  const { user } = useSelector((state) => state.user);
   // 토큰으로 로그인
   useEffect(() => {
     dispatch(loginWithToken());
@@ -83,6 +82,7 @@ const AppLayout = ({ children }) => {
     >
       <NavBar isAdminPage={isAdminPage} />
       <SideBar
+        user={user}
         currentPage={currentPage}
         isSidebarActive={isSidebarActive}
         setIsSidebarActive={setIsSidebarActive}
