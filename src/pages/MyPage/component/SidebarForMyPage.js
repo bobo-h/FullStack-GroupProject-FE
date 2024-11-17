@@ -23,9 +23,9 @@ const SidebarForMyPage = () => {
         <ul className="sidebar-area">
           <li
             className="sidebar-item"
-            onClick={() => handleSelectMenu("/my-page/product")}
+            onClick={() => handleSelectMenu("/my-page")}
           >
-            구매내역
+            나의 챗봇리스트
           </li>
         </ul>
       </div>
