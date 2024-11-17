@@ -3,8 +3,38 @@ import SidebarForMyPage from "./component/SidebarForMyPage";
 import UserInfo from "./component/UserInfo";
 import { Col, Container, Row } from "react-bootstrap";
 import "./style/sidebarForMyPage.style.css";
-
+import "./style/myPage.style.css";
+import ChatbotList from "./component/ChatbotList";
+import userDefaultLogo from "../../assets/userDefaultLogo.png";
+import Button2 from "../../common/components/Button2";
 const MyPage = () => {
+  const wishlistItems = [
+    {
+      productId: {
+        id: "product123",
+        name: "스타일리시 선글라스",
+      },
+      price: 19900,
+      image: userDefaultLogo,
+    },
+    {
+      productId: {
+        id: "product456",
+        name: "따뜻한 캐시미어 스웨터",
+      },
+      price: 129000,
+      image: userDefaultLogo,
+    },
+    {
+      productId: {
+        id: "product456",
+        name: "따뜻한 캐시미어 스웨터",
+      },
+      price: 129000,
+      image: userDefaultLogo,
+    },
+  ];
+
   return (
     <div className="my-page-toptop">
       <Container fluid className="mypage-style">
@@ -26,20 +56,28 @@ const MyPage = () => {
                 <UserInfo />
               </Col>
             </Row>
-
             {/* 추가 콘텐츠 섹션 */}
-            <Row className="mt-5">
-              <Col>
-                <div className="additional-content">
-                  {/* 여기에 새로운 콘텐츠 컴포넌트를 추가할 수 있습니다 */}
-                  <h2>추가 콘텐츠</h2>
-                  <p>
-                    이곳에 유저의 다른 정보를 표시하거나 다른 기능을 추가할 수
-                    있습니다.
-                  </p>
-                </div>
-              </Col>
-            </Row>
+            {/* ex) 주소가 /my-page일 경우에만 보이도록 지정 */}
+            <div className="chatbot-list-area">
+              <Row className="chatbot-list__title">
+                <h2>나의 챗봇리스트</h2>
+              </Row>
+              <Row className="chatbot-list__content">
+                <Col>
+                  {wishlistItems.map((item) => (
+                    <ChatbotList wishlistItem={item} />
+                  ))}
+                </Col>
+              </Row>
+              <Row>
+                <Col className="chatbot-list__btn-list">
+                  <Button2 className="btn__selected-delete">
+                    선택한 거 삭제하기
+                  </Button2>
+                  <Button2 className="btn__go-shop">상점가기</Button2>
+                </Col>
+              </Row>
+            </div>
           </Col>
         </Row>
       </Container>
