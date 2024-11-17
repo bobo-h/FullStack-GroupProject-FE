@@ -48,8 +48,8 @@ const AdminProduct = () => {
   // 카테고리 필터링된 리스트 생성
   const filteredProducts = productList.filter((product) => {
     if (selectedCategory === "All") return true; // "All" 선택 시 모든 상품 표시
-    if (selectedCategory === "고양이") return product.category[0] === "cat";
-    if (selectedCategory === "배경지") return product.category[0] === "bg_img";
+    if (selectedCategory === "고양이") return product.category[0] === "Cat";
+    if (selectedCategory === "배경지") return product.category[0] === "BG_IMG";
     return false; // 기본적으로 필터링 조건에 맞지 않으면 제외
   });
 
@@ -76,7 +76,10 @@ const AdminProduct = () => {
         </Row>
         <Row className="table-area">
           <ProductTable className="unser-line" />
-          {filteredProducts.map((product) => (
+    
+          {
+            
+          filteredProducts.map((product) => (
             <ProductCard
               key={product.id}
               product={product} // 개별 `product` 객체를 `ProductCard`에 전달

@@ -183,7 +183,7 @@ const PaymentInfoModal = ({ onClose }) => {
 
             {/* 구매자 전화번호 입력 */}
             <Row className="mb-3">
-              <Form.Group controlId="phone-number">
+              <Form.Group controlId="phone">
               <Row>
                   <Col lg={2} xs="auto">
                    <Form.Label>전화번호</Form.Label>
@@ -193,7 +193,7 @@ const PaymentInfoModal = ({ onClose }) => {
                     type="tel"
                     onChange={handleFormChange}
                     required
-                    name="phone-number"
+                    name="phoneNumber"
                     // value={orderInfo.phoneNumber}
                     placeholder="010-XXXX-XXXX"
                   />

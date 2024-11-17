@@ -2,32 +2,28 @@ import React, { useState, useEffect } from "react";
 import { Form, Modal, Row, Col, Alert } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import CloudinaryUploadWidget from "../../../../../utils/CloudinaryUploadWidget";
-import { CATEGORY, DEFAULT_PRODUCT, IS_ACTIVE } from "../../../../../constants/product.constants";
-import "../style/adminProduct.style.css";
+import "../style/adminMood.style.css";
 import Button from '../../../../../common/components/Button';
 import {
   clearError,
-  createProduct,
-  editProduct,
-} from "../../../../../features/product/productSlice";
+  createMood,
+  editMood,
+} from "../../../../../features/mood/moodSlice";
 
 const InitialFormData = {
   id: "",
   name: "",
   image: "",
   description: "",
-  category: ["Cat"],
-  is_active: "Active",
-  price: 0,
-  default_product: "No"
+  is_deleted: "No"
 };
 
 const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
-  const { error, success, selectedProduct } = useSelector(
-    (state) => state.product
+  const { error, success, selectedMood } = useSelector(
+    (state) => state.mood
   );
   const [formData, setFormData] = useState(
-    mode === "new" ? { ...InitialFormData } : selectedProduct
+    mode === "new" ? { ...InitialFormData } : selectedMood
   );
   const dispatch = useDispatch();
 
@@ -43,7 +39,7 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
     }
     if (showDialog) {
       if (mode === "edit") {
-        setFormData(selectedProduct);
+        setFormData(selectedMood);
       } else {
         setFormData({ ...InitialFormData });
       }
@@ -59,14 +55,12 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
     event.preventDefault();
 
     if (mode === "new") {
-      //새 상품 만들기
-      console.log("formData??", formData)
-      dispatch(createProduct(formData))
+      //새 무드 만들기
+      dispatch(createMood(formData))
     } else {
-      // 상품 수정하기
-      console.log("selectedProduct??", selectedProduct)
+      // 무드 수정하기
       console.log("formData??", formData)
-      dispatch(editProduct({ ...formData, id: selectedProduct._id })
+      dispatch(editMood({ ...formData, id: selectedMood._id })
       );
     };
 
@@ -78,15 +72,6 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
     setFormData({ ...formData, [id]: value });
   }
 
-  const handleCategoryChange = (value) => {
-    console.log("Selected category:", value);
-    setFormData((prevFormData) => {
-      const updatedCategory = [value]; // 기존 값을 지우고 새로 선택된 값만 배열로 저장
-      console.log("Updated category:", updatedCategory); // 디버깅 로그
-      return { ...prevFormData, category: updatedCategory };
-    });
-  };
-
   const uploadImage = (url) => {
     //이미지 업로드
     setFormData({ ...formData, image: url })
@@ -96,9 +81,9 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
     <Modal show={showDialog} onHide={handleClose}>
       <Modal.Header closeButton>
         {mode === "new" ? (
-          <Modal.Title>Create New Product</Modal.Title>
+          <Modal.Title>Create New Mood</Modal.Title>
         ) : (
-          <Modal.Title>Edit Product</Modal.Title>
+          <Modal.Title>Edit Mood</Modal.Title>
         )}
       </Modal.Header>
       {error && (
@@ -109,11 +94,11 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
       <Form className="form-container" onSubmit={handleSubmit}>
         <Row className="mb-3">
           <Form.Group as={Col} controlId="id">
-            <Form.Label>Product ID</Form.Label>
+            <Form.Label>Mood ID</Form.Label>
             <Form.Control
               onChange={handleChange}
               type="string"
-              placeholder="Enter Product Id"
+              placeholder="Enter Mood Id"
               required
               value={formData.id}
             />
@@ -147,16 +132,6 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
         <Form.Group className="mb-3" controlId="Image" required>
           <Form.Label>Image</Form.Label>
           <CloudinaryUploadWidget uploadImage={uploadImage} />
-
-          {/* 조건부 렌더링: 이미지가 있을 때만 보여줍니다 */}
-          {/* {formData.image && ( */}
-          {/* <img
-            id="uploadedimage"
-            src={formData.image}
-            className="upload-image mt-2"
-            alt="uploadedimage"
-          /> */}
-          {/* 이미지가 있을 때 불투명도 조정 */}
           <img
             id="uploadedimage"
             src={formData.image || "#"} // 이미지가 없을 때 기본 이미지나 빈 값 사용
@@ -167,37 +142,16 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
         </Form.Group>
 
         <Row className="mb-3">
-          <Form.Group as={Col} controlId="price">
-            <Form.Label>Price</Form.Label>
-            <Form.Control
-              value={formData.price}
-              required
-              onChange={handleChange}
-              type="number"
-              placeholder="0"
-            />
-          </Form.Group>
 
-          <Form.Group as={Col} controlId="category">
-            <Form.Label>Category</Form.Label>
+          <Form.Group as={Col} controlId="is_deleted">
+            <Form.Label>Is_deleted</Form.Label>
             <Form.Select
-              value={formData.category[0] || ""} // 첫 번째 선택된 값을 표시
-              onChange={(e) => handleCategoryChange(e.target.value)} // 변경 핸들러 호출
-              required
-            >
-              {CATEGORY.map((item, idx) => (
-                <option key={idx} value={item}>
-                  {item}
-                </option>
-              ))}
-            </Form.Select>
-          </Form.Group>
-
-          <Form.Group as={Col} controlId="default_product">
-            <Form.Label>DefaultProduct</Form.Label>
-            <Form.Select
-              value={formData.default_product} // 초기값이 "No"로 설정되었는지 확인
-              onChange={(e) => setFormData({ ...formData, default_product: e.target.value })} // 선택 값 반영
+              value={formData.is_deleted} // 초기값이 "No"로 설정되었는지 확인
+              onChange={(e) => {
+                const newValue = e.target.value;
+                console.log("Updated is_deleted:", newValue); // 값 디버깅
+                setFormData({ ...formData, is_deleted: newValue }); }
+              }
               required
             >
               <option value="Yes">Yes</option>
@@ -205,20 +159,6 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
             </Form.Select>
           </Form.Group>
 
-          <Form.Group as={Col} controlId="is_active">
-            <Form.Label>Status</Form.Label>
-            <Form.Select
-              value={formData.is_active}
-              onChange={handleChange}
-              required
-            >
-              {IS_ACTIVE.map((item, idx) => (
-                <option key={idx} value={item}>
-                  {item}
-                </option>
-              ))}
-            </Form.Select>
-          </Form.Group>
         </Row>
         {mode === "new" ? (
           <Button variant="primary" type="submit">
