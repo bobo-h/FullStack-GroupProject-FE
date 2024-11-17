@@ -1,6 +1,34 @@
 import api from "../../utils/api";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
+// getChatbot action
+export const getChatbotList = createAsyncThunk(
+  'chatbot/getChatbot',
+  async (userId, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/chatbot/${userId}`);
+      //console.log("rr",response); // 응답 데이터 확인
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// getChatbotDetail action
+export const getChatbotDetail = createAsyncThunk(
+  'chatbot/getChatbotDetail',
+  async ({ userId, chatbotId }, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/chatbot/${userId}/${chatbotId}`);
+      return response.data; 
+    } catch (err) {
+      return rejectWithValue(err.message); 
+    }
+  }
+);
+
+
 // createChatbot action
 export const createChatbot = createAsyncThunk(
   'chatbot/createChatbot',
@@ -152,6 +180,12 @@ const chatbotSlice = createSlice({
       .addCase(createChatbot.pending, handlePending)
       .addCase(createChatbot.fulfilled, handleFulfilled)
       .addCase(createChatbot.rejected, handleRejected)
+      .addCase(getChatbotList.pending, handlePending)
+      .addCase(getChatbotList.fulfilled, handleFulfilled)
+      .addCase(getChatbotList.rejected, handleRejected)
+      .addCase(getChatbotDetail.pending, handlePending)
+      .addCase(getChatbotDetail.fulfilled, handleFulfilled)
+      .addCase(getChatbotDetail.rejected, handleRejected)
       .addCase(updateChatbot.pending, handlePending)
       .addCase(updateChatbot.fulfilled, handleFulfilled)
       .addCase(updateChatbot.rejected, handleRejected)
