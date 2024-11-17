@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import NavBar from "../common/components/NavBar";
 import SideBar from "../common/components/SideBar";
 import { loginWithToken } from "../features/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import throttle from "lodash.throttle"; // 스크롤 상태 최적화
 import LoadingSpinner from "../common/components/LoadingSpinner";
 import "./style/applayout.style.css";
 
@@ -61,6 +62,54 @@ const AppLayout = ({ children }) => {
     }
   }, [location.pathname]);
 
+  //================== 스크롤시 토글 숨기기 =======================
+  const [isScrollingUp, setIsScrollingUp] = useState(true);
+  const [scrollTop, setScrollTop] = useState(0);
+  const lastScrollTop = useRef(0);
+  const scrollContainerRef = useRef(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = scrollContainerRef.current
+        ? scrollContainerRef.current.scrollTop
+        : window.pageYOffset || document.documentElement.scrollTop;
+
+      if (scrollTop === 0) {
+        // 페이지 상단에 있을 때
+        setIsScrollingUp(true);
+      } else if (scrollTop < lastScrollTop.current) {
+        // 상단으로 스크롤 중
+        setIsScrollingUp(true);
+      } else {
+        // 하단으로 스크롤 중
+        setIsScrollingUp(false);
+      }
+      lastScrollTop.current = scrollTop <= 0 ? 0 : scrollTop;
+    };
+
+    const throttledHandleScroll = throttle(handleScroll, 200);
+
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.addEventListener(
+        "scroll",
+        throttledHandleScroll
+      );
+    } else {
+      window.addEventListener("scroll", throttledHandleScroll);
+    }
+    return () => {
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.removeEventListener(
+          "scroll",
+          throttledHandleScroll
+        );
+      } else {
+        window.removeEventListener("scroll", throttledHandleScroll);
+      }
+    };
+  }, []);
+  //================== 스크롤시 토글 숨기기 끝 ====================
+
   const toggleAlert = () => {
     setIsAlertVisible(!isAlertVisible);
   };
@@ -94,9 +143,13 @@ const AppLayout = ({ children }) => {
         currentPage={currentPage}
         isSidebarActive={isSidebarActive}
         setIsSidebarActive={setIsSidebarActive}
+        isScrollingUp={isScrollingUp} // 추가
+        scrollTop={scrollTop} // 스크롤 시작 전 조건때문
       />
       {/* {loading ? <LoadingSpinner /> : children} */}
-      {children}
+      <div ref={scrollContainerRef} className="children-container">
+        {children}
+      </div>
     </div>
   );
 };

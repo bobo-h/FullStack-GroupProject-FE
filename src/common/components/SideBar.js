@@ -14,7 +14,13 @@ import testCatfImage9 from "./../../assets/test_cats/cat_9_pf.png";
 import testCatfImage10 from "./../../assets/test_cats/cat_10_pf.png";
 
 // 하위 컴포넌트로 분리하여 코드 가독성 및 재사용성을 높이자.
-const SideBar = ({ currentPage, isSidebarActive, setIsSidebarActive }) => {
+const SideBar = ({
+  currentPage,
+  isSidebarActive,
+  setIsSidebarActive,
+  isScrollingUp,
+  scrollTop,
+}) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [cats, setCats] = useState([
     {
@@ -162,6 +168,7 @@ const SideBar = ({ currentPage, isSidebarActive, setIsSidebarActive }) => {
         currentPage={currentPage}
         cats={cats}
         handleRightClick={handleRightClick}
+        isScrollingUp={isScrollingUp}
       />
     </>
   );
@@ -176,6 +183,8 @@ const SidebarContainer = ({
   currentPage,
   cats,
   handleRightClick,
+  isScrollingUp,
+  scrollTop,
 }) => {
   const navigate = useNavigate();
   return (
@@ -221,7 +230,8 @@ const SidebarContainer = ({
 
       {windowWidth < 700 &&
       !isSidebarActive &&
-      (currentPage === "home" || currentPage === "diary") ? (
+      (currentPage === "home" || currentPage === "diary") &&
+      (isScrollingUp || scrollTop === 0) ? (
         <ToggleButton toggleSidebar={toggleSidebar} />
       ) : null}
     </>
@@ -232,7 +242,7 @@ const SidebarContainer = ({
 const ToggleButton = ({ toggleSidebar }) => {
   return (
     <div className="sidebar-toggle" onClick={toggleSidebar}>
-      ☰
+      <img src="logo4.png" className="sidebar-toggle-image" />
     </div>
   );
 };

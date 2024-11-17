@@ -166,12 +166,12 @@
 @media (max-width: 700px) {
   .sidebar-toggle {
     position: fixed;
-    top: 20px;
-    left: 20px;
-    width: 50px;
-    height: 50px;
-    background-color: #333;
-    color: white;
+    top: 15px;
+    left: 15px;
+    width: 70px;
+    height: 70px;
+    background-color: rgb(59, 59, 59);
+    box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.4);
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -180,6 +180,11 @@
     z-index: 1000;
     font-size: 24px;
     animation: toggleFadeIn 0.5s ease forwards; /* 등장 시 애니메이션 추가 */
+  }
+
+  .sidebar-toggle-image {
+    width: 100%;
+    object-fit: contain; /* 이미지 비율 유지하며 부모에 맞춤 */
   }
   @keyframes toggleFadeIn {
     0% {

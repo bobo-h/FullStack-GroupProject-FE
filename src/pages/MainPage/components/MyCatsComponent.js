@@ -19,7 +19,7 @@ function MyCatsComponent() {
       defaultPosition: { x: 0, y: 0 },
       zIndex: 2,
       showInput: false,
-      positionPercentage: { x: 20, y: 0 },
+      positionPercentage: { x: 40, y: 40 },
       flipped: false, // 좌우반전
     },
     {
@@ -28,7 +28,7 @@ function MyCatsComponent() {
       defaultPosition: { x: 0, y: 0 },
       zIndex: 2,
       showInput: false,
-      positionPercentage: { x: 20, y: 0 },
+      positionPercentage: { x: 40, y: 40 },
       flipped: false, // 좌우반전
     },
     {
@@ -37,7 +37,7 @@ function MyCatsComponent() {
       defaultPosition: { x: 0, y: 0 },
       zIndex: 2,
       showInput: false,
-      positionPercentage: { x: 20, y: 0 },
+      positionPercentage: { x: 40, y: 40 },
       flipped: false, // 좌우반전
     },
     {
@@ -46,7 +46,7 @@ function MyCatsComponent() {
       defaultPosition: { x: 0, y: 0 },
       zIndex: 2,
       showInput: false,
-      positionPercentage: { x: 20, y: 0 },
+      positionPercentage: { x: 40, y: 40 },
       flipped: false, // 좌우반전
     },
     {
@@ -55,7 +55,7 @@ function MyCatsComponent() {
       defaultPosition: { x: 0, y: 0 },
       zIndex: 2,
       showInput: false,
-      positionPercentage: { x: 20, y: 0 },
+      positionPercentage: { x: 40, y: 40 },
       flipped: false, // 좌우반전
     },
     {
@@ -64,7 +64,7 @@ function MyCatsComponent() {
       defaultPosition: { x: 0, y: 0 },
       zIndex: 2,
       showInput: false,
-      positionPercentage: { x: 20, y: 0 },
+      positionPercentage: { x: 40, y: 40 },
       flipped: false, // 좌우반전
     },
     {
@@ -73,7 +73,7 @@ function MyCatsComponent() {
       defaultPosition: { x: 0, y: 0 },
       zIndex: 2,
       showInput: false,
-      positionPercentage: { x: 20, y: 0 },
+      positionPercentage: { x: 40, y: 40 },
       flipped: false, // 좌우반전
     },
     {
@@ -82,7 +82,7 @@ function MyCatsComponent() {
       defaultPosition: { x: 0, y: 0 },
       zIndex: 2,
       showInput: false,
-      positionPercentage: { x: 20, y: 0 },
+      positionPercentage: { x: 40, y: 40 },
       flipped: false, // 좌우반전
     },
     {
@@ -91,7 +91,7 @@ function MyCatsComponent() {
       defaultPosition: { x: 0, y: 0 },
       zIndex: 2,
       showInput: false,
-      positionPercentage: { x: 20, y: 0 },
+      positionPercentage: { x: 40, y: 40 },
       flipped: false, // 좌우반전
     },
     {
@@ -100,7 +100,7 @@ function MyCatsComponent() {
       defaultPosition: { x: 0, y: 0 },
       zIndex: 2,
       showInput: false,
-      positionPercentage: { x: 20, y: 0 },
+      positionPercentage: { x: 40, y: 40 },
       flipped: false, // 좌우반전
     },
   ]);
