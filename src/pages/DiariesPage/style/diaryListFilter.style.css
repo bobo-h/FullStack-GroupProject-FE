@@ -1,5 +1,33 @@
-.diary-list-filter__row {
+.diary-list-filter__select {
+  background: transparent; /* 투명한 배경 */
+  border: none; /* 테두리 제거 */
+  box-shadow: none; /* 기본 쉐도우 제거 */
+  color: inherit; /* 글씨 색상 상속 */
+  padding-right: 2rem; /* 아이콘 공간 확보 */
+  appearance: none; /* 기본 드롭다운 화살표 제거 */
+  cursor: pointer; /* 마우스 포인터 변경 */
+}
+
+.diary-list-filter__select:focus {
+  outline: none; /* 포커스 시 외곽선 제거 */
+}
+
+.diary-list-filter__dropdown {
+  position: relative;
   display: flex;
-  justify-content: center;
   align-items: center;
+}
+
+.diary-list-filter__icon {
+  position: absolute;
+  right: 0.75rem;
+  pointer-events: none; /* 클릭 방지 */
+  width: 1rem;
+  height: 1rem;
+  fill: #888; /* 기본 색상 */
+  transition: fill 0.2s ease;
+}
+
+.diary-list-filter__select:focus + .diary-list-filter__icon {
+  fill: #555; /* 포커스 시 색상 변경 */
 }
