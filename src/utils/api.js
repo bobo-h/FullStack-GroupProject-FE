@@ -10,7 +10,7 @@ const api = axios.create({
     "Content-Type": "application/json",
     authorization: `Bearer ${sessionStorage.getItem("token")}`,
   },
-  // withCredentials: true,
+  withCredentials: true,
 });
 
 api.interceptors.request.use(
