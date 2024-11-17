@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Form, Modal, Row, Col, Alert } from "react-bootstrap";
+import { Form, Modal, Row, Col } from "react-bootstrap";
+import Alert from "../../../../../common/components/Alert";
 import { useDispatch, useSelector } from "react-redux";
 import CloudinaryUploadWidget from "../../../../../utils/CloudinaryUploadWidget";
 import { CATEGORY, DEFAULT_PRODUCT, IS_ACTIVE } from "../../../../../constants/product.constants";
@@ -17,9 +18,9 @@ const InitialFormData = {
   image: "",
   description: "",
   category: ["Cat"],
-  is_active: "Active",
+  isActive: "Active",
   price: 0,
-  default_product: "No"
+  defaultProduct: "No"
 };
 
 const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
@@ -29,12 +30,14 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
   const [formData, setFormData] = useState(
     mode === "new" ? { ...InitialFormData } : selectedProduct
   );
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertContent, setAlertContent] = useState("");
   const dispatch = useDispatch();
 
   // 성공 시 다이얼로그 닫기
-  useEffect(() => {
-    if (success) setShowDialog(false);
-  }, [success]);
+  // useEffect(() => {
+  //   if (success) setShowDialog(false);
+  // }, [success]);
 
   // 다이얼로그가 열리면, 모드에 따라 초기 데이터 설정
   useEffect(() => {
@@ -60,14 +63,27 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
 
     if (mode === "new") {
       //새 상품 만들기
-      console.log("formData??", formData)
       dispatch(createProduct(formData))
+        .then(() => {
+          console.log("excuted here!!!")
+          setAlertContent("상품 생성 완료하였습니다!");
+          setShowAlert(true);
+        })
+        .catch((error) => {
+          setAlertContent("상품 생성 실패!");
+          setShowAlert(true);
+        });
     } else {
       // 상품 수정하기
-      console.log("selectedProduct??", selectedProduct)
-      console.log("formData??", formData)
-      dispatch(editProduct({ ...formData, id: selectedProduct._id })
-      );
+      dispatch(editProduct({ ...formData, id: selectedProduct._id }))
+        .then(() => {
+          setAlertContent("상품 정보 변경되었습니다!");
+          setShowAlert(true);
+        })
+        .catch((error) => {
+          setAlertContent("상품 정보 변경 실패!");
+          setShowAlert(true);
+        });
     };
 
   };
@@ -79,10 +95,8 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
   }
 
   const handleCategoryChange = (value) => {
-    console.log("Selected category:", value);
     setFormData((prevFormData) => {
       const updatedCategory = [value]; // 기존 값을 지우고 새로 선택된 값만 배열로 저장
-      console.log("Updated category:", updatedCategory); // 디버깅 로그
       return { ...prevFormData, category: updatedCategory };
     });
   };
@@ -93,6 +107,7 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
   };
 
   return (
+
     <Modal show={showDialog} onHide={handleClose}>
       <Modal.Header closeButton>
         {mode === "new" ? (
@@ -105,6 +120,17 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
         <div className="error-message">
           <Alert variant="danger">{error}</Alert>
         </div>
+      )}
+      {showAlert && (
+        <Alert
+          message={alertContent}
+          onClose={() => {
+
+            setShowAlert(false)
+            setShowDialog(false)
+          }}
+          redirectTo="/admin"
+        />
       )}
       <Form className="form-container" onSubmit={handleSubmit}>
         <Row className="mb-3">
@@ -193,11 +219,11 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
             </Form.Select>
           </Form.Group>
 
-          <Form.Group as={Col} controlId="default_product">
+          <Form.Group as={Col} controlId="defaultProduct">
             <Form.Label>DefaultProduct</Form.Label>
             <Form.Select
-              value={formData.default_product} // 초기값이 "No"로 설정되었는지 확인
-              onChange={(e) => setFormData({ ...formData, default_product: e.target.value })} // 선택 값 반영
+              value={formData.defaultProduct} // 초기값이 "No"로 설정되었는지 확인
+              onChange={(e) => setFormData({ ...formData, defaultProduct: e.target.value })} // 선택 값 반영
               required
             >
               <option value="Yes">Yes</option>
@@ -205,10 +231,10 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
             </Form.Select>
           </Form.Group>
 
-          <Form.Group as={Col} controlId="is_active">
+          <Form.Group as={Col} controlId="isActive">
             <Form.Label>Status</Form.Label>
             <Form.Select
-              value={formData.is_active}
+              value={formData.isActive}
               onChange={handleChange}
               required
             >

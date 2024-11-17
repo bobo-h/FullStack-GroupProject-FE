@@ -26,7 +26,7 @@ export const createProduct = createAsyncThunk(
             const response = await api.post("/product", formData)
             if (response.status !== 200) throw new Error(response.error)
 
-            dispatch(showToastMessage({ message: "상품 생성 완료", status: "success" }))
+            // dispatch(showToastMessage({ message: "상품 생성 완료", status: "success" }))
             dispatch(getProductList({ page: 1 }))
 
             return true
@@ -43,7 +43,7 @@ export const editProduct = createAsyncThunk(
 
             const response = await api.put(`/product/${id}`, formData)
             if (response.status !== 200) throw new Error(response.error)
-            dispatch(showToastMessage({ message: "상품 변경 완료", status: "success" }))
+            // dispatch(showToastMessage({ message: "상품 변경 완료", status: "success" }))
             dispatch(getProductList({ page: 1 }))
             return true
         } catch (error) {
@@ -55,19 +55,19 @@ export const editProduct = createAsyncThunk(
 export const deleteProduct = createAsyncThunk(
     "products/deleteProduct",
     async (id, { dispatch, rejectWithValue }) => {
-      try {
-        const response = await api.delete(`/product/${id}`);
-        if (response.status !== 200) throw new Error(response.error)
-  
-        dispatch(showToastMessage({ message: "상품 삭제 완료", status: "success" }))
-        dispatch(getProductList({ page: 1 }))
-      } catch (error) {
-        return rejectWithValue(error.error)
-      }
-  
+        try {
+            const response = await api.delete(`/product/${id}`);
+            if (response.status !== 200) throw new Error(response.error)
+
+            dispatch(showToastMessage({ message: "상품 삭제 완료", status: "success" }))
+            dispatch(getProductList({ page: 1 }))
+        } catch (error) {
+            return rejectWithValue(error.error)
+        }
+
     }
-  );
-  
+);
+
 
 // 슬라이스 생성
 const productSlice = createSlice({
@@ -99,7 +99,7 @@ const productSlice = createSlice({
         builder.addCase(createProduct.fulfilled, (state, action) => {
             state.loading = false;
             state.error = "";
-            state.success = true; //상품 생성을 성공하면? 다이얼로그르 닫고, 실패하면? 실패 메시지를 다이얼로그에 보여주고, 닫진 않음. 
+            // state.success = true; // 신규 alert 적용으로 주석처리 
 
         })
         builder.addCase(createProduct.rejected, (state, action) => {
@@ -126,7 +126,7 @@ const productSlice = createSlice({
         builder.addCase(editProduct.fulfilled, (state, action) => {
             state.loading = false;
             state.error = "";
-            state.success = true;
+            //state.success = true;   // 신규 alert 적용으로 주석처리 
         })
         builder.addCase(editProduct.rejected, (state, action) => {
             state.loading = false;
