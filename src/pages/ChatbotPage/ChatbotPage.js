@@ -62,7 +62,7 @@ const ChatbotCreation = ({ chatbotItem }) => {
       >
         <Row className="text-center chatbot-create-content">
           <h3 className="create-modal-title">입양 서류</h3>
-          <Col lg={3} className="">
+          <Col style={{ flex: "0 0 35%" }} className="">
             {/* <img 
                         className='chatbot-image-size'
                         alt="Cute Cat" 
@@ -73,7 +73,7 @@ const ChatbotCreation = ({ chatbotItem }) => {
               구매루트의 경우 구매한 고양이
             </div>
           </Col>
-          <Col>
+          <Col style={{ flex: "0 0 65%" }}>
             <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3" controlId="formName">
                 <Row className="align-items-center">

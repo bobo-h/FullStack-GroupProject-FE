@@ -63,10 +63,8 @@ const ProductPage = () => {
     return (
         <Container fluid className="product-page">
             <Row className="product-category-btns">
-                <Col md={2}>
-                    <Button2 onClick={() => setFilter("Cat")}>고양이</Button2>
-                </Col>
-                <Col md={2}>
+                <Col>
+                    <Button2  className="me-2" onClick={() => setFilter("Cat")}>고양이</Button2>
                     <Button2 onClick={() => setFilter("BG_IMG")}>배경</Button2>
                 </Col>
             </Row>
@@ -81,8 +79,8 @@ const ProductPage = () => {
                     filteredProducts.map((item) =>
                         item? (
                         <Col
-                            xs={12}
-                            sm={6}
+                            xs={6}
+                            sm={4}
                             md={4}
                             lg={2}
                             key={item.id}
