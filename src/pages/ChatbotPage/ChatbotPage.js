@@ -11,8 +11,9 @@ import Alert from "../../common/components/Alert";
 //import PersonalityBox from './component/PersonalityBox/PersonalityBox';
 
 // ChatbotCreation 컴포넌트
-const ChatbotCreation = () => {
-  const [name, setName] = useState("");
+const ChatbotCreation = ({ chatbotItem }) => {
+  //const [name, setName] = useState("");
+  const [name, setName] = useState(chatbotItem?.productId?.name || "");
   const [personality, setPersonality] = useState("");
   const [isDirectInput, setIsDirectInput] = useState(true);
   const [showAlert, setShowAlert] = useState(false);
@@ -91,7 +92,11 @@ const ChatbotCreation = () => {
                     <Form.Control
                       type="text"
                       placeholder="이름을 입력하세요"
-                      value={name}
+                      value={
+                        chatbotItem?.productId?.name
+                          ? chatbotItem.productId?.name
+                          : name
+                      }
                       onChange={(e) => setName(e.target.value)}
                       required
                     />
@@ -107,12 +112,14 @@ const ChatbotCreation = () => {
                     <Button2
                       variant={isDirectInput ? "outline-secondary" : "primary"}
                       onClick={() => handleInputTypeChange(true)}
+                      disabled={Boolean(chatbotItem)}
                     >
                       직접 입력
                     </Button2>
                     <Button
                       variant={isDirectInput ? "primary" : "outline-secondary"}
                       onClick={() => handleInputTypeChange(false)}
+                      disabled={Boolean(chatbotItem)}
                     >
                       성격 선택
                     </Button>
@@ -131,9 +138,14 @@ const ChatbotCreation = () => {
                       <Form.Control
                         as="textarea"
                         placeholder="성격을 직접 입력하세요"
-                        value={personality}
+                        value={
+                          chatbotItem?.productId?.name
+                            ? chatbotItem.productId?.name
+                            : personality
+                        }
                         onChange={(e) => setPersonality(e.target.value)}
                         required
+                        disabled={Boolean(chatbotItem)}
                       />
                     )}
                   </Row>
@@ -152,7 +164,11 @@ const ChatbotCreation = () => {
                       disabled={loading}
                       className="w-auto"
                     >
-                      {loading ? "생성 중..." : "입양하기"}
+                      {loading
+                        ? "생성 중..."
+                        : chatbotItem
+                        ? "수정하기"
+                        : "입양하기"}
                     </Button>
                   </Col>
                 </Row>

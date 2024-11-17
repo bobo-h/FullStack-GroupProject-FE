@@ -8,7 +8,7 @@ import ChatbotList from "./component/ChatbotList";
 import userDefaultLogo from "../../assets/userDefaultLogo.png";
 import Button2 from "../../common/components/Button2";
 const MyPage = () => {
-  const wishlistItems = [
+  const chatbotList = [
     {
       productId: {
         id: "product123",
@@ -64,8 +64,8 @@ const MyPage = () => {
               </Row>
               <Row className="chatbot-list__content">
                 <Col>
-                  {wishlistItems.map((item) => (
-                    <ChatbotList wishlistItem={item} />
+                  {chatbotList.map((item) => (
+                    <ChatbotList chatbotItem={item} />
                   ))}
                 </Col>
               </Row>

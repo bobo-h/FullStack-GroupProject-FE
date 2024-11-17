@@ -5,7 +5,7 @@ import "../style/chatbotList.style.css";
 import Button2 from "../../../common/components/Button2";
 import ChatbotCreation from "../../ChatbotPage/ChatbotPage";
 
-const ChatbotList = ({ wishlistItem }) => {
+const ChatbotList = ({ chatbotItem }) => {
   const [isEditing, setIsEditing] = useState(false); // 수정 모드 상태 관리
   // 수정 버튼 클릭 핸들러
   const handleModifyClick = () => {
@@ -15,7 +15,7 @@ const ChatbotList = ({ wishlistItem }) => {
     <>
       {/* 수정 모드 여부에 따라 ChatbotCreation 컴포넌트 표시 */}
       {isEditing ? (
-        <ChatbotCreation /> // 수정 화면 컴포넌트
+        <ChatbotCreation chatbotItem={chatbotItem} /> // 수정 화면 컴포넌트
       ) : (
         <div className="chatbot-list-card">
           <Row className="align-items-center">
@@ -24,20 +24,20 @@ const ChatbotList = ({ wishlistItem }) => {
             </Col>
             <Col xs={3} md={3} className="chatbot-image-area">
               <img
-                src={wishlistItem?.image}
-                alt={wishlistItem?.productId?.name || "상품 이미지"}
+                src={chatbotItem?.image}
+                alt={chatbotItem?.productId?.name || "상품 이미지"}
                 className="chatbot-image"
               />
             </Col>
             <Col xs={5} md={5} className="chatbot-info-area">
               <div className="chatbot-info__name">
                 <strong>
-                  챗봇명: {wishlistItem?.productId?.name || "챗봇 이름"}
+                  챗봇명: {chatbotItem?.productId?.name || "챗봇 이름"}
                 </strong>
               </div>
               <div className="chatbot-info__personality">
                 <strong>
-                  챗봇 성격: {wishlistItem?.productId?.name || "챗봇 성격"}
+                  챗봇 성격: {chatbotItem?.productId?.name || "챗봇 성격"}
                 </strong>
               </div>
             </Col>
