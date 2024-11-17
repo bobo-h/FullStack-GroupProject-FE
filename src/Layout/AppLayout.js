@@ -33,9 +33,17 @@ const AppLayout = ({ children }) => {
 
   useEffect(() => {
     // 현재 경로와 일치하는 페이지 찾기
-    const matchedPage = pageMapping.find(
-      ({ path }) => path === location.pathname
-    );
+    let matchedPage;
+
+    if (location.pathname === "/") {
+      // 정확히 루트(/) 경로인 경우
+      matchedPage = pageMapping.find(({ path }) => path === "/");
+    } else {
+      // 그 외의 경우에는 startsWith를 사용해서 더 정확한 매칭을 찾음
+      matchedPage = pageMapping.find(
+        ({ path }) => location.pathname.startsWith(path) && path !== "/"
+      );
+    }
 
     // 페이지가 매칭될 경우 상태 업데이트
     if (matchedPage) {
