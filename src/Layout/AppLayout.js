@@ -4,6 +4,7 @@ import NavBar from "../common/components/NavBar";
 import SideBar from "../common/components/SideBar";
 import { loginWithToken } from "../features/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import throttle from "lodash.throttle"; // 스크롤 상태 최적화
 import LoadingSpinner from "../common/components/LoadingSpinner";
 import "./style/applayout.style.css";
@@ -12,7 +13,8 @@ const AppLayout = ({ children }) => {
   const location = useLocation();
   const dispatch = useDispatch();
 
-  const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const [isAlertVisible, setIsAlertVisible] = useState(false); //? 이건 이제 사용 안하는듯?
+  // =========  사이드바 관련 ============== //
   const [currentPage, setCurrentPage] = useState("");
   const [isSidebarActive, setIsSidebarActive] = useState(false);
   const pageMapping = [
@@ -25,11 +27,19 @@ const AppLayout = ({ children }) => {
     { path: "/admin", page: "admin", sidebar: false },
   ];
 
-  const { user } = useSelector((state) => state.user);
+  const { user, loading } = useSelector((state) => state.user);
+  const navigate = useNavigate();
   // 토큰으로 로그인
   useEffect(() => {
     dispatch(loginWithToken());
   }, []);
+
+  useEffect(() => {
+    // 로딩이 끝났는데 user가 없으면 리디렉션
+    if (!loading && user === null) {
+      navigate("/login");
+    }
+  }, [user, loading, navigate]);
 
   useEffect(() => {
     // 현재 경로와 일치하는 페이지 찾기
@@ -120,8 +130,6 @@ const AppLayout = ({ children }) => {
   // 경로가 /admin일 때 display: flex를 제거하려면 no-flex 클래스 추가
   // const appLayoutClass = isAdminPage ? "no-flex" : "display-flex";
 
-  const loading = false;
-
   return (
     // <div className={`app-layout ${appLayoutClass}`}>
     //   {!isAdminPage && <NavBar toggleAlert={toggleAlert} />}
@@ -139,16 +147,15 @@ const AppLayout = ({ children }) => {
     >
       <NavBar isAdminPage={isAdminPage} />
       <SideBar
-        user={user}
         currentPage={currentPage}
         isSidebarActive={isSidebarActive}
         setIsSidebarActive={setIsSidebarActive}
         isScrollingUp={isScrollingUp} // 추가
         scrollTop={scrollTop} // 스크롤 시작 전 조건때문
       />
-      {/* {loading ? <LoadingSpinner /> : children} */}
+      {/* 로딩 중이면 로딩 스피너 표시, 아니면 children 렌더링 */}
       <div ref={scrollContainerRef} className="children-container">
-        {children}
+        {loading ? <LoadingSpinner /> : children}
       </div>
     </div>
   );

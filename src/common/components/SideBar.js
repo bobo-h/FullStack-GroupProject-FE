@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../features/user/userSlice";
 import "../style/sidebar.style.css";
 import debounce from "lodash.debounce";
 import testCatfImage1 from "./../../assets/test_cats/cat_1_pf.png";
@@ -22,6 +24,7 @@ const SideBar = ({
   scrollTop,
 }) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const { user } = useSelector((state) => state.user);
   const [cats, setCats] = useState([
     {
       id: "cat1",
@@ -160,16 +163,19 @@ const SideBar = ({
 
   return (
     <>
-      <SidebarContainer
-        sidebarClasses={sidebarClasses}
-        toggleSidebar={toggleSidebar}
-        windowWidth={windowWidth}
-        isSidebarActive={isSidebarActive}
-        currentPage={currentPage}
-        cats={cats}
-        handleRightClick={handleRightClick}
-        isScrollingUp={isScrollingUp}
-      />
+      {user && (
+        <SidebarContainer
+          sidebarClasses={sidebarClasses}
+          toggleSidebar={toggleSidebar}
+          windowWidth={windowWidth}
+          isSidebarActive={isSidebarActive}
+          currentPage={currentPage}
+          cats={cats}
+          handleRightClick={handleRightClick}
+          isScrollingUp={isScrollingUp}
+          user={user}
+        />
+      )}
     </>
   );
 };
@@ -185,6 +191,7 @@ const SidebarContainer = ({
   handleRightClick,
   isScrollingUp,
   scrollTop,
+  user,
 }) => {
   const navigate = useNavigate();
   return (
@@ -201,7 +208,10 @@ const SidebarContainer = ({
           onClick={() => navigate(`/`)}
         />
         <div className="user-image" />
-        <div className="user-info">개인정보</div>
+        <div className="user-info">
+          <span className="user-name">집사 이름 : {user.name}</span>
+          <LogoutButton />
+        </div>
         <div className="cat-list-container">
           {cats.map((cat) => (
             <div
@@ -244,6 +254,28 @@ const ToggleButton = ({ toggleSidebar }) => {
     <div className="sidebar-toggle" onClick={toggleSidebar}>
       <img src="logo4.png" className="sidebar-toggle-image" />
     </div>
+  );
+};
+
+const LogoutButton = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // 토큰 제거
+    localStorage.removeItem("token"); // 예: localStorage에 저장된 토큰 제거
+
+    // Redux 상태 초기화
+    dispatch(logout());
+
+    // 로그인 페이지로 리디렉션
+    navigate("/login");
+  };
+
+  return (
+    <button className="sidebar-logout-button" onClick={handleLogout}>
+      로그아웃
+    </button>
   );
 };
 

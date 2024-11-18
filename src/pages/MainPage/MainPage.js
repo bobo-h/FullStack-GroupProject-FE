@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { ReactComponent as CalendarIcon } from "../../assets/calendar.svg";
 import { ReactComponent as AdminIcon } from "../../assets/admin_info.svg";
 import CalendarComponent from "./components/CalendarComponent";
@@ -10,6 +11,7 @@ const MainPage = () => {
   // 여기부터 캘린더 관련 기능
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const calendarRef = useRef(null);
+  const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const toggleCalendar = () => {
@@ -49,10 +51,13 @@ const MainPage = () => {
       <img className="cats-room" src="backgroundimage.png" alt="cats room" />
       <MyCatsComponent />
 
-      <AdminIcon
-        className="main-opt navigate-admin-button"
-        onClick={() => navigate(`/admin`)}
-      />
+      {/* 관리자일 때만 AdminIcon 렌더링 */}
+      {user && user.level === "admin" && (
+        <AdminIcon
+          className="main-opt navigate-admin-button"
+          onClick={() => navigate("/admin")}
+        />
+      )}
 
       {!isCalendarOpen ? (
         <CalendarIcon

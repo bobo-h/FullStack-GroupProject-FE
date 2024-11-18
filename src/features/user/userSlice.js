@@ -48,6 +48,7 @@ export const loginWithGoogle = createAsyncThunk(
       sessionStorage.setItem("token", response.data.token);
       return response.data;
     } catch (error) {
+      console.log("이거", error);
       return rejectWithValue(error.message);
     }
   }
@@ -59,7 +60,7 @@ export const loginWithToken = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get("/user/me");
-      return response;
+      return response.data; //response 뒤에 .data 수정됨
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -112,6 +113,10 @@ const userSlice = createSlice({
       state.editError = null;
       state.deleteError = null;
     },
+    // 로그아웃 액션
+    logout: (state) => {
+      state.user = null; // 사용자 정보 초기화
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -150,8 +155,17 @@ const userSlice = createSlice({
         state.loading = false;
         state.loginError = action.payload;
       })
+      .addCase(loginWithToken.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(loginWithToken.fulfilled, (state, action) => {
-        state.user = action.payload.data.user;
+        state.loading = false;
+        state.user = action.payload.user; // action.payload.data.user 에서 수정
+      })
+      .addCase(loginWithToken.rejected, (state, action) => {
+        state.user = null;
+        state.loading = false;
+        state.loginError = action.payload || "로그인 실패";
       })
       .addCase(editUserInfo.pending, (state) => {
         state.loading = true;
@@ -177,5 +191,5 @@ const userSlice = createSlice({
       });
   },
 });
-export const { clearErrors } = userSlice.actions;
+export const { clearErrors, logout } = userSlice.actions;
 export default userSlice.reducer;
