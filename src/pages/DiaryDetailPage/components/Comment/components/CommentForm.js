@@ -1,35 +1,48 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Container, Row, Col, Form } from 'react-bootstrap';
 import { useDispatch} from "react-redux";
-import Button from '../../../../../common/components/Button';
+import Button from "../../../../../common/components/Button"
+import { addUserComment } from "../../../../../features/comment/commentSlice";
 
-const CommentForm = () => {
+const CommentForm = ({diaryId}) => {
+    const [comment, setComment] = useState("");
     const dispatch = useDispatch();
 
-    // onSubmit={handleSubmit}
-    return(
-        <div>
-            <Container>
-                <Col lg={2}>
-                    <img>유저 이미지</img>
-                </Col>
-                <Col>
-                    <Form className="form-container" >
-                            {/* <Form.Control
-                                // onChange={handleChange}
-                                type="string"
-                                placeholder="댓글 추가"
-                                required
-                                value={formData.id}
-                            /> */}
-                        <Button>등록</Button>
-                    </Form>
-                </Col>
+    const handleSubmit = (e) => {
+        e.preventDefault();
 
-            </Container>
-            
-        </div>
-    );
+        if (comment.trim()) {
+            dispatch(addUserComment({ diaryId, content: comment }));
+            setComment("");
+          }
+    };
+
+    return (
+    <Container>
+      <Row>
+        <Col lg={2}>
+            유저 이미지
+          {/* <img alt="User" src="" /> */}
+        </Col>
+        <Col>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="commentInput">
+              <Form.Control
+                type="text"
+                placeholder="댓글 추가..."
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+              />
+            </Form.Group>
+            <Button variant="primary" type="submit" className="mt-2">
+              등록
+            </Button>
+          </Form>
+        </Col>
+      </Row>
+    </Container>
+  );
 };
+
 
 export default CommentForm;
