@@ -97,7 +97,8 @@ const PaymentInfoModal = ({ onClose }) => {
   };
 
   const proceedToPayment = () => {
-    navigate("/chatbot")
+    //user_id도 넘겨주세용
+    navigate("/chatbot", { state: { productImage: selectedProduct._id} });
   }
   const handleBackdropClick = (event) => {
     if (event.target.classList.contains("modal-backdrop")) {
@@ -226,19 +227,19 @@ const PaymentInfoModal = ({ onClose }) => {
                 handlePaymentInfoChange={handlePaymentInfoChange}
               />
 
-              {/* 결제 버튼 */}
-              <div className="text-center mt-4">
-                <Button variant="primary" className="payment-button mx-2" type="submit">
-                  결제하기
-                </Button>
-                <Button2 variant="secondary" onClick={onClose} className="cancel-button mx-2">
-                  취소
-                </Button2>
-              </div>
-            </Form>
-          </Col>
-        </Row>
-      </Container>
+            {/* 결제 버튼 */}
+            <div className="text-center mt-4">
+              <Button variant="primary"  onClick={proceedToPayment} className="payment-button mx-2" type="submit">
+                결제하기
+              </Button>
+              <Button2 variant="secondary" onClick={onClose} className="cancel-button mx-2">
+                취소
+              </Button2>
+            </div>
+          </Form>
+        </Col>
+      </Row>
+    </Container>
     </div>
   );
 

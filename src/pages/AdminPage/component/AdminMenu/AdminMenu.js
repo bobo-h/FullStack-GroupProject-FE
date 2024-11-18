@@ -1,13 +1,19 @@
-import React from 'react';
+import React ,{useState} from 'react';
 import "./style/adminMenu.style.css";
 import { Row } from 'react-bootstrap';
+import sidebarLogo from '../../../../assets/sidebarForMyPageLogo.png';
 
 const AdminMenu = ({ setSelectedComponent, selectedComponent }) => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
     <div className='admin-menubar'>
       <div className='titles'>
-        <h3 className='project-title'>프로젝트</h3>
-        <h4 className='project-subtitle'>Admin Page</h4>
+        <img src={sidebarLogo} alt="Sidebar Logo" className='project-logo' />
       </div>
       <Row className="button-container">
         <button

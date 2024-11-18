@@ -1,28 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Container, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { createChatbot } from "../../features/chatbot/chatbotSlice";
 import "./style/chatbot.style.css";
 import Button from "../../common/components/Button";
 import PersonalityMBTI from "./component/PersonalityMBTI/PersonalityMBTI";
-import Spinner from "react-bootstrap/Spinner";
 import Button2 from "../../common/components/Button2";
 import Alert from "../../common/components/Alert";
+import { getProductList } from "../../features/product/productSlice";
 //import PersonalityBox from './component/PersonalityBox/PersonalityBox';
 
 // ChatbotCreation 컴포넌트
 const ChatbotCreation = ({ chatbotItem }) => {
-  //const [name, setName] = useState("");
   const [name, setName] = useState(chatbotItem?.productId?.name || "");
   const [personality, setPersonality] = useState("");
   const [isDirectInput, setIsDirectInput] = useState(true);
   const [showAlert, setShowAlert] = useState(false);
   const [alertContent, setAlertContent] = useState("");
-
   const dispatch = useDispatch();
+
   const { loading, registrationError, success } = useSelector(
     (state) => state.chatbot
   );
+
+
+  const product = useSelector((state) => state.product?.productList || []);
+  console.log(product); 
+
+  useEffect(() => {
+    dispatch(getProductList());
+  }, [dispatch]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -66,6 +73,10 @@ const ChatbotCreation = ({ chatbotItem }) => {
     setPersonality("");
   };
 
+  const defaultProduct = Array.isArray(product)
+    ? product.find((product) => product.defaultProduct === "Yes")
+    : null;
+
   return (
     <div className="chatbot-create-modal">
       {showAlert && (
@@ -81,18 +92,18 @@ const ChatbotCreation = ({ chatbotItem }) => {
       >
         <Row className="text-center chatbot-create-content">
           <h3 className="create-modal-title">입양 서류</h3>
-          <Col lg={3} className="">
-            {/* <img 
-                        className='chatbot-image-size'
-                        alt="Cute Cat" 
-                    /> */}
-            <div>
-              이미지 들어올 자리 <br /> <br /> 유저의 챗봇이 없을 경우 기본
-              고양이 <br />
-              구매루트의 경우 구매한 고양이
-            </div>
+          <Col style={{ flex: "0 0 35%" }} className="">
+            {chatbotItem?.image ? (
+              <img src={chatbotItem.image} alt="Selected Product" className="chatbot-image-size" />
+            ) : defaultProduct?.image ? (
+              <img src={defaultProduct.image} alt="Default Product" className="chatbot-image-size" />
+            ) : (
+              <div className="no-image-message">이미지 없음</div>
+            )}
+
+
           </Col>
-          <Col>
+          <Col style={{ flex: "0 0 65%" }}>
             <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3" controlId="formName">
                 <Row className="align-items-center">
