@@ -46,6 +46,9 @@ const diarySlice = createSlice({
       state.error = "";
       state.success = false;
     },
+    clearDiaryList: (state) => {
+      state.diaryList = [];
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -79,5 +82,6 @@ const diarySlice = createSlice({
   },
 });
 
-export const { setSelectedDiary, clearError } = diarySlice.actions;
+export const { setSelectedDiary, clearError, clearDiaryList } =
+  diarySlice.actions;
 export default diarySlice.reducer;

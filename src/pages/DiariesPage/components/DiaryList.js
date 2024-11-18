@@ -42,7 +42,7 @@ const DiaryList = () => {
   return (
     <Container className="diary-list">
       {diaryList.map((entry) => {
-        const dateObj = new Date(entry.seletedDate);
+        const dateObj = new Date(entry.selectedDate);
         const dayOfWeek = DAYS[dateObj.getDay()];
         return (
           <Row
