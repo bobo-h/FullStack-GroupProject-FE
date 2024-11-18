@@ -15,7 +15,7 @@ const InitialFormData = {
   name: "",
   image: "",
   description: "",
-  is_deleted: "No"
+  isDeleted: "No"
 };
 
 const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
@@ -143,14 +143,14 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
 
         <Row className="mb-3">
 
-          <Form.Group as={Col} controlId="is_deleted">
-            <Form.Label>Is_deleted</Form.Label>
+          <Form.Group as={Col} controlId="isDeleted">
+            <Form.Label>isDeleted</Form.Label>
             <Form.Select
-              value={formData.is_deleted} // 초기값이 "No"로 설정되었는지 확인
+              value={formData.isDeleted} // 초기값이 "No"로 설정되었는지 확인
               onChange={(e) => {
                 const newValue = e.target.value;
-                console.log("Updated is_deleted:", newValue); // 값 디버깅
-                setFormData({ ...formData, is_deleted: newValue }); }
+                console.log("Updated isDeleted:", newValue); // 값 디버깅
+                setFormData({ ...formData, isDeleted: newValue }); }
               }
               required
             >

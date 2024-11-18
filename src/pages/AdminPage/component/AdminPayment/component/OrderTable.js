@@ -24,7 +24,6 @@ const OrderTable = ({ header, data, openEditForm }) => {
                 <th>{item.productName}</th>
                 <th>{item.productCategory}</th>
                 <th>{item.price}</th>
-                <th>{item.image}</th>
               </tr>
             ))
           ) : (
