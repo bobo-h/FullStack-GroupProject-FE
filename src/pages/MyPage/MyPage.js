@@ -7,6 +7,7 @@ import "./style/myPage.style.css";
 import ChatbotList from "./component/ChatbotList";
 import userDefaultLogo from "../../assets/userDefaultLogo.png";
 import Button2 from "../../common/components/Button2";
+
 const MyPage = () => {
   const chatbotList = [
     {
