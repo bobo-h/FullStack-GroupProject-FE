@@ -1,15 +1,19 @@
-import React from "react";
+import React, {useState} from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import Alert from "../../../../../common/components/Alert";
 import "../style/adminProduct.style.css";
 import Button2 from "../../../../../common/components/Button2";
 import { useDispatch } from "react-redux";
 import {
   setSelectedProduct,
   deleteProduct,
+  getProductList
 } from "../../../../../features/product/productSlice";
 
 const AdminProductCard = ({ product, setMode, setShowDialog }) => {
   const dispatch = useDispatch();
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertContent, setAlertContent] = useState("");
 
   const handleClickEditItem = () => {
     // Edit 모드로 설정하고 다이얼로그 열기
@@ -21,11 +25,30 @@ const AdminProductCard = ({ product, setMode, setShowDialog }) => {
   };
 
   const handleClickDeleteItem = () => {
-    dispatch(deleteProduct(product._id));
+    dispatch(deleteProduct(product._id))
+      .then(() => {
+        setAlertContent("상품 삭제 완료하였습니다!");
+        setShowAlert(true);
+      })
+      .catch((error) => {
+        setAlertContent("상품 삭제 실패!");
+        setShowAlert(true);
+      });
   };
 
   return (
     <div className="product-table-content">
+      {showAlert && (
+        <Alert
+          message={alertContent}
+          onClose={() => {
+            setShowAlert(false);
+            setShowDialog(false);
+            dispatch(getProductList({ page: 1 }));
+          }}
+          redirectTo="/admin"
+        />
+      )}
       <Container>
         <Row className="mb-4">
           <Col md={1} className="d-flex align-items-center">

@@ -7,6 +7,7 @@ import MoodCard from './component/AdminMoodCard';
 import NewMoodDialog from './component/NewMoodDialog';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedMood, getMoodList, clearError } from '../../../../features/mood/moodSlice';
+import LoadingSpinner from '../../../../common/components/LoadingSpinner';
 
 const AdminDiary = () => {
   const dispatch = useDispatch();
@@ -14,6 +15,7 @@ const AdminDiary = () => {
   const moodList = useSelector((state) => state.mood.moodList);
   const selectedMood = useSelector((state) => state.mood.selectedMood);
   const success = useSelector((state) => state.mood.success);
+  const loading = useSelector((state) => state.mood.loading)
   const [mode, setMode] = useState("new");
   const [showDialog, setShowDialog] = useState(false);
   const [searchQuery, setSearchQuery] = useState({
@@ -58,21 +60,29 @@ const AdminDiary = () => {
             <Button onClick={handleClickNewItem}>add Item</Button>
           </Col>
         </Row>
-        <Row className="table-area">
-          <MoodTable className="unser-line" />
-          {moodList.length > 0 ? (
-            moodList.map((mood) => (
-              <MoodCard
-                key={mood.id} // 고유한 키 설정
-                mood={mood}
-                setMode={setMode}
-                setShowDialog={setShowDialog}
-              />
-            ))
-          ) : (
-            <p>No moods available.</p>
-          )}
-        </Row>
+        {loading ? (
+          <div className="text-align-center">
+            <LoadingSpinner animation="border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </LoadingSpinner>
+          </div>
+        ) : (
+          <Row className="table-area">
+            <MoodTable className="unser-line" />
+            {moodList.length > 0 ? (
+              moodList.map((mood) => (
+                <MoodCard
+                  key={mood.id} // 고유한 키 설정
+                  mood={mood}
+                  setMode={setMode}
+                  setShowDialog={setShowDialog}
+                />
+              ))
+            ) : (
+              <p>No moods available.</p>
+            )}
+          </Row>
+        )}
       </Container>
       <NewMoodDialog
         mode={mode}

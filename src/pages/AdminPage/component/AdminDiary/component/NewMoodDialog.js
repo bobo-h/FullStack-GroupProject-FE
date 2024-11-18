@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Form, Modal, Row, Col, Alert } from "react-bootstrap";
+import { Form, Modal, Row, Col } from "react-bootstrap";
+import Alert from "../../../../../common/components/Alert";
 import { useDispatch, useSelector } from "react-redux";
 import CloudinaryUploadWidget from "../../../../../utils/CloudinaryUploadWidget";
 import "../style/adminMood.style.css";
@@ -23,12 +24,14 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
   const [formData, setFormData] = useState(
     mode === "new" ? { ...InitialFormData } : selectedMood
   );
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertContent, setAlertContent] = useState("");
   const dispatch = useDispatch();
 
   // 성공 시 다이얼로그 닫기
-  useEffect(() => {
-    if (success) setShowDialog(false);
-  }, [success]);
+  // useEffect(() => {
+  //   if (success) setShowDialog(false);
+  // }, [success]);
 
   // 다이얼로그가 열리면, 모드에 따라 초기 데이터 설정
   useEffect(() => {
@@ -54,11 +57,26 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
 
     if (mode === "new") {
       //새 무드 만들기
-      dispatch(createMood(formData));
+      dispatch(createMood(formData))
+        .then(() => {
+          setAlertContent("무드 생성 완료하였습니다!");
+          setShowAlert(true);
+        })
+        .catch((error) => {
+          setAlertContent("무드 생성 실패!");
+          setShowAlert(true);
+        });
     } else {
       // 무드 수정하기
-      console.log("formData??", formData);
-      dispatch(editMood({ ...formData, id: selectedMood._id }));
+      dispatch(editMood({ ...formData, id: selectedMood._id }))
+        .then(() => {
+          setAlertContent("무드 수정 완료하였습니다!");
+          setShowAlert(true);
+        })
+        .catch((error) => {
+          setAlertContent("무드 수정 실패!");
+          setShowAlert(true);
+        });
     }
   };
 
@@ -86,6 +104,16 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
         <div className="error-message">
           <Alert variant="danger">{error}</Alert>
         </div>
+      )}
+      {showAlert && (
+        <Alert
+          message={alertContent}
+          onClose={() => {
+            setShowAlert(false);
+            setShowDialog(false);
+          }}
+          redirectTo="/admin"
+        />
       )}
       <Form className="form-container" onSubmit={handleSubmit}>
         <Row className="mb-3">
@@ -131,9 +159,8 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
           <img
             id="uploadedimage"
             src={formData.image || "#"} // 이미지가 없을 때 기본 이미지나 빈 값 사용
-            className={`upload-image mt-2 ${
-              formData.image ? "" : "blurred-image"
-            }`}
+            className={`upload-image mt-2 ${formData.image ? "" : "blurred-image"
+              }`}
             alt="uploadedimage"
           />
         </Form.Group>

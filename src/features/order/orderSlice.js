@@ -5,6 +5,7 @@ import api from "../../utils/api";
 const initialState = {
     orderList: [],
     orderNum: "",
+    orderUserId: "",
     selectedOrder: {},
     error: "",
     loading: false,
@@ -24,7 +25,7 @@ export const createOrder = createAsyncThunk(
             const response = await api.post("/order", payload)
             if (response.status !== 200) throw new Error(response.error)
 
-            return response.data.orderNum
+            return response.data
         } catch (error) {
             const errorMessage = error.error || error.message || "주문 실패 했습니다!";
             return rejectWithValue(errorMessage)
@@ -81,7 +82,8 @@ const orderSlice = createSlice({
             .addCase(createOrder.fulfilled, (state, action) => {
                 state.loading = false;
                 state.error = "";
-                state.orderNum = action.payload;
+                state.orderNum = action.payload.orderNum;
+                state.orderUserId = action.payload.orderUserId;
             })
             .addCase(createOrder.rejected, (state, action) => {
                 state.loading = false;

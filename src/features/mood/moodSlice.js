@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../utils/api";
-import { showToastMessage } from "../../common/components/uiSlice";
 
 // 비동기 액션 생성
 export const getMoodList = createAsyncThunk(
@@ -40,9 +39,6 @@ export const createMood = createAsyncThunk(
       const response = await api.post("/mood", formData);
       if (response.status !== 200) throw new Error(response.error);
 
-      dispatch(
-        showToastMessage({ message: "무드 생성 완료", status: "success" })
-      );
       dispatch(getMoodList({ page: 1 }));
 
       return response.data;
@@ -56,12 +52,9 @@ export const editMood = createAsyncThunk(
   "moods/editMood",
   async ({ id, ...formData }, { dispatch, rejectWithValue }) => {
     try {
-      console.log("formData???", formData);
       const response = await api.put(`/mood/${id}`, formData);
       if (response.status !== 200) throw new Error(response.error);
-      dispatch(
-        showToastMessage({ message: "무드 변경 완료", status: "success" })
-      );
+
       dispatch(getMoodList({ page: 1 }));
       return response.data;
     } catch (error) {
@@ -77,10 +70,6 @@ export const deleteMood = createAsyncThunk(
       const response = await api.delete(`/mood/${id}`);
       if (response.status !== 200) throw new Error(response.error);
 
-      dispatch(
-        showToastMessage({ message: "무드 삭제 완료", status: "success" })
-      );
-      dispatch(getMoodList({ page: 1 }));
     } catch (error) {
       return rejectWithValue(error.error);
     }
@@ -117,7 +106,7 @@ const moodSlice = createSlice({
     builder.addCase(createMood.fulfilled, (state, action) => {
       state.loading = false;
       state.error = "";
-      state.success = true; //무드 생성을 성공하면? 다이얼로그르 닫고, 실패하면? 실패 메시지를 다이얼로그에 보여주고, 닫진 않음.
+      //state.success = true; // 신규 Alert 적용으로 주석 처리
     });
     builder.addCase(createMood.rejected, (state, action) => {
       state.loading = false;
@@ -143,7 +132,7 @@ const moodSlice = createSlice({
     builder.addCase(editMood.fulfilled, (state, action) => {
       state.loading = false;
       state.error = "";
-      state.success = true;
+      //state.success = true; // 신규 Alert 적용으로 주석 처리
     });
     builder.addCase(editMood.rejected, (state, action) => {
       state.loading = false;

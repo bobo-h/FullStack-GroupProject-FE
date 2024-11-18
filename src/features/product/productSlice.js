@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../utils/api";
-import { showToastMessage } from "../../common/components/uiSlice";
 
 // 비동기 액션 생성
 export const getProductList = createAsyncThunk(
@@ -23,7 +22,6 @@ export const createProduct = createAsyncThunk(
       const response = await api.post("/product", formData);
       if (response.status !== 200) throw new Error(response.error);
 
-      // dispatch(showToastMessage({ message: "상품 생성 완료", status: "success" }))
       dispatch(getProductList({ page: 1 }));
 
       return true;
@@ -39,7 +37,7 @@ export const editProduct = createAsyncThunk(
     try {
       const response = await api.put(`/product/${id}`, formData);
       if (response.status !== 200) throw new Error(response.error);
-      // dispatch(showToastMessage({ message: "상품 변경 완료", status: "success" }))
+
       dispatch(getProductList({ page: 1 }));
       return true;
     } catch (error) {
@@ -55,10 +53,6 @@ export const deleteProduct = createAsyncThunk(
       const response = await api.delete(`/product/${id}`);
       if (response.status !== 200) throw new Error(response.error);
 
-      dispatch(
-        showToastMessage({ message: "상품 삭제 완료", status: "success" })
-      );
-      dispatch(getProductList({ page: 1 }));
     } catch (error) {
       return rejectWithValue(error.error);
     }
