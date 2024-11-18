@@ -19,6 +19,10 @@
         width: 100%; /* Full width */
         text-align: center; /* Center the text inside titles */
     }
+
+    .project-logo{
+      width: 80%;
+    }
   
     .project-title {
         margin-top: 20%; /* Space below the title */
@@ -64,41 +68,30 @@
  
 }
 
-@media (max-width: 700px) {
-    .admin-menubar {
-      width: 100%; /* Full width when in mobile view */
-      height: auto; /* Allow the menu to adjust height */
-      position: absolute; /* Move the menu to the top */
-      flex-direction: row; /* 수평 배치 */
-      justify-content: space-around; /* 항목들을 좌우로 고르게 배치 */
-    
-      .titles{
-        justify-content: space-around;
-        width: 20%;
-      }
-  
-      .project-title, .project-subtitle {
-        margin: 0; /* Remove margin to reduce space */
-        width: 100%; /* Full width */
-      }
-    
-      .project-subtitle {
-        margin-top: 10px; /* 추가로 간격을 주어 두 텍스트 사이 간격을 줄 수 있음 */
-      }
-  
-.button-container {
-    display: flex;
-    flex-direction: row; 
-    justify-content: space-between; /* 버튼 간의 공간을 고르게 배치 */
-    width: 40%; /* 버튼들이 전체 너비를 차지하도록 설정 */
-    gap: 10px; /* 버튼 간의 간격 설정 */
-    margin-top: 10px; /* 버튼과 제목 사이에 간격 추가 */
+@media (min-width: 1300px) {
+  .project-logo {
+    width: 40%;
   }
-  
-    .admin-button {
-        width: 100%;/* Remove full-width for buttons */
-      padding: 10px 20px; /* Adjust padding for smaller buttons */
-      font-size: 16px; /* Adjust font size */
-    }
+}
+
+@media (max-width: 700px) {
+  .admin-menubar {
+    width: 70%; /* Sidebar takes 70% of screen width */
+  }
+
+  /* Show the toggle button only on mobile screens */
+  .toggle-button {
+    display: block;
+    background-color: #000;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+
+  /* When the sidebar is closed, it will slide out */
+  .admin-menubar.closed {
+    transform: translateX(-100%);
   }
 } 

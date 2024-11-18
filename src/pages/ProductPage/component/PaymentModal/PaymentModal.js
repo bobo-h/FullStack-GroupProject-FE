@@ -31,8 +31,8 @@ const PaymentModal = ({ selectedProduct, onClose, onProceedToPayment }) => {
                 <h3 className="modal-title">입양하시겠습니까?</h3>
                 <div className="payment-card-area">
                     <Container className="product-card">
-                        <Row className="align-items-center">
-                            <div className="cat-id"> {selectedProduct.id} </div>
+                        <Row className="align-items-center payment-modal-area">
+                            {/* <div className="cat-id"> {selectedProduct.id} </div> */}
                             <Col className="image-container">
                                 <div className="image">
                                     <img src={selectedProduct.image} className="image" />

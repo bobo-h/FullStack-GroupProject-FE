@@ -97,7 +97,8 @@ const PaymentInfoModal = ({ onClose }) => {
   };
 
   const proceedToPayment = () => {
-    navigate("/chatbot");
+    //user_id도 넘겨주세용
+    navigate("/chatbot", { state: { productImage: selectedProduct._id } });
   };
   const handleBackdropClick = (event) => {
     if (event.target.classList.contains("modal-backdrop")) {
@@ -193,6 +194,7 @@ const PaymentInfoModal = ({ onClose }) => {
                   </Row>
                 </Form.Group>
               </Row>
+
               {/* 구매자 전화번호 입력 */}
               <Row className="mb-3">
                 <Form.Group controlId="phone">
@@ -213,6 +215,7 @@ const PaymentInfoModal = ({ onClose }) => {
                   </Row>
                 </Form.Group>
               </Row>
+
               {/* 카드 정보 입력 폼 */}
               <h4 className="payment-title">카드 정보</h4>
               <PaymentForm

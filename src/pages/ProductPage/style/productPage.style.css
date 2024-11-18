@@ -42,6 +42,16 @@
     cursor: pointer; /* 손가락 모양 */
     transition: transform 0.2s ease; /* 부드러운 확대 효과 */
   }
+
+  .product-card:hover {
+    transform: scale(1.05); /* 마우스 오버 시 약간 확대 */
+  }
+
+  /* ProductCard 컴포넌트에 마우스 호버 효과 */
+  .product-card {
+    cursor: pointer; /* 손가락 모양 */
+    transition: transform 0.2s ease; /* 부드러운 확대 효과 */
+  }
   .product-card:hover {
     transform: scale(1.05); /* 마우스 오버 시 약간 확대 */
   }

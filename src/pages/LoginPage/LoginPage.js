@@ -27,9 +27,15 @@ const LoginPage = () => {
     dispatch(loginWithGoogle(googleData.credential));
   };
 
-  if (user) {
-    navigate("/");
-  }
+  // if (user) {
+  //   navigate("/");
+  // }
+  // user 상태에 따라 리다이렉션 -> 기존에는 토근 로그인 일때만 리다이렉션 해줌.
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
   // 에러 초기화
   const onClose = () => {
     dispatch(clearErrors());
@@ -38,7 +44,7 @@ const LoginPage = () => {
     <Container className="login-area">
       {loginError && (
         <div className="error-message">
-          <Alert variant="danger" onClose={onClose}>
+          <Alert variant="danger" onClose={onClose} redirectTo="/login">
             {loginError}
           </Alert>
         </div>

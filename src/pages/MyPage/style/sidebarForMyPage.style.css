@@ -10,6 +10,14 @@
     display: none;
   }
 
+  .logo-image {
+    margin-top: 20px;
+  }
+
+  .sidebar-general-style {
+    margin-top: 15px;
+  }
+
   .sidebar-item {
     color: #5f6f52;
     font-weight: bold;

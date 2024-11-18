@@ -34,7 +34,6 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
   const [formData, setFormData] = useState(
     mode === "new" ? { ...InitialFormData } : selectedProduct
   );
-
   const [showAlert, setShowAlert] = useState(false);
   const [alertContent, setAlertContent] = useState("");
   const dispatch = useDispatch();
@@ -99,10 +98,8 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
   };
 
   const handleCategoryChange = (value) => {
-    console.log("Selected category:", value);
     setFormData((prevFormData) => {
       const updatedCategory = [value]; // 기존 값을 지우고 새로 선택된 값만 배열로 저장
-      console.log("Updated category:", updatedCategory); // 디버깅 로그
       return { ...prevFormData, category: updatedCategory };
     });
   };

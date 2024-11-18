@@ -1,5 +1,4 @@
 .product-card-area {
-  width: 40%;
   border-radius: 8px;
   padding: 3%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -61,18 +60,11 @@
 }
 
 /* 미디어 쿼리: 화면 너비 1500px 이하일 때 */
-@media (max-width: 1500px) {
-  .product-card-area {
-    width: 70%;
-    /* 카드가 한 줄에 하나씩 차지하도록 설정 */
-    margin: 1% auto;
-    /* 가운데 정렬을 위해 여백 조정 */
-  }
-}
+
 
 @media (max-width: 700px) {
   .product-card-area {
-    width: 90%;
+    width: 80%;
     /* 더 작은 화면에서는 너비를 90%로 설정 */
     margin: 1% auto;
     /* 여전히 가운데 정렬 유지 */

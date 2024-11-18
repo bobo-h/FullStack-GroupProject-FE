@@ -10,7 +10,6 @@ const uiSlice = createSlice({
   initialState,
   reducers: {
     showToastMessage(state, action) {
-      console.log("excuted here!!!")
       state.toastMessage = {
         message: action.payload.message,
         status: action.payload.status,

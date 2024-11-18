@@ -59,7 +59,7 @@ export const loginWithToken = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get("/user/me");
-      return response;
+      return response.data; //response 뒤에 .data 수정됨
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -72,7 +72,6 @@ export const editUserInfo = createAsyncThunk(
   async ({ id, formData }, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.put(`/user/${id}`, formData);
-      // 수정된 내용 바로 갱신
       return response.data.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -86,11 +85,20 @@ export const deleteUserInfo = createAsyncThunk(
   async ({ id, navigate }, { rejectWithValue }) => {
     try {
       const response = await api.delete(`/user/${id}`);
-      // navigate -> login page로 이동하는 거
+      sessionStorage.removeItem("token");
       navigate("/login");
     } catch (error) {
       return rejectWithValue(error.message);
     }
+  }
+);
+
+// 로그아웃
+export const logout = createAsyncThunk(
+  "user/logout",
+  async (_, { dispatch }) => {
+    sessionStorage.removeItem("token");
+    dispatch(userSlice.actions.logout()); // 유저 정보 초기화
   }
 );
 
@@ -111,6 +119,10 @@ const userSlice = createSlice({
       state.registrationError = null;
       state.editError = null;
       state.deleteError = null;
+    },
+    logout: (state) => {
+      state.user = null;
+      state.loginError = null;
     },
   },
   extraReducers: (builder) => {
@@ -150,8 +162,17 @@ const userSlice = createSlice({
         state.loading = false;
         state.loginError = action.payload;
       })
+      .addCase(loginWithToken.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(loginWithToken.fulfilled, (state, action) => {
-        state.user = action.payload.user;
+        state.loading = false;
+        state.user = action.payload.user; // action.payload.data.user 에서 수정
+      })
+      .addCase(loginWithToken.rejected, (state, action) => {
+        state.user = null;
+        state.loading = false;
+        // state.error = action.payload || "로그인 실패"; //쓸데 없는 알림 노출되는 것 같아 지웠습니다.
       })
       .addCase(editUserInfo.pending, (state) => {
         state.loading = true;
