@@ -151,7 +151,7 @@ const userSlice = createSlice({
         state.loginError = action.payload;
       })
       .addCase(loginWithToken.fulfilled, (state, action) => {
-        state.user = action.payload.data.user;
+        state.user = action.payload.user;
       })
       .addCase(editUserInfo.pending, (state) => {
         state.loading = true;
