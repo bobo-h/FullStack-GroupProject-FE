@@ -2,18 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../features/user/userSlice";
+import {
+  getChatbotList,
+  updateChatbotJins,
+} from "../../features/chatbot/chatbotSlice";
 import "../style/sidebar.style.css";
 import debounce from "lodash.debounce";
-import testCatfImage1 from "./../../assets/test_cats/cat_1_pf.png";
-import testCatfImage2 from "./../../assets/test_cats/cat_2_pf.png";
-import testCatfImage3 from "./../../assets/test_cats/cat_3_pf.png";
-import testCatfImage4 from "./../../assets/test_cats/cat_4_pf.png";
-import testCatfImage5 from "./../../assets/test_cats/cat_5_pf.png";
-import testCatfImage6 from "./../../assets/test_cats/cat_6_pf.png";
-import testCatfImage7 from "./../../assets/test_cats/cat_7_pf.png";
-import testCatfImage8 from "./../../assets/test_cats/cat_8_pf.png";
-import testCatfImage9 from "./../../assets/test_cats/cat_9_pf.png";
-import testCatfImage10 from "./../../assets/test_cats/cat_10_pf.png";
 
 // 하위 컴포넌트로 분리하여 코드 가독성 및 재사용성을 높이자.
 const SideBar = ({
@@ -24,90 +18,33 @@ const SideBar = ({
   scrollTop,
 }) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
-  const [cats, setCats] = useState([
-    {
-      id: "cat1",
-      name: "미유",
-      personality: "활발하고 장난기가 많음",
-      visualization: false,
-      image: testCatfImage1,
-    },
-    {
-      id: "cat2",
-      name: "루나",
-      personality: "조용하고 신비로운 성격",
-      visualization: false,
-      image: testCatfImage2,
-    },
-    {
-      id: "cat3",
-      name: "모카",
-      personality: "다정하고 사람을 좋아함",
-      visualization: false,
-      image: testCatfImage3,
-    },
-    {
-      id: "cat4",
-      name: "초코",
-      personality: "탐험을 좋아하는 호기심 많은 성격",
-      visualization: false,
-      image: testCatfImage4,
-    },
-    {
-      id: "cat5",
-      name: "나비",
-      personality: "온순하고 애교가 많음",
-      visualization: false,
-      image: testCatfImage5,
-    },
-    {
-      id: "cat6",
-      name: "소이",
-      personality: "까칠하지만 속은 따뜻함",
-      visualization: false,
-      image: testCatfImage6,
-    },
-    {
-      id: "cat7",
-      name: "구름",
-      personality: "느긋하고 차분한 성격",
-      visualization: false,
-      image: testCatfImage7,
-    },
-    {
-      id: "cat8",
-      name: "별이",
-      personality: "활달하고 빛나는 에너지를 가짐",
-      visualization: false,
-      image: testCatfImage8,
-    },
-    {
-      id: "cat9",
-      name: "보리",
-      personality: "먹을 것을 좋아하는 푸근한 성격",
-      visualization: false,
-      image: testCatfImage9,
-    },
-    {
-      id: "cat10",
-      name: "쥬니",
-      personality: "영리하고 호기심이 넘침",
-      visualization: false,
-      image: testCatfImage10,
-    },
-  ]);
-  // 임시 보이기 안보이기 로직
+  const { cats, status, error } = useSelector((state) => state.chatbot);
+
+  // 토큰으로 로그인
+  useEffect(() => {
+    dispatch(getChatbotList());
+  }, []);
+
+  // 임시 고양이 보이기 안보이기 로직
   const handleRightClick = (e, catId) => {
     e.preventDefault(); // 기본 우클릭 메뉴 방지
+    // cats 배열에서 해당 catId를 가진 고양이 찾기
+    const selectedCat = cats.find((cat) => cat._id === catId);
 
-    setCats((prevCatList) =>
-      prevCatList.map((cat) =>
-        cat.id === catId
-          ? { ...cat, visualization: !cat.visualization } // visualization 값 토글
-          : cat
-      )
-    );
+    if (selectedCat) {
+      // visualization 값을 토글하여 새로운 상태 만들기
+      const updatedVisualization = !selectedCat.visualization;
+
+      // updateChatbotJins action 호출
+      dispatch(
+        updateChatbotJins({
+          id: catId,
+          updateData: { visualization: updatedVisualization },
+        })
+      );
+    }
   };
 
   // 화면 크기 변경 감지
@@ -216,9 +153,13 @@ const SidebarContainer = ({
           {cats.map((cat) => (
             <div
               className="my-cats-info"
-              key={cat.id}
-              id={cat.id}
-              onContextMenu={(e) => handleRightClick(e, cat.id)} // 우클릭 이벤트 핸들러 추가
+              key={cat._id}
+              id={cat._id}
+              onContextMenu={
+                (e) => {
+                  handleRightClick(e, cat._id);
+                } // 우클릭 이벤트 핸들러 추가
+              }
             >
               <div
                 className={`cat-list-image-back ${
@@ -227,7 +168,7 @@ const SidebarContainer = ({
               >
                 <img
                   className="cat-list-image-profile"
-                  src={cat.image}
+                  src={cat.product_id.image}
                   alt="cats profile"
                 />
               </div>
@@ -262,9 +203,6 @@ const LogoutButton = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // 토큰 제거
-    localStorage.removeItem("token"); // 예: localStorage에 저장된 토큰 제거
-
     // Redux 상태 초기화
     dispatch(logout());
 

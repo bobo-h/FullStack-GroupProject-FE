@@ -9,7 +9,7 @@ const PrivateRoute = ({ children, requiredRole }) => {
     return <Navigate to="/login" replace />;
   }
 
-  if (requiredRole && user.role !== requiredRole) {
+  if (requiredRole && user.level !== requiredRole) {
     // 권한이 없는 경우 접근 차단
     return <Navigate to="/" replace />;
   }

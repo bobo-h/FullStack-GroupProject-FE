@@ -34,12 +34,14 @@ const AppLayout = ({ children }) => {
     dispatch(loginWithToken());
   }, []);
 
+  const publicPaths = ["/login", "/register", "/register-success"]; // user없이 들어갈 수 있는 페이지 추가
+
   useEffect(() => {
-    // 로딩이 끝났는데 user가 없으면 리디렉션
-    if (!loading && user === null) {
+    // 로딩이 끝났는데 user가 없고, 현재 경로가 공개 경로가 아닌 경우 리디렉션
+    if (!loading && user === null && !publicPaths.includes(location.pathname)) {
       navigate("/login");
     }
-  }, [user, loading, navigate]);
+  }, [user, loading, navigate, location.pathname]);
 
   useEffect(() => {
     // 현재 경로와 일치하는 페이지 찾기

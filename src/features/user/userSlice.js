@@ -48,7 +48,6 @@ export const loginWithGoogle = createAsyncThunk(
       sessionStorage.setItem("token", response.data.token);
       return response.data;
     } catch (error) {
-      console.log("이거", error);
       return rejectWithValue(error.message);
     }
   }
@@ -95,6 +94,15 @@ export const deleteUserInfo = createAsyncThunk(
   }
 );
 
+// 로그아웃
+export const logout = createAsyncThunk(
+  "user/logout",
+  async (_, { dispatch }) => {
+    sessionStorage.removeItem("token");
+    dispatch(userSlice.actions.logout()); // 유저 정보 초기화
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -116,6 +124,7 @@ const userSlice = createSlice({
     // 로그아웃 액션
     logout: (state) => {
       state.user = null; // 사용자 정보 초기화
+      state.loginError = null;
     },
   },
   extraReducers: (builder) => {
@@ -165,7 +174,7 @@ const userSlice = createSlice({
       .addCase(loginWithToken.rejected, (state, action) => {
         state.user = null;
         state.loading = false;
-        state.loginError = action.payload || "로그인 실패";
+        // state.error = action.payload || "로그인 실패"; //쓸데 없는 알림 노출되는 것 같아 지웠습니다.
       })
       .addCase(editUserInfo.pending, (state) => {
         state.loading = true;
@@ -191,5 +200,5 @@ const userSlice = createSlice({
       });
   },
 });
-export const { clearErrors, logout } = userSlice.actions;
+export const { clearErrors } = userSlice.actions;
 export default userSlice.reducer;

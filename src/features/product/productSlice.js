@@ -9,8 +9,6 @@ export const getProductList = createAsyncThunk(
     try {
       const response = await api.get("/product", { params: { ...query } });
       if (response.status !== 200) throw new Error(response.error);
-      console.log("여기", response.data);
-
       return response.data;
     } catch (error) {
       return rejectWithValue(error.error);
