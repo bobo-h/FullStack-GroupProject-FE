@@ -13,7 +13,7 @@ const AdminMenu = ({ setSelectedComponent, selectedComponent }) => {
   return (
     <div className='admin-menubar'>
       <div className='titles'>
-        // <img src={sidebarLogo} alt="Sidebar Logo" className='project-logo' />
+        {/* // <img src={sidebarLogo} alt="Sidebar Logo" className='project-logo' /> */}
       </div>
       <Row className="button-container">
         <button

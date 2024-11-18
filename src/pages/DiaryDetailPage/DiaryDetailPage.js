@@ -2,7 +2,9 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import DiaryDetail from "./components/DiaryDetail";
 import { photo } from "../../assets";
-import Comment from "./components/Comment";
+import CommentArea from "./components/Comment/CommentArea";
+import { Container, Col, Row } from "react-bootstrap";
+
 
 const dummyDiaryEntries = [
   {
@@ -70,8 +72,12 @@ const DiaryDetailPage = () => {
 
   return (
     <div>
-      <DiaryDetail diaryEntry={diaryEntry} />
-      <Comment />
+      <Col>
+        <DiaryDetail diaryEntry={diaryEntry} />
+      </Col>
+      <Col>
+        <CommentArea diaryId = {diaryId}/>
+      </Col>
     </div>
   );
 };
