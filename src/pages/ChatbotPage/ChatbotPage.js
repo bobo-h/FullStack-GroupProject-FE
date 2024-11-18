@@ -26,6 +26,24 @@ const ChatbotCreation = ({ chatbotItem }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // if (chatbotItem) {
+    //   // 수정 로직
+    //   dispatch(
+    //     updateChatbot({
+    //       chatbotId: chatbotItem.productId._id, // ID를 전달
+    //       name,
+    //     })
+    //   )
+    //     .then(() => {
+    //       setAlertContent("수정이 완료되었습니다!");
+    //       setShowAlert(true);
+    //     })
+    //     .catch((error) => {
+    //       console.error("수정 실패", error);
+    //       setAlertContent("수정에 실패했습니다!");
+    //       setShowAlert(true);
+    //     });
+    // } else {
     dispatch(createChatbot({ name, personality }))
       .then(() => {
         setAlertContent("입양에 성공했습니다!");
@@ -36,6 +54,7 @@ const ChatbotCreation = ({ chatbotItem }) => {
         setAlertContent("입양에 실패했습니다!");
         setShowAlert(true);
       });
+    //  }
   };
 
   const handlePersonalityChange = (selectedPersonality) => {
@@ -108,22 +127,29 @@ const ChatbotCreation = ({ chatbotItem }) => {
                   <Col xs="auto">
                     <Form.Label>챗봇 성격</Form.Label>
                   </Col>
-                  <Col className="btn-gap">
-                    <Button2
-                      variant={isDirectInput ? "outline-secondary" : "primary"}
-                      onClick={() => handleInputTypeChange(true)}
-                      disabled={Boolean(chatbotItem)}
-                    >
-                      직접 입력
-                    </Button2>
-                    <Button
-                      variant={isDirectInput ? "primary" : "outline-secondary"}
-                      onClick={() => handleInputTypeChange(false)}
-                      disabled={Boolean(chatbotItem)}
-                    >
-                      성격 선택
-                    </Button>
-                  </Col>
+                  {chatbotItem ? (
+                    ""
+                  ) : (
+                    <Col className="btn-gap">
+                      <Button2
+                        variant={
+                          isDirectInput ? "outline-secondary" : "primary"
+                        }
+                        onClick={() => handleInputTypeChange(true)}
+                      >
+                        직접 입력
+                      </Button2>
+                      <Button
+                        variant={
+                          isDirectInput ? "primary" : "outline-secondary"
+                        }
+                        onClick={() => handleInputTypeChange(false)}
+                      >
+                        성격 선택
+                      </Button>
+                    </Col>
+                  )}
+
                   <Row className="personality-area">
                     {!isDirectInput && (
                       <Form.Control

@@ -38,7 +38,7 @@ const LoginPage = () => {
     <Container className="login-area">
       {loginError && (
         <div className="error-message">
-          <Alert variant="danger" onClose={onClose}>
+          <Alert variant="danger" onClose={onClose} redirectTo="/login">
             {loginError}
           </Alert>
         </div>
