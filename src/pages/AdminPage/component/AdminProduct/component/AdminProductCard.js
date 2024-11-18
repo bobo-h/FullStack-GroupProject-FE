@@ -1,9 +1,12 @@
-import React from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import React from "react";
+import { Container, Row, Col } from "react-bootstrap";
 import "../style/adminProduct.style.css";
-import Button2 from '../../../../../common/components/Button2';
-import { useDispatch } from 'react-redux';
-import { setSelectedProduct, deleteProduct } from "../../../../../features/product/productSlice";
+import Button2 from "../../../../../common/components/Button2";
+import { useDispatch } from "react-redux";
+import {
+  setSelectedProduct,
+  deleteProduct,
+} from "../../../../../features/product/productSlice";
 
 const AdminProductCard = ({ product, setMode, setShowDialog }) => {
   const dispatch = useDispatch();
@@ -15,17 +18,14 @@ const AdminProductCard = ({ product, setMode, setShowDialog }) => {
     // 선택한 상품을 Redux 상태에 저장
     dispatch(setSelectedProduct(product));
     setShowDialog(true);
-
   };
 
   const handleClickDeleteItem = () => {
-    
     dispatch(deleteProduct(product._id));
-
   };
 
   return (
-    <div className='product-table-content'>
+    <div className="product-table-content">
       <Container>
         <Row className="mb-4">
           <Col md={1} className="d-flex align-items-center">
@@ -46,7 +46,10 @@ const AdminProductCard = ({ product, setMode, setShowDialog }) => {
           <Col md={1} className="d-flex align-items-center">
             {product.defaultProduct}
           </Col>
-          <Col md={3} className="d-flex align-items-center justify-content-center">
+          <Col
+            md={3}
+            className="d-flex align-items-center justify-content-center"
+          >
             <Button2 onClick={handleClickEditItem}>수정</Button2>
             <Button2 onClick={handleClickDeleteItem}>삭제</Button2>
           </Col>

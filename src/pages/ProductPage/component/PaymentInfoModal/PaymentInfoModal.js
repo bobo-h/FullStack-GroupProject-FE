@@ -9,15 +9,15 @@ import PaymentForm from "./PaymentForm";
 import Button from "../../../../common/components/Button";
 import Button2 from "../../../../common/components/Button2";
 import ReactDOM from "react-dom";
-import Alert from "../../../../common/components/Alert"
+import Alert from "../../../../common/components/Alert";
 
 const PaymentInfoModal = ({ onClose }) => {
   const dispatch = useDispatch();
   const selectedProduct = useSelector((state) => state.product.selectedProduct);
   const { orderNum } = useSelector((state) => state.order);
   const [firstLoading, setFirstLoading] = useState(true);
-  const [showAlert, setShowAlert] = useState(false)
-  const [alertContent, setAlertContent] = useState("")
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertContent, setAlertContent] = useState("");
 
   const [cardValue, setCardValue] = useState({
     cvc: "",
@@ -48,35 +48,35 @@ const PaymentInfoModal = ({ onClose }) => {
 
   // }, [orderNum]);
 
-
   const handleSubmit = (event) => {
     event.preventDefault();
 
     // 선택한 상품 정보를 사용하여 주문 생성
-    dispatch(createOrder({
-      name: orderPersonInfo.name,
-      email: orderPersonInfo.email,
-      phone: orderPersonInfo.phoneNumber,
-      productId: selectedProduct._id,
-      price: selectedProduct.price,
-      productName: selectedProduct.name,
-      productCategory: selectedProduct.category,
-      img: selectedProduct.image,
-    })).then(() => {
-      // setAlertContent(`결제 성공하였습니다! <br /> 주문번호: ${orderNum}`);
-      setAlertContent("결제 성공하였습니다!");
-      setShowAlert(true);
-    })
+    dispatch(
+      createOrder({
+        name: orderPersonInfo.name,
+        email: orderPersonInfo.email,
+        phone: orderPersonInfo.phoneNumber,
+        productId: selectedProduct._id,
+        price: selectedProduct.price,
+        productName: selectedProduct.name,
+        productCategory: selectedProduct.category,
+        img: selectedProduct.image,
+      })
+    )
+      .then(() => {
+        // setAlertContent(`결제 성공하였습니다! <br /> 주문번호: ${orderNum}`);
+        setAlertContent("결제 성공하였습니다!");
+        setShowAlert(true);
+      })
       .catch((error) => {
         setAlertContent("결제 실패!");
         setShowAlert(true);
       });
-
   };
 
   const handleFormChange = (event) => {
-
-    // 이름, 이메일 주소 입력 
+    // 이름, 이메일 주소 입력
     const { name, value } = event.target;
     setOrderPersonInfo({ ...orderPersonInfo, [name]: value }); // 입력 필드 업데이트
   };
@@ -85,9 +85,9 @@ const PaymentInfoModal = ({ onClose }) => {
     //카드정보 넣어주기
     const { name, value } = event.target;
     if (name === "expiry") {
-      let newValue = cc_expires_format(value)
+      let newValue = cc_expires_format(value);
       setCardValue({ ...cardValue, [name]: newValue });
-      return
+      return;
     }
     setCardValue({ ...cardValue, [name]: value });
   };
@@ -98,14 +98,13 @@ const PaymentInfoModal = ({ onClose }) => {
 
   const proceedToPayment = () => {
     //user_id도 넘겨주세용
-    navigate("/chatbot", { state: { productImage: selectedProduct._id} });
-  }
+    navigate("/chatbot", { state: { productImage: selectedProduct._id } });
+  };
   const handleBackdropClick = (event) => {
     if (event.target.classList.contains("modal-backdrop")) {
       onClose();
     }
   };
-
 
   const PaymentInfoContent = (
     <div className="modal-backdrop" onClick={handleBackdropClick}>
@@ -141,7 +140,6 @@ const PaymentInfoModal = ({ onClose }) => {
                   </Col>
                 </Row>
               </div>
-
             ) : (
               <p>상품 정보를 불러올 수 없습니다.</p>
             )}
@@ -163,17 +161,16 @@ const PaymentInfoModal = ({ onClose }) => {
                     <Col lg={2} xs="auto">
                       <Form.Label>이름</Form.Label>
                     </Col>
-                    <Col >
+                    <Col>
                       <Form.Control
                         type="text"
                         onChange={handleFormChange}
                         required
                         name="name"
-                      // value={orderInfo.name}
+                        // value={orderInfo.name}
                       />
                     </Col>
                   </Row>
-
                 </Form.Group>
               </Row>
 
@@ -227,24 +224,34 @@ const PaymentInfoModal = ({ onClose }) => {
                 handlePaymentInfoChange={handlePaymentInfoChange}
               />
 
-            {/* 결제 버튼 */}
-            <div className="text-center mt-4">
-              <Button variant="primary"  onClick={proceedToPayment} className="payment-button mx-2" type="submit">
-                결제하기
-              </Button>
-              <Button2 variant="secondary" onClick={onClose} className="cancel-button mx-2">
-                취소
-              </Button2>
-            </div>
-          </Form>
-        </Col>
-      </Row>
-    </Container>
+              {/* 결제 버튼 */}
+              <div className="text-center mt-4">
+                <Button
+                  variant="primary"
+                  className="payment-button mx-2"
+                  type="submit"
+                >
+                  결제하기
+                </Button>
+                <Button2
+                  variant="secondary"
+                  onClick={onClose}
+                  className="cancel-button mx-2"
+                >
+                  취소
+                </Button2>
+              </div>
+            </Form>
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 
-  return ReactDOM.createPortal(PaymentInfoContent, document.getElementById("root"));
-
+  return ReactDOM.createPortal(
+    PaymentInfoContent,
+    document.getElementById("root")
+  );
 };
 
 export default PaymentInfoModal;

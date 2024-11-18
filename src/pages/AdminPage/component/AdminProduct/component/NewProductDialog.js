@@ -3,9 +3,13 @@ import { Form, Modal, Row, Col } from "react-bootstrap";
 import Alert from "../../../../../common/components/Alert";
 import { useDispatch, useSelector } from "react-redux";
 import CloudinaryUploadWidget from "../../../../../utils/CloudinaryUploadWidget";
-import { CATEGORY, DEFAULT_PRODUCT, IS_ACTIVE } from "../../../../../constants/product.constants";
+import {
+  CATEGORY,
+  DEFAULT_PRODUCT,
+  IS_ACTIVE,
+} from "../../../../../constants/product.constants";
 import "../style/adminProduct.style.css";
-import Button from '../../../../../common/components/Button';
+import Button from "../../../../../common/components/Button";
 import {
   clearError,
   createProduct,
@@ -20,7 +24,7 @@ const InitialFormData = {
   category: ["Cat"],
   isActive: "Active",
   price: 0,
-  defaultProduct: "No"
+  defaultProduct: "No",
 };
 
 const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
@@ -65,7 +69,7 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
       //새 상품 만들기
       dispatch(createProduct(formData))
         .then(() => {
-          console.log("excuted here!!!")
+          console.log("excuted here!!!");
           setAlertContent("상품 생성 완료하였습니다!");
           setShowAlert(true);
         })
@@ -84,15 +88,14 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
           setAlertContent("상품 정보 변경 실패!");
           setShowAlert(true);
         });
-    };
-
+    }
   };
 
   const handleChange = (event) => {
     //form에 데이터 넣어주기
     const { id, value } = event.target;
     setFormData({ ...formData, [id]: value });
-  }
+  };
 
   const handleCategoryChange = (value) => {
     setFormData((prevFormData) => {
@@ -103,11 +106,10 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
 
   const uploadImage = (url) => {
     //이미지 업로드
-    setFormData({ ...formData, image: url })
+    setFormData({ ...formData, image: url });
   };
 
   return (
-
     <Modal show={showDialog} onHide={handleClose}>
       <Modal.Header closeButton>
         {mode === "new" ? (
@@ -125,9 +127,8 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
         <Alert
           message={alertContent}
           onClose={() => {
-
-            setShowAlert(false)
-            setShowDialog(false)
+            setShowAlert(false);
+            setShowDialog(false);
           }}
           redirectTo="/admin"
         />
@@ -186,10 +187,11 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
           <img
             id="uploadedimage"
             src={formData.image || "#"} // 이미지가 없을 때 기본 이미지나 빈 값 사용
-            className={`upload-image mt-2 ${formData.image ? "" : "blurred-image"}`}
+            className={`upload-image mt-2 ${
+              formData.image ? "" : "blurred-image"
+            }`}
             alt="uploadedimage"
           />
-
         </Form.Group>
 
         <Row className="mb-3">
@@ -223,7 +225,9 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
             <Form.Label>DefaultProduct</Form.Label>
             <Form.Select
               value={formData.defaultProduct} // 초기값이 "No"로 설정되었는지 확인
-              onChange={(e) => setFormData({ ...formData, defaultProduct: e.target.value })} // 선택 값 반영
+              onChange={(e) =>
+                setFormData({ ...formData, defaultProduct: e.target.value })
+              } // 선택 값 반영
               required
             >
               <option value="Yes">Yes</option>

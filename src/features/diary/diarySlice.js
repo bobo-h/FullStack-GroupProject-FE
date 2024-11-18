@@ -13,6 +13,18 @@ export const createDiary = createAsyncThunk(
   }
 );
 
+export const getDiaryList = createAsyncThunk(
+  "diary/getDiaryList",
+  async (page, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/diary?page=${page}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const diarySlice = createSlice({
   name: "diary",
   initialState: {
@@ -21,7 +33,8 @@ const diarySlice = createSlice({
     diaryList: [],
     deletedDiaryList: [],
     selectedDiary: null,
-    totalPageNum: 1,
+    currentPage: 1,
+    totalPages: 1,
     deletedTotalPageNum: 1,
     success: false,
   },
@@ -32,6 +45,9 @@ const diarySlice = createSlice({
     clearError: (state) => {
       state.error = "";
       state.success = false;
+    },
+    clearDiaryList: (state) => {
+      state.diaryList = [];
     },
   },
   extraReducers: (builder) => {
@@ -45,12 +61,27 @@ const diarySlice = createSlice({
         state.success = true;
       })
       .addCase(createDiary.rejected, (state, action) => {
-        state.loading = true;
+        state.loading = false;
         state.error = action.payload;
         state.success = false;
+      })
+      .addCase(getDiaryList.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getDiaryList.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.diaryList = [...state.diaryList, ...action.payload.data];
+        state.currentPage = action.payload.currentPage;
+        state.totalPages = action.payload.totalPages;
+      })
+      .addCase(getDiaryList.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to fetch diaries.";
       });
   },
 });
 
-export const { setSelectedDiary, clearError } = diarySlice.actions;
+export const { setSelectedDiary, clearError, clearDiaryList } =
+  diarySlice.actions;
 export default diarySlice.reducer;

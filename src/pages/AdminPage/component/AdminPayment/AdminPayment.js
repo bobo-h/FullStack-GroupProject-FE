@@ -9,7 +9,7 @@ import {
   getOrderList,
   setSelectedOrder,
 } from "../../../../features/order/orderSlice";
-import "./style/adminPayment.style.css"
+import "./style/adminPayment.style.css";
 
 const AdminOrderPage = () => {
   const navigate = useNavigate();
@@ -61,11 +61,11 @@ const AdminOrderPage = () => {
 
   return (
     <div>
-       <OrderTable
-          header={tableHeader}
-          data={orderList}
-          openEditForm={openEditForm}
-        />
+      <OrderTable
+        header={tableHeader}
+        data={orderList}
+        openEditForm={openEditForm}
+      />
     </div>
   );
 };
