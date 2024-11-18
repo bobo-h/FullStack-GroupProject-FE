@@ -108,22 +108,29 @@ const ChatbotCreation = ({ chatbotItem }) => {
                   <Col xs="auto">
                     <Form.Label>챗봇 성격</Form.Label>
                   </Col>
-                  <Col className="btn-gap">
-                    <Button2
-                      variant={isDirectInput ? "outline-secondary" : "primary"}
-                      onClick={() => handleInputTypeChange(true)}
-                      disabled={Boolean(chatbotItem)}
-                    >
-                      직접 입력
-                    </Button2>
-                    <Button
-                      variant={isDirectInput ? "primary" : "outline-secondary"}
-                      onClick={() => handleInputTypeChange(false)}
-                      disabled={Boolean(chatbotItem)}
-                    >
-                      성격 선택
-                    </Button>
-                  </Col>
+                  {chatbotItem ? (
+                    ""
+                  ) : (
+                    <Col className="btn-gap">
+                      <Button2
+                        variant={
+                          isDirectInput ? "outline-secondary" : "primary"
+                        }
+                        onClick={() => handleInputTypeChange(true)}
+                      >
+                        직접 입력
+                      </Button2>
+                      <Button
+                        variant={
+                          isDirectInput ? "primary" : "outline-secondary"
+                        }
+                        onClick={() => handleInputTypeChange(false)}
+                      >
+                        성격 선택
+                      </Button>
+                    </Col>
+                  )}
+
                   <Row className="personality-area">
                     {!isDirectInput && (
                       <Form.Control
