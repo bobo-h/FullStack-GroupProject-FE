@@ -4,6 +4,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // getChatbot action
 export const getChatbotList = createAsyncThunk(
   "chatbot/getChatbot",
+
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get(`/chatbot/me`);

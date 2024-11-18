@@ -72,7 +72,6 @@ export const editUserInfo = createAsyncThunk(
   async ({ id, formData }, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.put(`/user/${id}`, formData);
-      // 수정된 내용 바로 갱신
       return response.data.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -86,7 +85,7 @@ export const deleteUserInfo = createAsyncThunk(
   async ({ id, navigate }, { rejectWithValue }) => {
     try {
       const response = await api.delete(`/user/${id}`);
-      // navigate -> login page로 이동하는 거
+      sessionStorage.removeItem("token");
       navigate("/login");
     } catch (error) {
       return rejectWithValue(error.message);
@@ -121,9 +120,8 @@ const userSlice = createSlice({
       state.editError = null;
       state.deleteError = null;
     },
-    // 로그아웃 액션
     logout: (state) => {
-      state.user = null; // 사용자 정보 초기화
+      state.user = null;
       state.loginError = null;
     },
   },
