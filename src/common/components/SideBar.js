@@ -27,7 +27,7 @@ const SideBar = ({
     dispatch(getChatbotList());
   }, []);
 
-  // 임시 고양이 보이기 안보이기 로직
+  // 고양이 보이기 안보이기 로직 // 수정 필요
   const handleRightClick = (e, catId) => {
     e.preventDefault(); // 기본 우클릭 메뉴 방지
     // cats 배열에서 해당 catId를 가진 고양이 찾기
