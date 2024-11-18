@@ -3,7 +3,7 @@ import { Form, Modal, Row, Col, Alert } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import CloudinaryUploadWidget from "../../../../../utils/CloudinaryUploadWidget";
 import "../style/adminMood.style.css";
-import Button from '../../../../../common/components/Button';
+import Button from "../../../../../common/components/Button";
 import {
   clearError,
   createMood,
@@ -15,13 +15,11 @@ const InitialFormData = {
   name: "",
   image: "",
   description: "",
-  is_deleted: "No"
+  isDeleted: "No",
 };
 
 const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
-  const { error, success, selectedMood } = useSelector(
-    (state) => state.mood
-  );
+  const { error, success, selectedMood } = useSelector((state) => state.mood);
   const [formData, setFormData] = useState(
     mode === "new" ? { ...InitialFormData } : selectedMood
   );
@@ -56,25 +54,23 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
 
     if (mode === "new") {
       //새 무드 만들기
-      dispatch(createMood(formData))
+      dispatch(createMood(formData));
     } else {
       // 무드 수정하기
-      console.log("formData??", formData)
-      dispatch(editMood({ ...formData, id: selectedMood._id })
-      );
-    };
-
+      console.log("formData??", formData);
+      dispatch(editMood({ ...formData, id: selectedMood._id }));
+    }
   };
 
   const handleChange = (event) => {
     //form에 데이터 넣어주기
     const { id, value } = event.target;
     setFormData({ ...formData, [id]: value });
-  }
+  };
 
   const uploadImage = (url) => {
     //이미지 업로드
-    setFormData({ ...formData, image: url })
+    setFormData({ ...formData, image: url });
   };
 
   return (
@@ -135,30 +131,29 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
           <img
             id="uploadedimage"
             src={formData.image || "#"} // 이미지가 없을 때 기본 이미지나 빈 값 사용
-            className={`upload-image mt-2 ${formData.image ? "" : "blurred-image"}`}
+            className={`upload-image mt-2 ${
+              formData.image ? "" : "blurred-image"
+            }`}
             alt="uploadedimage"
           />
-
         </Form.Group>
 
         <Row className="mb-3">
-
-          <Form.Group as={Col} controlId="is_deleted">
-            <Form.Label>Is_deleted</Form.Label>
+          <Form.Group as={Col} controlId="isDeleted">
+            <Form.Label>isDeleted</Form.Label>
             <Form.Select
-              value={formData.is_deleted} // 초기값이 "No"로 설정되었는지 확인
+              value={formData.isDeleted} // 초기값이 "No"로 설정되었는지 확인
               onChange={(e) => {
                 const newValue = e.target.value;
-                console.log("Updated is_deleted:", newValue); // 값 디버깅
-                setFormData({ ...formData, is_deleted: newValue }); }
-              }
+                console.log("Updated isDeleted:", newValue); // 값 디버깅
+                setFormData({ ...formData, isDeleted: newValue });
+              }}
               required
             >
               <option value="Yes">Yes</option>
               <option value="No">No</option>
             </Form.Select>
           </Form.Group>
-
         </Row>
         {mode === "new" ? (
           <Button variant="primary" type="submit">

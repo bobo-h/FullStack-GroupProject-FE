@@ -45,7 +45,7 @@ const diarySlice = createSlice({
         state.success = true;
       })
       .addCase(createDiary.rejected, (state, action) => {
-        state.loading = true;
+        state.loading = false;
         state.error = action.payload;
         state.success = false;
       });

@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Form, Modal, Row, Col, Alert } from "react-bootstrap";
+import { Form, Modal, Row, Col } from "react-bootstrap";
+import Alert from "../../../../../common/components/Alert";
 import { useDispatch, useSelector } from "react-redux";
 import CloudinaryUploadWidget from "../../../../../utils/CloudinaryUploadWidget";
-import { CATEGORY, DEFAULT_PRODUCT, IS_ACTIVE } from "../../../../../constants/product.constants";
+import {
+  CATEGORY,
+  DEFAULT_PRODUCT,
+  IS_ACTIVE,
+} from "../../../../../constants/product.constants";
 import "../style/adminProduct.style.css";
-import Button from '../../../../../common/components/Button';
+import Button from "../../../../../common/components/Button";
 import {
   clearError,
   createProduct,
@@ -17,9 +22,9 @@ const InitialFormData = {
   image: "",
   description: "",
   category: ["Cat"],
-  is_active: "Active",
+  isActive: "Active",
   price: 0,
-  default_product: "No"
+  defaultProduct: "No",
 };
 
 const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
@@ -29,12 +34,15 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
   const [formData, setFormData] = useState(
     mode === "new" ? { ...InitialFormData } : selectedProduct
   );
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertContent, setAlertContent] = useState("");
   const dispatch = useDispatch();
 
   // 성공 시 다이얼로그 닫기
-  useEffect(() => {
-    if (success) setShowDialog(false);
-  }, [success]);
+  // useEffect(() => {
+  //   if (success) setShowDialog(false);
+  // }, [success]);
 
   // 다이얼로그가 열리면, 모드에 따라 초기 데이터 설정
   useEffect(() => {
@@ -60,23 +68,35 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
 
     if (mode === "new") {
       //새 상품 만들기
-      console.log("formData??", formData)
       dispatch(createProduct(formData))
+        .then(() => {
+          console.log("excuted here!!!");
+          setAlertContent("상품 생성 완료하였습니다!");
+          setShowAlert(true);
+        })
+        .catch((error) => {
+          setAlertContent("상품 생성 실패!");
+          setShowAlert(true);
+        });
     } else {
       // 상품 수정하기
-      console.log("selectedProduct??", selectedProduct)
-      console.log("formData??", formData)
-      dispatch(editProduct({ ...formData, id: selectedProduct._id })
-      );
-    };
-
+      dispatch(editProduct({ ...formData, id: selectedProduct._id }))
+        .then(() => {
+          setAlertContent("상품 정보 변경되었습니다!");
+          setShowAlert(true);
+        })
+        .catch((error) => {
+          setAlertContent("상품 정보 변경 실패!");
+          setShowAlert(true);
+        });
+    }
   };
 
   const handleChange = (event) => {
     //form에 데이터 넣어주기
     const { id, value } = event.target;
     setFormData({ ...formData, [id]: value });
-  }
+  };
 
   const handleCategoryChange = (value) => {
     console.log("Selected category:", value);
@@ -89,7 +109,7 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
 
   const uploadImage = (url) => {
     //이미지 업로드
-    setFormData({ ...formData, image: url })
+    setFormData({ ...formData, image: url });
   };
 
   return (
@@ -105,6 +125,16 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
         <div className="error-message">
           <Alert variant="danger">{error}</Alert>
         </div>
+      )}
+      {showAlert && (
+        <Alert
+          message={alertContent}
+          onClose={() => {
+            setShowAlert(false);
+            setShowDialog(false);
+          }}
+          redirectTo="/admin"
+        />
       )}
       <Form className="form-container" onSubmit={handleSubmit}>
         <Row className="mb-3">
@@ -160,10 +190,11 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
           <img
             id="uploadedimage"
             src={formData.image || "#"} // 이미지가 없을 때 기본 이미지나 빈 값 사용
-            className={`upload-image mt-2 ${formData.image ? "" : "blurred-image"}`}
+            className={`upload-image mt-2 ${
+              formData.image ? "" : "blurred-image"
+            }`}
             alt="uploadedimage"
           />
-
         </Form.Group>
 
         <Row className="mb-3">
@@ -193,11 +224,13 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
             </Form.Select>
           </Form.Group>
 
-          <Form.Group as={Col} controlId="default_product">
+          <Form.Group as={Col} controlId="defaultProduct">
             <Form.Label>DefaultProduct</Form.Label>
             <Form.Select
-              value={formData.default_product} // 초기값이 "No"로 설정되었는지 확인
-              onChange={(e) => setFormData({ ...formData, default_product: e.target.value })} // 선택 값 반영
+              value={formData.defaultProduct} // 초기값이 "No"로 설정되었는지 확인
+              onChange={(e) =>
+                setFormData({ ...formData, defaultProduct: e.target.value })
+              } // 선택 값 반영
               required
             >
               <option value="Yes">Yes</option>
@@ -205,10 +238,10 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
             </Form.Select>
           </Form.Group>
 
-          <Form.Group as={Col} controlId="is_active">
+          <Form.Group as={Col} controlId="isActive">
             <Form.Label>Status</Form.Label>
             <Form.Select
-              value={formData.is_active}
+              value={formData.isActive}
               onChange={handleChange}
               required
             >

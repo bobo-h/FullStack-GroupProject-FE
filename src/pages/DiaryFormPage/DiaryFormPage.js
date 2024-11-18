@@ -1,44 +1,66 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Row, Col } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "./../../common/components/Button";
+import CloudinaryUploadWidget from "../../utils/CloudinaryUploadWidget";
+import { useDispatch, useSelector } from "react-redux";
+import { createDiary } from "../../features/diary/diarySlice";
+import { fetchAllMoods } from "../../features/mood/moodSlice";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const DiaryFormPage = () => {
   const [selectedDate, setSelectedDate] = useState("");
   const [mood, setMood] = useState("");
   const [title, setTitle] = useState("");
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState("");
   const [content, setContent] = useState("");
 
-  const moods = [
-    { id: "happy", label: "Happy" },
-    { id: "sad", label: "Sad" },
-    { id: "excited", label: "Excited" },
-    { id: "calm", label: "Calm" },
-    { id: "angry", label: "Angry" },
-  ];
+  const dispatch = useDispatch();
+  const {
+    moodList = [],
+    loading,
+    error,
+  } = useSelector((state) => state.mood || {});
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    setImage(file);
-  };
+  useEffect(() => {
+    console.log("Updated moodList in DiaryFormPage:", moodList);
+  }, [moodList]);
+
+  useEffect(() => {
+    dispatch(fetchAllMoods());
+  }, [dispatch]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const formData = new FormData();
-    formData.append("selectedDate", selectedDate);
-    formData.append("mood", mood);
-    formData.append("title", title);
-    formData.append("image", image);
-    formData.append("content", content);
 
-    console.log("Form submitted", {
+    const payload = {
       selectedDate,
       mood,
       title,
-      image,
+      image, // Cloudinary URL
       content,
-    });
+    };
+
+    console.log("Form submitted", payload);
+
+    // 여기에서 Redux로 비동기 액션을 호출하여 데이터를 저장
+    dispatch(createDiary(payload))
+      .unwrap()
+      .then(() => {
+        alert("Diary entry created successfully!");
+        // 필요 시 상태 초기화
+        setSelectedDate("");
+        setMood("");
+        setTitle("");
+        setImage("");
+        setContent("");
+      })
+      .catch((error) => {
+        alert(`Failed to create diary entry: ${error}`);
+      });
+  };
+
+  const handleImageUpload = (url) => {
+    setImage(url);
   };
 
   return (
@@ -66,11 +88,17 @@ const DiaryFormPage = () => {
                 required
               >
                 <option value="">Select a mood</option>
-                {moods.map((m) => (
-                  <option key={m.id} value={m.id}>
-                    {m.label}
-                  </option>
-                ))}
+                {loading ? (
+                  <option disabled>Loading...</option>
+                ) : moodList.length > 0 ? (
+                  moodList.map((m) => (
+                    <option key={m.id} value={m.id}>
+                      {m.name}
+                    </option>
+                  ))
+                ) : (
+                  <option disabled>No moods available</option>
+                )}
               </Form.Select>
             </Form.Group>
           </Col>
@@ -89,7 +117,19 @@ const DiaryFormPage = () => {
 
         <Form.Group controlId="image" className="mb-3">
           <Form.Label>Attach an Image</Form.Label>
-          <Form.Control type="file" onChange={handleImageUpload} required />
+          <CloudinaryUploadWidget uploadImage={handleImageUpload} />
+          {image && (
+            <img
+              src={image}
+              alt="Uploaded preview"
+              className="mt-3"
+              style={{
+                width: "100%",
+                maxHeight: "200px",
+                objectFit: "contain",
+              }}
+            />
+          )}
         </Form.Group>
 
         <Form.Group controlId="content" className="mb-3">
