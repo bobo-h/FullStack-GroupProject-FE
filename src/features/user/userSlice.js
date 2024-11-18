@@ -85,7 +85,7 @@ export const deleteUserInfo = createAsyncThunk(
   async ({ id, navigate }, { rejectWithValue }) => {
     try {
       const response = await api.delete(`/user/${id}`);
-      // navigate -> login page로 이동하는 거
+      sessionStorage.removeItem("token");
       navigate("/login");
     } catch (error) {
       return rejectWithValue(error.message);
