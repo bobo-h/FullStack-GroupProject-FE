@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SidebarForMyPage from "./component/SidebarForMyPage";
 import UserInfo from "./component/UserInfo";
 import { Col, Container, Row } from "react-bootstrap";
@@ -7,8 +7,20 @@ import "./style/myPage.style.css";
 import ChatbotList from "./component/ChatbotList";
 import userDefaultLogo from "../../assets/userDefaultLogo.png";
 import Button2 from "../../common/components/Button2";
+//import { useDispatch, useSelector } from "react-redux";
+//import { getChatbotList } from "../../features/chatbot/chatbotSlice";
 
 const MyPage = () => {
+  //const dispatch = useDispatch();
+  //const { user } = useSelector((state) => state.user);
+  // 챗봇리스트 가지고 오기 (useSelector 사용)
+  //const { chatbotList } = useSelector((state) => state.chatbot);
+
+  // 챗봇리스트를 받아오기
+  // useEffect(() => {
+  //   dispatch(getChatbotList({ userId: user._id }));
+  // }, [user]);
+
   const chatbotList = [
     {
       productId: {
