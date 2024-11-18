@@ -11,6 +11,7 @@ import ProductPage from "../pages/ProductPage/ProductPage";
 import DiariesPage from "./../pages/DiariesPage/DiariesPage";
 import DiaryDetailPage from "./../pages/DiaryDetailPage/DiaryDetailPage";
 import DiaryFormPage from "./../pages/DiaryFormPage/DiaryFormPage";
+import PrivateRoute from "./PrivateRoute";
 
 const AppRouter = () => {
   return (
@@ -19,7 +20,14 @@ const AppRouter = () => {
       <Route path="/chatbot" element={<ChatbotPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/admin" element={<AdminPage />} />
+      <Route
+        path="/admin"
+        element={
+          <PrivateRoute requiredRole="admin">
+            <AdminPage />
+          </PrivateRoute>
+        }
+      />
       <Route path="/my-page" element={<MyPage />} />
       <Route path="/shop" element={<ProductPage />} />
       {/* <Route path="/payment" element={<PaymentPage />} /> */}

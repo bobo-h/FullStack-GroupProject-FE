@@ -59,7 +59,7 @@ export const loginWithToken = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get("/user/me");
-      return response;
+      return response.data; //response 뒤에 .data 수정됨
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -162,8 +162,17 @@ const userSlice = createSlice({
         state.loading = false;
         state.loginError = action.payload;
       })
+      .addCase(loginWithToken.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(loginWithToken.fulfilled, (state, action) => {
-        state.user = action.payload.data.user;
+        state.loading = false;
+        state.user = action.payload.user; // action.payload.data.user 에서 수정
+      })
+      .addCase(loginWithToken.rejected, (state, action) => {
+        state.user = null;
+        state.loading = false;
+        // state.error = action.payload || "로그인 실패"; //쓸데 없는 알림 노출되는 것 같아 지웠습니다.
       })
       .addCase(editUserInfo.pending, (state) => {
         state.loading = true;

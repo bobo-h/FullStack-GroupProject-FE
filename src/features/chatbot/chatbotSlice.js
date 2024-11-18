@@ -4,10 +4,11 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // getChatbot action
 export const getChatbotList = createAsyncThunk(
   "chatbot/getChatbot",
-  async (userId, { rejectWithValue }) => {
+
+  async (_, { rejectWithValue }) => {
     try {
-      const response = await api.get(`/chatbot/${userId}`);
-      //console.log("rr",response); // 응답 데이터 확인
+      const response = await api.get(`/chatbot/me`);
+
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -112,6 +113,21 @@ export const deleteChatbot = createAsyncThunk(
   }
 );
 
+// ============= 신진수 추가 ==================//
+// updateChatbot action
+export const updateChatbotJins = createAsyncThunk(
+  "chatbot/updateChatbotJins",
+  async ({ id, updateData }, { rejectWithValue }) => {
+    try {
+      const response = await api.put(`/chatbot/${id}`, updateData);
+
+      return response.data; // 서버에서 반환한 데이터를 그대로 사용
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
 // printLineChatbot action
 export const printLineChatbot = createAsyncThunk(
   "chatbot/printLineChatbot",
@@ -159,7 +175,7 @@ const chatbotSlice = createSlice({
     loading: false,
     registrationError: null,
     success: false,
-    // chatbotList: [],
+    cats: [], // 서버에서 가져온 쳇봇리스트를 저장
   },
   reducers: {
     clearErrors: (state) => {
@@ -184,12 +200,17 @@ const chatbotSlice = createSlice({
       state.registrationError = action.payload;
     };
 
-    builder
+    builder // 와 ㅋㅋㅋㅋ아이디어 좋으신데요?!
       .addCase(createChatbot.pending, handlePending)
       .addCase(createChatbot.fulfilled, handleFulfilled)
       .addCase(createChatbot.rejected, handleRejected)
       .addCase(getChatbotList.pending, handlePending)
-      .addCase(getChatbotList.fulfilled, handleFulfilled)
+      .addCase(getChatbotList.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.registrationError = null;
+        state.cats = action.payload; // 서버 데이터로 상태 업데이트
+      })
       .addCase(getChatbotList.rejected, handleRejected)
       .addCase(getChatbotDetail.pending, handlePending)
       .addCase(getChatbotDetail.fulfilled, handleFulfilled)
@@ -202,7 +223,18 @@ const chatbotSlice = createSlice({
       .addCase(deleteChatbot.rejected, handleRejected)
       .addCase(printLineChatbot.pending, handlePending)
       .addCase(printLineChatbot.fulfilled, handleFulfilled)
-      .addCase(printLineChatbot.rejected, handleRejected);
+      .addCase(printLineChatbot.rejected, handleRejected)
+      .addCase(updateChatbotJins.pending, handlePending)
+      .addCase(updateChatbotJins.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.registrationError = null;
+        const updatedCat = action.payload;
+        state.cats = state.cats.map((cat) =>
+          cat._id === updatedCat._id ? { ...cat, ...updatedCat } : cat
+        );
+      })
+      .addCase(updateChatbotJins.rejected, handleRejected);
   },
 });
 
