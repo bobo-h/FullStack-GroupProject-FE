@@ -2,12 +2,21 @@
   height: 100vh;
   width: calc(100vw - 100px);
   margin-left: 100px;
+}
+/* style.css */
+.children-container {
+  overflow: auto;
+  height: 100%;
   overflow: auto; /* 내용이 넘칠 때 스크롤 바를 표시 */
   -ms-overflow-style: none; /* IE, Edge에서 스크롤바 숨기기 */
   scrollbar-width: none; /* Firefox에서 스크롤바 숨기기 */
 }
+
 /* 웹킷 기반 브라우저에서 스크롤바 숨기기 */
 .app-layout::-webkit-scrollbar {
+  display: none;
+}
+.children-container::-webkit-scrollbar {
   display: none;
 }
 

@@ -1,12 +1,16 @@
 import { set } from "@cloudinary/url-gen/actions/variable";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Offcanvas, Navbar, Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import sidebarForMyPageLogo from "../../../assets/sidebarForMyPageLogo.png";
+import Button2 from "../../../common/components/Button2";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../../features/user/userSlice";
 
 const SidebarForMyPage = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
+  const { user } = useSelector((state) => state.user);
 
   const handleSelectMenu = (url) => {
     setShow(false);
@@ -17,17 +21,24 @@ const SidebarForMyPage = () => {
     return (
       <div>
         <Link to="/">
-          <img width={120} src={sidebarForMyPageLogo} alt="catlog-logo.png" />
+          <img
+            width={150}
+            src="logo1.png"
+            alt="logo.png"
+            className="logo-image"
+          />
         </Link>
-        <div className="sidebar-item">My Page</div>
-        <ul className="sidebar-area">
-          <li
-            className="sidebar-item"
-            onClick={() => handleSelectMenu("/my-page")}
-          >
-            나의 챗봇리스트
-          </li>
-        </ul>
+        <div className="sidebar-general-style">
+          <div className="sidebar-item">My Page</div>
+          <ul className="sidebar-area">
+            <li
+              className="sidebar-item"
+              onClick={() => handleSelectMenu("/my-page")}
+            >
+              나의 챗봇리스트
+            </li>
+          </ul>
+        </div>
       </div>
     );
   };
@@ -38,8 +49,7 @@ const SidebarForMyPage = () => {
 
       <Navbar bg="light" expand={false} className="mobile-sidebar-toggle">
         <Container fluid>
-          <img width={80} src={sidebarForMyPageLogo} alt="catlog-logo.png" />
-          <Navbar.Brand href="#"></Navbar.Brand>
+          <img width={80} src="logo1.png" alt="logo1.png" />
           <Navbar.Toggle
             aria-controls={`offcanvasNavbar-expand`}
             onClick={() => setShow(true)}

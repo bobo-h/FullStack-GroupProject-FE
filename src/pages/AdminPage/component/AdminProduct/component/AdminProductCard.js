@@ -44,7 +44,7 @@ const AdminProductCard = ({ product, setMode, setShowDialog }) => {
             {product.price ? `${product.price.toLocaleString()}원` : "0"}
           </Col>
           <Col md={1} className="d-flex align-items-center">
-            {product.default_product}
+            {product.defaultProduct}
           </Col>
           <Col md={3} className="d-flex align-items-center justify-content-center">
             <Button2 onClick={handleClickEditItem}>수정</Button2>

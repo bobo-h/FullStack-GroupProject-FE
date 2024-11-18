@@ -30,7 +30,6 @@ const AdminOrderPage = () => {
     "Order Item",
     "Category",
     "Price",
-    "Image",
   ];
 
   useEffect(() => {

@@ -79,9 +79,7 @@ const UserInfo = () => {
   };
 
   const handleConfirmDelete = () => {
-    if (user && user._id) {
-      dispatch(deleteUserInfo({ id: user?._id, navigate }));
-    }
+    dispatch(deleteUserInfo({ id: user?._id, navigate }));
     setDeleteShowAlert(false);
   };
 

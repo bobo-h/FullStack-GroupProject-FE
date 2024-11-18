@@ -86,7 +86,7 @@ const ProductPage = () => {
                             key={item.id}
                             className="d-flex justify-content-center mb-4">
 
-                            <ProductCard
+                            <ProductCard className="product-card"
                                 item={item}
                                 handleOpenPaymentModal={handleOpenPaymentModal}
                             />

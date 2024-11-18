@@ -3,9 +3,7 @@ import Button from "../../common/components/Button";
 import "../../common/style/alert.style.css";
 import { useNavigate } from "react-router-dom";
 
-
-const Alert = ({ message, onClose, redirectTo }) => {
-
+const Alert = ({ message, onClose, redirectTo, children }) => {
   const navigate = useNavigate();
 
   const handleConfirm = () => {
@@ -19,9 +17,11 @@ const Alert = ({ message, onClose, redirectTo }) => {
     <div className="alert">
       <div className="alert-overlay">
         <div className="alert-container">
-          <button className="alert-close-button" onClick={handleConfirm}>X</button>
+          <button className="alert-close-button" onClick={handleConfirm}>
+            X
+          </button>
           <h4 className="alert-title">MeowMemo</h4>
-          <div className="alert-content">{message}</div>
+          <div className="alert-content">{message || children}</div>
           <Button onClick={handleConfirm} className="alert-button">
             확인
           </Button>

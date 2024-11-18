@@ -27,6 +27,7 @@ const RegisterPage = () => {
   );
 
   const register = (event) => {
+    console.log("Register function called1");
     event.preventDefault();
     const { email, name, password, confirmPassword, birthday, policy } =
       formData;
@@ -36,7 +37,7 @@ const RegisterPage = () => {
       setPasswordError("비밀번호가 일치하지 않습니다.");
       return;
     }
-
+    console.log("Register function called2");
     if (!policy) {
       setPolicyError(true);
       return;
@@ -44,7 +45,7 @@ const RegisterPage = () => {
 
     setPasswordError("");
     setPolicyError(false);
-
+    console.log("Register function called3");
     // API 호출
     dispatch(registerUser({ name, email, password, birthday, navigate }));
   };
