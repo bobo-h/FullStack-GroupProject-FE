@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 const UserInfo = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user, editError, deleteError } = useSelector((state) => state.user);
+  const { user, editError } = useSelector((state) => state.user);
 
   // formData 상태 초기화
   const [formData, setFormData] = useState({

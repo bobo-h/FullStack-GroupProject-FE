@@ -1,14 +1,65 @@
-import React, { useState } from "react";
-import { Container, Row, Col, Form, Tab, Tabs } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col, Form, Tab, Tabs, Button } from "react-bootstrap";
 import UserTable from "./component/AdminUserTable";
 import UserCard from "./component/AdminUserCard";
+import UserLevelEditDialog from "./component/UserLevelEditDialog";
+import {
+  setSelectedUser,
+  deleteAllEligibleUsers,
+  clearStates,
+} from "../../../../features/admin/adminSlice";
+import { useDispatch, useSelector } from "react-redux";
+import Button2 from "../../../../common/components/Button2";
+import Alert from "../../../../common/components/Alert";
 
 const AdminUser = () => {
   const [sortBy, setSortBy] = useState("");
-  const [activeTab, setActiveTab] = useState("allUser"); // 초기 탭 설정
+  const [activeTab, setActiveTab] = useState("allUser");
+  const [showDialog, setShowDialog] = useState(false); // 다이얼로그 열림 상태 관리
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertContent, setAlertContent] = useState("");
+
+  const selectedUser = useSelector((state) => state.admin.selectedUser);
+  const { error, success, message, totalUserNum } = useSelector(
+    (state) => state.admin
+  );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (success && activeTab === "eligibleUsers") {
+      // 특정 탭에서만 처리
+      setAlertContent(message);
+      setShowAlert(true);
+    } else if (error && activeTab === "eligibleUsers") {
+      setAlertContent("삭제에 실패하였습니다.");
+      setShowAlert(true);
+    }
+    return () => dispatch(clearStates()); // 상태 초기화
+  }, [success, error, message, activeTab]);
+
+  // 수정 버튼 클릭 시 호출
+  const handleEditUser = (user) => {
+    dispatch(setSelectedUser(user)); // 선택된 유저 정보를 Redux 상태에 저장
+    setShowDialog(true); // 다이얼로그 열기
+  };
+
+  const handleDeleteAllEligibleUsers = () => {
+    dispatch(deleteAllEligibleUsers());
+  };
+
   return (
     <div className="admin-user-page">
       <Container>
+        {showAlert && (
+          <Alert
+            message={alertContent}
+            onClose={() => {
+              setShowAlert(false);
+              dispatch(clearStates());
+            }}
+            redirectTo="/admin"
+          />
+        )}
         <Row>
           <Col md={2}>
             <h2>User</h2>
@@ -22,6 +73,11 @@ const AdminUser = () => {
               <option>등록순</option>
             </Form.Select>
           </Col>
+          {activeTab === "allUser" && (
+            <Col md={7} className="total-user-num">
+              <p>총 회원수 : {totalUserNum}</p>
+            </Col>
+          )}
         </Row>
         <Row className="table-area">
           {/* 탭 메뉴 */}
@@ -33,25 +89,53 @@ const AdminUser = () => {
             {/* 회원 리스트 탭 */}
             <Tab eventKey="allUser" title="회원 리스트">
               <UserTable />
-              <UserCard sortBy={sortBy} userType="allUser" />
+              <UserCard
+                sortBy={sortBy}
+                userType="allUser"
+                onEditUser={handleEditUser}
+              />
             </Tab>
 
             {/* 탈퇴 회원 탭 */}
             <Tab eventKey="ineligibleUsers" title="탈퇴회원 (90일이내)">
               <UserTable />
-              <UserCard sortBy={sortBy} userType="ineligibleUser" />
+              <UserCard
+                sortBy={sortBy}
+                userType="ineligibleUser"
+                onEditUser={handleEditUser}
+              />
             </Tab>
 
             {/* 탈퇴 회원 탭 */}
             <Tab eventKey="eligibleUsers" title="탈퇴회원 (90일이상)">
+              <Button2 onClick={handleDeleteAllEligibleUsers}>
+                전체 삭제
+              </Button2>
               <UserTable />
-              <UserCard sortBy={sortBy} userType="eligibleUser" />
+              <UserCard
+                sortBy={sortBy}
+                userType="eligibleUser"
+                onEditUser={handleEditUser}
+              />
+            </Tab>
+            {/* 관리자 */}
+            <Tab eventKey="allAdmin" title="관리자">
+              <UserTable />
+              <UserCard
+                sortBy={sortBy}
+                userType="allAdmin"
+                onEditUser={handleEditUser}
+              />
             </Tab>
           </Tabs>
-          {/* <UserTable />
-          <UserCard /> */}
         </Row>
       </Container>
+      {/* EditDialog 추가 */}
+      <UserLevelEditDialog
+        showDialog={showDialog}
+        setShowDialog={setShowDialog}
+        selectedUser={selectedUser}
+      />
     </div>
   );
 };
