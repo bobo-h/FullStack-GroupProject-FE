@@ -9,7 +9,7 @@ import PaymentForm from "./PaymentForm";
 import Button from "../../../../common/components/Button";
 import Button2 from "../../../../common/components/Button2";
 import ReactDOM from "react-dom";
-import Alert from "../../../../common/components/Alert";
+import Alert4 from "../../../../common/components/Alert4";
 
 const PaymentInfoModal = ({ onClose }) => {
   const dispatch = useDispatch();
@@ -109,7 +109,7 @@ const PaymentInfoModal = ({ onClose }) => {
   const PaymentInfoContent = (
     <div className="modal-backdrop" onClick={handleBackdropClick}>
       {showAlert && (
-        <Alert
+        <Alert4
           message={alertContent}
           onClose={() => setShowAlert(false)}
           redirectTo="/chatbot"

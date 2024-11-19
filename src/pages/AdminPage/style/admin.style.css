@@ -28,6 +28,10 @@ body {
   .content-component {
     padding-top: 50px; 
   }
+
+  /* .sidebar-toggle-image{
+    width: 50px;
+  } */
 }
 
 @media (max-width: 700px) {

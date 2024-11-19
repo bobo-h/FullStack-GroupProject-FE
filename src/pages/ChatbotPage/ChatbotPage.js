@@ -5,8 +5,8 @@ import { createChatbot } from "../../features/chatbot/chatbotSlice";
 import "./style/chatbot.style.css";
 import Button from "../../common/components/Button";
 import PersonalityMBTI from "./component/PersonalityMBTI/PersonalityMBTI";
-import Button2 from "../../common/components/Button2";
 import Alert from "../../common/components/Alert";
+import Alert2 from "../../common/components/Alert2";
 import { getProductList } from "../../features/product/productSlice";
 //import PersonalityBox from './component/PersonalityBox/PersonalityBox';
 
@@ -16,7 +16,10 @@ const ChatbotCreation = ({ chatbotItem }) => {
   const [personality, setPersonality] = useState("");
   const [isDirectInput, setIsDirectInput] = useState(true);
   const [showAlert, setShowAlert] = useState(false);
+  const [confilmAlert, setConfilmAlert] = useState(false);
+
   const [alertContent, setAlertContent] = useState("");
+  const [alertStep, setAlertStep] = useState(1); 
   const dispatch = useDispatch();
 
   const { loading, registrationError, success } = useSelector(
@@ -33,6 +36,11 @@ const ChatbotCreation = ({ chatbotItem }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (loading) {
+      setAlertContent("정하신 성격은 바꾸실 수 없습니다.");
+      setConfilmAlert(true);
+      return;
+    }
     // if (chatbotItem) {
     //   // 수정 로직
     //   dispatch(
@@ -73,6 +81,13 @@ const ChatbotCreation = ({ chatbotItem }) => {
     setPersonality("");
   };
 
+  const handleAlertConfirm = () => {
+    setConfilmAlert(false);
+    if (alertStep === 1) {
+      setShowAlert(true);
+    }
+  };
+
   const defaultProduct = Array.isArray(product)
     ? product.find((product) => product.defaultProduct === "Yes")
     : null;
@@ -85,6 +100,14 @@ const ChatbotCreation = ({ chatbotItem }) => {
           onClose={() => setShowAlert(false)}
           redirectTo="/"
         />
+      )}
+      {confilmAlert && (
+       <Alert2
+       message={alertContent}
+       onClose={() => setConfilmAlert(false)}
+       redirectTo="/chatbot"
+       onConfirm={handleAlertConfirm}
+     />
       )}
       <Container
         className=" d-flex justify-content-center align-items-center"
@@ -142,14 +165,14 @@ const ChatbotCreation = ({ chatbotItem }) => {
                     ""
                   ) : (
                     <Col className="btn-gap">
-                      <Button2
+                      <Button
                         variant={
                           isDirectInput ? "outline-secondary" : "primary"
                         }
                         onClick={() => handleInputTypeChange(true)}
                       >
                         직접 입력
-                      </Button2>
+                      </Button>
                       <Button
                         variant={
                           isDirectInput ? "primary" : "outline-secondary"

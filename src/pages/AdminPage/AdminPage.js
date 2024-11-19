@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 const AdminPage = () => {
   const [selectedComponent, setSelectedComponent] = useState('products');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const navigate = useNavigate();
 
   const renderSelectedComponent = () => {
@@ -32,9 +33,21 @@ const AdminPage = () => {
     navigate("/")
   }
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
     <div className="admin-page">
-      <div className="admin-menu">
+      <div className="sidebar-toggle">
+        {/* <img
+          src="logo4.png"
+          className="sidebar-toggle-image"
+          alt="Toggle Sidebar"
+          onClick={toggleSidebar}
+        /> */}
+      </div>
+      <div className={`admin-menu ${isSidebarOpen ? "" : "closed"}`}>
         <AdminMenu
           setSelectedComponent={setSelectedComponent}
           selectedComponent={selectedComponent}
