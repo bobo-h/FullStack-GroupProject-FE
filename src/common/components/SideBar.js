@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../features/user/userSlice";
 import {
   getChatbotList,
   updateChatbotJins,
+  getListLenght,
+  logoutChatBot,
 } from "../../features/chatbot/chatbotSlice";
 import "../style/sidebar.style.css";
 import debounce from "lodash.debounce";
@@ -18,34 +20,7 @@ const SideBar = ({
   scrollTop,
 }) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
-  const { cats, status, error } = useSelector((state) => state.chatbot);
-
-  // 토큰으로 로그인
-  useEffect(() => {
-    dispatch(getChatbotList());
-  }, []);
-
-  // 고양이 보이기 안보이기 로직 // 수정 필요
-  const handleRightClick = (e, catId) => {
-    e.preventDefault(); // 기본 우클릭 메뉴 방지
-    // cats 배열에서 해당 catId를 가진 고양이 찾기
-    const selectedCat = cats.find((cat) => cat._id === catId);
-
-    if (selectedCat) {
-      // visualization 값을 토글하여 새로운 상태 만들기
-      const updatedVisualization = !selectedCat.visualization;
-
-      // updateChatbotJins action 호출
-      dispatch(
-        updateChatbotJins({
-          id: catId,
-          updateData: { visualization: updatedVisualization },
-        })
-      );
-    }
-  };
 
   // 화면 크기 변경 감지
   useEffect(() => {
@@ -107,8 +82,6 @@ const SideBar = ({
           windowWidth={windowWidth}
           isSidebarActive={isSidebarActive}
           currentPage={currentPage}
-          cats={cats}
-          handleRightClick={handleRightClick}
           isScrollingUp={isScrollingUp}
           user={user}
         />
@@ -124,13 +97,46 @@ const SidebarContainer = ({
   windowWidth,
   isSidebarActive,
   currentPage,
-  cats,
-  handleRightClick,
   isScrollingUp,
   scrollTop,
   user,
 }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const cats = useSelector((state) => state.chatbot.cats);
+  const loading = useSelector((state) => state.chatbot.loading);
+  const catsLength = useSelector((state) => state.chatbot.catsLength);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await dispatch(getChatbotList());
+      dispatch(getListLenght());
+    };
+
+    fetchData();
+  }, [dispatch]);
+  // useEffect(async () => { // 이 방법이 WARNING 떠서 위 방법으로.
+  //   await dispatch(getChatbotList());
+  //   dispatch(getListLenght());
+  // }, [dispatch]);
+
+  const handleRightClick = useCallback(
+    (e, catId) => {
+      e.preventDefault();
+      const selectedCat = cats.find((cat) => cat._id === catId);
+      if (selectedCat) {
+        const updatedVisualization = !selectedCat.visualization;
+        dispatch(
+          updateChatbotJins({
+            id: catId,
+            updateData: { visualization: updatedVisualization },
+          })
+        );
+      }
+    },
+    [cats, dispatch]
+  );
+
   return (
     <>
       {/* 사이드바가 활성화된 경우에만 오버레이 표시 */}
@@ -149,36 +155,29 @@ const SidebarContainer = ({
           <span className="user-name">집사 이름 : {user.name}</span>
           <LogoutButton />
         </div>
-        <div className="cat-list-container">
-          {cats.map((cat) => (
-            <div
-              className="my-cats-info"
-              key={cat._id}
-              id={cat._id}
-              onContextMenu={
-                (e) => {
-                  handleRightClick(e, cat._id);
-                } // 우클릭 이벤트 핸들러 추가
-              }
-            >
-              <div
-                className={`cat-list-image-back ${
-                  cat.visualization ? "view" : ""
-                }`}
-              >
-                <img
-                  className="cat-list-image-profile"
-                  src={cat.product_id.image}
-                  alt="cats profile"
-                />
-              </div>
-              <span className="cat-list-title">{cat.name}</span>
-              <span className="cat-list-discript">{cat.personality}</span>
-            </div>
-          ))}
-        </div>
+        {!loading ? (
+          <div className="cat-list-container">
+            {cats.map((cat) => (
+              <CatItem
+                key={cat._id}
+                cat={cat}
+                handleRightClick={handleRightClick}
+              />
+            ))}
+          </div>
+        ) : (
+          // ㅠㅠㅠㅠㅠ 스켈레톤 만들어서 깜빡임 없앰 ㅠㅠㅠㅠㅠㅠㅠㅠ
+          <div className="cat-list-container">
+            {[...Array(catsLength)].map((_, index) => (
+              <CatItem
+                key={index}
+                cat={cats[index]}
+                handleRightClick={handleRightClick}
+              />
+            ))}
+          </div>
+        )}
       </div>
-
       {windowWidth < 700 &&
       !isSidebarActive &&
       (currentPage === "home" || currentPage === "diary") &&
@@ -189,11 +188,32 @@ const SidebarContainer = ({
   );
 };
 
+const CatItem = React.memo(({ cat, handleRightClick }) => {
+  return (
+    <div
+      className="my-cats-info"
+      key={cat._id}
+      id={cat._id}
+      onContextMenu={(e) => handleRightClick(e, cat._id)}
+    >
+      <div className={`cat-list-image-back ${cat.visualization ? "view" : ""}`}>
+        <img
+          className="cat-list-image-profile"
+          src={cat.product_id.image}
+          alt="cats profile"
+        />
+      </div>
+      <span className="cat-list-title">{cat.name}</span>
+      <span className="cat-list-discript">{cat.personality}</span>
+    </div>
+  );
+});
+
 // ToggleButton 컴포넌트
 const ToggleButton = ({ toggleSidebar }) => {
   return (
     <div className="sidebar-toggle" onClick={toggleSidebar}>
-      <img src="logo4.png" className="sidebar-toggle-image" />
+      <img src="logo4.png" className="sidebar-toggle-image" alt="logo4" />
     </div>
   );
 };
@@ -205,6 +225,7 @@ const LogoutButton = () => {
   const handleLogout = () => {
     // Redux 상태 초기화
     dispatch(logout());
+    dispatch(logoutChatBot());
 
     // 로그인 페이지로 리디렉션
     navigate("/login");

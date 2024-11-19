@@ -48,20 +48,18 @@ const ChatbotList = ({ chatbotItem }) => {
             </Col>
             <Col xs={3} md={3} className="chatbot-image-area">
               <img
-                src={chatbotItem?.image}
+                src={chatbotItem?.product_id?.image}
                 alt={chatbotItem?.productId?.name || "상품 이미지"}
                 className="chatbot-image"
               />
             </Col>
             <Col xs={5} md={5} className="chatbot-info-area">
               <div className="chatbot-info__name">
-                <strong>
-                  챗봇명: {chatbotItem?.productId?.name || "챗봇 이름"}
-                </strong>
+                <strong>챗봇명: {chatbotItem?.name || "챗봇 이름"}</strong>
               </div>
               <div className="chatbot-info__personality">
                 <strong>
-                  챗봇 성격: {chatbotItem?.productId?.name || "챗봇 성격"}
+                  챗봇 성격: {chatbotItem?.personality || "챗봇 성격"}
                 </strong>
               </div>
             </Col>

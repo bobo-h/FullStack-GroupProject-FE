@@ -1,4 +1,10 @@
 .admin-user-page {
+  .total-user-num {
+    text-align: end;
+    margin-top: 10px;
+    padding-right: 25px;
+    font-weight: bolder;
+  }
   .user-table-name {
     margin-top: 3%;
     margin-bottom: 2%;
@@ -27,5 +33,21 @@
 
   .user-table-name {
     border-bottom: 2px solid #000;
+  }
+
+  /* 기본 탭 스타일 */
+  .nav-tabs .nav-link {
+    color: gray; /* 비활성화된 탭 글자 색 */
+  }
+
+  /* 활성화된 탭 스타일 */
+  .nav-tabs .nav-link.active {
+    color: black; /* 활성화된 탭 글자 색 */
+    font-weight: bold; /* 강조 효과 */
+  }
+
+  /* 탭에 마우스를 올렸을 때 스타일 */
+  .nav-tabs .nav-link:hover {
+    color: darkgray; /* 마우스 오버 시 색상 */
   }
 }

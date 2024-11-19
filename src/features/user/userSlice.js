@@ -72,7 +72,7 @@ export const editUserInfo = createAsyncThunk(
   async ({ id, formData }, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.put(`/user/${id}`, formData);
-      return response.data.data;
+      return response.data.user;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -110,8 +110,8 @@ const userSlice = createSlice({
     loginError: null,
     registrationError: null,
     editError: null,
+    editSuccess: false,
     deleteError: null,
-    success: false,
   },
   reducers: {
     clearErrors: (state) => {
@@ -119,6 +119,7 @@ const userSlice = createSlice({
       state.registrationError = null;
       state.editError = null;
       state.deleteError = null;
+      state.editSuccess = false;
     },
     logout: (state) => {
       state.user = null;
@@ -176,14 +177,17 @@ const userSlice = createSlice({
       })
       .addCase(editUserInfo.pending, (state) => {
         state.loading = true;
+        state.editSuccess = false;
       })
       .addCase(editUserInfo.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
+        state.editSuccess = true;
       })
       .addCase(editUserInfo.rejected, (state, action) => {
         state.loading = false;
         state.editError = action.payload;
+        state.editSuccess = false;
       })
       .addCase(deleteUserInfo.pending, (state) => {
         state.loading = true;

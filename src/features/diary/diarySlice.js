@@ -18,9 +18,34 @@ export const getDiaryList = createAsyncThunk(
   async (page, { rejectWithValue }) => {
     try {
       const response = await api.get(`/diary?page=${page}`);
+      console.log("API Response:", response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getDiaryDetail = createAsyncThunk(
+  "diary/getDiaryDetail",
+  async (diaryId, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/diary/${diaryId}`);
+      return response.data.diary; // 서버에서 반환되는 diary 데이터를 가져옴
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const updateDiary = createAsyncThunk(
+  "diary/updateDiary",
+  async ({ diaryId, payload }, { rejectWithValue }) => {
+    try {
+      const response = await api.put(`/diary/${diaryId}`, payload); // PUT 요청
+      return response.data.data; // 서버에서 반환되는 데이터
+    } catch (error) {
+      return rejectWithValue(error.response.data || "Failed to update diary.");
     }
   }
 );
@@ -48,6 +73,8 @@ const diarySlice = createSlice({
     },
     clearDiaryList: (state) => {
       state.diaryList = [];
+      state.currentPage = 1;
+      state.totalPages = 1;
     },
   },
   extraReducers: (builder) => {
@@ -78,6 +105,35 @@ const diarySlice = createSlice({
       .addCase(getDiaryList.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to fetch diaries.";
+      })
+      .addCase(getDiaryDetail.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.selectedDiary = null;
+      })
+      .addCase(getDiaryDetail.fulfilled, (state, action) => {
+        state.loading = false;
+        state.selectedDiary = action.payload;
+      })
+      .addCase(getDiaryDetail.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to fetch diary detail.";
+      })
+      .addCase(updateDiary.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(updateDiary.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+        state.selectedDiary = action.payload;
+      })
+      .addCase(updateDiary.rejected, (state, action) => {
+        state.loading = false;
+        state.success = false;
+        state.error = action.payload || "Failed to update diary.";
       });
   },
 });

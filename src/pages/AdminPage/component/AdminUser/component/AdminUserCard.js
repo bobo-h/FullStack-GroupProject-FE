@@ -7,20 +7,24 @@ import {
   getAllUserList,
   getIneligibleUserList,
   getEligibleUserList,
+  getAllAdminList,
 } from "../../../../../features/admin/adminSlice";
 
-const UserCard = ({ sortBy, userType }) => {
+const UserCard = ({ sortBy, userType, onEditUser }) => {
   const dispatch = useDispatch();
   const { allUser = [] } = useSelector((state) => state.admin);
   const { ineligibleUser = [] } = useSelector((state) => state.admin);
   const { eligibleUser = [] } = useSelector((state) => state.admin);
+  const { allAdmin = [] } = useSelector((state) => state.admin);
 
   const data =
     userType === "allUser"
       ? allUser
       : userType === "ineligibleUser"
       ? ineligibleUser
-      : eligibleUser;
+      : userType === "eligibleUser"
+      ? eligibleUser
+      : allAdmin;
 
   useEffect(() => {
     //API 호출
@@ -31,6 +35,8 @@ const UserCard = ({ sortBy, userType }) => {
       dispatch(getIneligibleUserList());
     } else if (userType === "eligibleUser") {
       dispatch(getEligibleUserList());
+    } else if (userType === "allAdmin") {
+      dispatch(getAllAdminList());
     }
   }, [userType, sortBy]);
 
@@ -41,7 +47,7 @@ const UserCard = ({ sortBy, userType }) => {
           data.map((user, index) => (
             <Row className="mb-4">
               <Col md={1} className="d-flex align-items-center">
-                {index}
+                {index + 1}
               </Col>
               <Col md={3} className="d-flex align-items-center">
                 {user.name}
@@ -56,8 +62,11 @@ const UserCard = ({ sortBy, userType }) => {
                 md={3}
                 className="d-flex align-items-center justify-content-center"
               >
-                <Button2>수정</Button2>
-                <Button2>삭제</Button2>
+                {userType !== "ineligibleUser" &&
+                  userType !== "eligibleUser" && (
+                    <Button2 onClick={() => onEditUser(user)}>수정</Button2>
+                  )}
+                {/* <Button2>삭제</Button2> */}
               </Col>
             </Row>
           ))
