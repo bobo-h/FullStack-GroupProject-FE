@@ -142,6 +142,27 @@ export const updateChatbotJins = createAsyncThunk(
     }
   }
 );
+export const updateChatbotMany = createAsyncThunk(
+  "chatbot/updateChatbotMany",
+  async (updateData, { rejectWithValue }) => {
+    try {
+      // API 요청
+      const response = await api.put(`/chatbot`, updateData);
+
+      // 성공 응답 처리
+      if (response.status === 200) {
+        return response.data.data; // 성공 데이터 반환
+      } else {
+        return rejectWithValue(response.data); // 에러 데이터 반환
+      }
+    } catch (error) {
+      // 네트워크 또는 서버 에러 처리
+      return rejectWithValue(
+        error.response?.data || { message: "Something went wrong" }
+      );
+    }
+  }
+);
 
 // printLineChatbot action
 export const printLineChatbot = createAsyncThunk(
@@ -255,7 +276,15 @@ const chatbotSlice = createSlice({
         state.registrationError = null;
         state.cats = action.payload; // 업데이트된 배열을 상태에 반영
       })
-      .addCase(updateChatbotJins.rejected, handleRejected);
+      .addCase(updateChatbotJins.rejected, handleRejected)
+      .addCase(updateChatbotMany.pending, handlePending)
+      .addCase(updateChatbotMany.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.registrationError = null;
+        state.cats = action.payload; // 업데이트된 배열을 상태에 반영
+      })
+      .addCase(updateChatbotMany.rejected, handleRejected);
   },
 });
 

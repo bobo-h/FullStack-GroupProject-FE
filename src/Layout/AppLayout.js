@@ -20,8 +20,8 @@ const AppLayout = ({ children }) => {
   const pageMapping = [
     //사이드 바 때문에
     { path: "/", page: "home", sidebar: true },
-    { path: "/diaries", page: "diary", sidebar: true },
-    { path: "/add-diary", page: "add-diary", sidebar: false },
+    { path: "/diaries", page: "diaries", sidebar: true },
+    { path: "/diaries/new", page: "diaries", sidebar: false },
     { path: "/shop", page: "shop", sidebar: false },
     { path: "/my-page", page: "my", sidebar: false },
     { path: "/admin", page: "admin", sidebar: false },
@@ -141,7 +141,7 @@ const AppLayout = ({ children }) => {
         isSidebarActive
           ? currentPage === "home"
             ? "sidebar-active-right"
-            : currentPage === "diary"
+            : currentPage === "diaries"
             ? "sidebar-active-left"
             : "sidebar-active"
           : ""

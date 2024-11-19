@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import React, { useState } from "react";
 import "./style/adminMenu.style.css";
 import { Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 const AdminMenu = ({ setSelectedComponent, selectedComponent }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const navigate = useNavigate();
-
 
   return (
     <div className={`admin-menubar ${isSidebarOpen ? "open" : "closed"}`}>
@@ -18,7 +16,6 @@ const AdminMenu = ({ setSelectedComponent, selectedComponent }) => {
           alt="project-title"
           onClick={() => navigate(`/`)}
         />
-        
       </div>
       {isSidebarOpen && (
         <Row className="button-container">

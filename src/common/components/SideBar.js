@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { memo, useCallback, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../features/user/userSlice";
@@ -56,7 +56,7 @@ const SideBar = ({
   const animationClass =
     currentPage === "home"
       ? "slide-in-right"
-      : currentPage === "diary"
+      : currentPage === "diaries"
       ? "slide-in-left"
       : "";
 
@@ -72,6 +72,15 @@ const SideBar = ({
   ]
     .filter(Boolean) // 빈 문자열 또는 false 값 제거
     .join(" "); // 배열을 공백으로 구분된 문자열로 변환
+
+  // 데스크탑 모드일 때 사이드바 활성화
+  useEffect(() => {
+    if (isDesktop) {
+      setIsSidebarActive(true);
+    } else {
+      setIsSidebarActive(false);
+    }
+  }, [isDesktop]);
 
   return (
     <>
@@ -180,7 +189,7 @@ const SidebarContainer = ({
       </div>
       {windowWidth < 700 &&
       !isSidebarActive &&
-      (currentPage === "home" || currentPage === "diary") &&
+      (currentPage === "home" || currentPage === "diaries") &&
       (isScrollingUp || scrollTop === 0) ? (
         <ToggleButton toggleSidebar={toggleSidebar} />
       ) : null}
@@ -210,13 +219,13 @@ const CatItem = React.memo(({ cat, handleRightClick }) => {
 });
 
 // ToggleButton 컴포넌트
-const ToggleButton = ({ toggleSidebar }) => {
+const ToggleButton = memo(({ toggleSidebar }) => {
   return (
     <div className="sidebar-toggle" onClick={toggleSidebar}>
-      <img src="logo4.png" className="sidebar-toggle-image" alt="logo4" />
+      <img src="/logo4.png" className="sidebar-toggle-image" alt="logo4" />
     </div>
   );
-};
+});
 
 const LogoutButton = () => {
   const dispatch = useDispatch();
