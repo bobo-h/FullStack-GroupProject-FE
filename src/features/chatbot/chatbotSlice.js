@@ -246,10 +246,10 @@ const chatbotSlice = createSlice({
       .addCase(printLineChatbot.rejected, handleRejected)
       .addCase(updateChatbotJins.pending, handlePending)
       .addCase(updateChatbotJins.fulfilled, (state, action) => {
-        state.cats = action.payload; // 업데이트된 배열을 상태에 반영
         state.loading = false;
         state.success = true;
         state.registrationError = null;
+        state.cats = action.payload; // 업데이트된 배열을 상태에 반영
       })
       .addCase(updateChatbotJins.rejected, handleRejected);
   },

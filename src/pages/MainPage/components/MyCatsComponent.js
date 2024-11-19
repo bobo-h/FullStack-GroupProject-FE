@@ -1,55 +1,81 @@
 import React, { useState, useEffect, useRef } from "react";
 import Draggable from "react-draggable";
+import { debounce } from "lodash";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  getChatbotList,
-  updateChatbotJins,
-} from "../../../features/chatbot/chatbotSlice";
-import testCatImage1 from "../../../assets/test_cats/cat_1.png";
+import { updateChatbotJins } from "../../../features/chatbot/chatbotSlice";
 
 function MyCatsComponent() {
   const dispatch = useDispatch();
   const parentRef = useRef(null); // 부모 요소를 참조
-  const prevCatsRef = useRef([]); // 이전 상태 저장
-  const { cats } = useSelector((state) => state.chatbot);
+  const [size, setSize] = useState({ width: 0, height: 0 });
+  const { cats, loading } = useSelector((state) => state.chatbot);
+  const [localCats, setLocalCats] = useState(cats || []);
 
-  // const [cats, setCats] = useState([
-  //   {
-  //     id: "cat1",
-  //     image: testCatImage1,
-  //     defaultPosition: { x: 0, y: 0 },
-  //     zIndex: 2,
-  //     showInput: false,
-  //     position: { x: 40, y: 40 },
-  //     flipped: false, // 좌우반전
-  //   },
-  // ]);
+  useEffect(() => {
+    if (!loading) {
+      setLocalCats(cats);
+    }
+  }, [cats, loading]);
 
-  // // 창 크기 변경 시 위치 업데이트
-  // useEffect(() => {
-  //   const updatePositions = () => {
-  //     setCats((prevCats) =>
-  //       prevCats.map((cat) => ({
-  //         ...cat,
-  //         defaultPosition: {
-  //           x: (window.innerWidth * cat.position.x) / 100,
-  //           y: (window.innerHeight * cat.position.y) / 100,
-  //         },
-  //       }))
-  //     );
-  //   };
+  useEffect(() => {
+    const updateSize = async () => {
+      if (parentRef.current) {
+        const { width, height } = parentRef.current.getBoundingClientRect();
+        setSize({ width, height });
+        // 고양이 정보를 출력
+        // 로컬 상태를 먼저 업데이트
+        setLocalCats((prevCats) =>
+          prevCats.map((cat) => ({
+            ...cat,
+            defaultPosition: {
+              x: (cat.position.x / 100) * width,
+              y: (cat.position.y / 100) * height,
+            },
+          }))
+        );
 
-  //   // 초기 위치 설정
-  //   updatePositions();
+        try {
+          // 모든 요청을 Promise.all로 감싸서 실행
+          const updatedCats = await Promise.all(
+            cats.map(async (cat) => {
+              await dispatch(
+                updateChatbotJins({
+                  id: cat._id,
+                  updateData: {
+                    defaultPosition: {
+                      x: (cat.position.x / 100) * width,
+                      y: (cat.position.y / 100) * height,
+                    },
+                  },
+                })
+              );
+              console.log(`Cat ${cat._id} updated successfully in DB`);
+              return cat._id; // 성공한 cat의 ID 반환
+            })
+          );
+          console.log("업데이트 완료", updatedCats); // 성공한 cat ID들 출력
+        } catch (error) {
+          console.error("Failed to update one or more cats:", error);
+        }
+      }
+    };
 
-  //   // 리사이즈 이벤트 리스너 추가
-  //   window.addEventListener("resize", updatePositions);
+    const debouncedUpdate = debounce(updateSize, 300); // 300ms 대기
 
-  //   // 클린업 함수로 이벤트 리스너 제거
-  //   return () => {
-  //     window.removeEventListener("resize", updatePositions);
-  //   };
-  // }, []);
+    updateSize();
+
+    // 창 크기 변경 시 업데이트
+    window.addEventListener("resize", debouncedUpdate);
+
+    return () => {
+      window.removeEventListener("resize", debouncedUpdate); // 이벤트 클린업
+      debouncedUpdate.cancel(); // 타이머 정리
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log("크기", size); // size가 업데이트될 때 로그 출력
+  }, [size]);
 
   // 드래그 완료 시 위치 저장 (픽셀 값을 %로 변환하여 저장)
   const handleDragStop = async (id, data) => {
@@ -58,13 +84,29 @@ function MyCatsComponent() {
 
     console.log("움직이니?", data);
     const newXY = { x: data.x, y: data.y };
-
+    // 현재 위치와 새 위치 비교
+    if (
+      catToUpdate.defaultPosition &&
+      catToUpdate.defaultPosition.x === newXY.x &&
+      catToUpdate.defaultPosition.y === newXY.y
+    ) {
+      console.log("위치가 동일하므로 업데이트하지 않음");
+      return;
+    }
+    // 지금 위치를 백분율 할때 {x: (cat.defaultPosition.x/width)*100, y: (cat.defaultPosition.y/height)*100}
     try {
       // 서버로 업데이트 요청
-      const response = await dispatch(
+      console.log("화면 사이즈", size.width);
+      await dispatch(
         updateChatbotJins({
           id,
-          updateData: { defaultPosition: newXY },
+          updateData: {
+            defaultPosition: newXY,
+            position: {
+              x: (newXY.x / size.width) * 100,
+              y: (newXY.y / size.height) * 100,
+            },
+          },
         })
       );
       console.log("Cat updated successfully in DB");
@@ -72,21 +114,6 @@ function MyCatsComponent() {
     } catch (error) {
       console.error("Failed to update cat in DB:", error);
     }
-
-    // setCats((prevCats) =>
-    //   prevCats.map((cat) =>
-    //     cat.id === id
-    //       ? {
-    //           ...cat,
-    //           defaultPosition: { x: data.x, y: data.y },
-    //           position: {
-    //             x: (data.x / window.innerWidth) * 100,
-    //             y: (data.y / window.innerHeight) * 100,
-    //           },
-    //         }
-    //       : cat
-    //   )
-    // );
   };
 
   // zIndex 변경 (-1 또는 +1) 2~20사이로만 변경가능
@@ -98,7 +125,7 @@ function MyCatsComponent() {
     const clampedZIndex = Math.max(2, Math.min(newZIndex, 20));
     try {
       // 서버로 업데이트 요청
-      const response = await dispatch(
+      await dispatch(
         updateChatbotJins({
           id,
           updateData: { zIndex: clampedZIndex },
@@ -122,7 +149,7 @@ function MyCatsComponent() {
       const updatedCat = !catToUpdate.flip;
 
       // 서버로 업데이트 요청
-      const response = await dispatch(
+      await dispatch(
         updateChatbotJins({
           id,
           updateData: { flip: updatedCat },
@@ -135,9 +162,14 @@ function MyCatsComponent() {
     }
   };
 
+  const renderedCats = !loading ? cats : localCats; // 사용 보류
+
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%" }}>
-      {cats
+    <div
+      ref={parentRef}
+      style={{ position: "relative", width: "100%", height: "100%" }}
+    >
+      {localCats
         .filter((cat) => cat.visualization) // visualization이 true인 것만 필터링
         .map((cat) => (
           <DraggableCat
@@ -169,7 +201,20 @@ function DraggableCat({
   // 말풍선 표시 상태와 타이머 참조 추가
   const [isSpeechBubbleVisible, setIsSpeechBubbleVisible] = useState(false);
   const [activeInputId, setActiveInputId] = useState(null); // 현재 입력 필드가 활성화된 고양이 ID
+  const { loading } = useSelector((state) => state.chatbot);
+  const [localPosition, setLocalPosition] = useState(defaultPosition); // 로딩중 임시 좌표
   const timerRef = useRef(null);
+
+  // 로딩중일때 임시 좌표
+  const handleDragStopLoding = (e, data) => {
+    const newXY = { x: data.x, y: data.y };
+
+    // 1. 로컬 상태 업데이트
+    setLocalPosition(newXY);
+
+    // 2. 상위 컴포넌트에 새 위치 전달
+    onDragStop(id, newXY);
+  };
 
   // 이미지 클릭 시 말풍선 표시 및 타이머 설정
   const handleImageClick = () => {
@@ -203,8 +248,8 @@ function DraggableCat({
 
   return (
     <Draggable
-      position={defaultPosition}
-      onStop={(e, data) => onDragStop(id, data)}
+      position={!loading ? localPosition : localPosition} // defaultPosition 사용 보류
+      onStop={(e, data) => handleDragStopLoding(id, data)}
       bounds="parent"
     >
       <div
