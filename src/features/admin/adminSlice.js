@@ -92,7 +92,7 @@ const adminSlice = createSlice({
     allAdmin: [],
     selectedUser: null,
     loading: false,
-    error: "",
+    error: null,
     success: false,
     message: "",
   },
@@ -100,8 +100,10 @@ const adminSlice = createSlice({
     setSelectedUser: (state, action) => {
       state.selectedUser = action.payload; //TODO
     },
-    clearErrors: (state) => {
-      state.error = "";
+    clearStates: (state) => {
+      state.error = null;
+      state.success = false;
+      state.message = "";
     },
   },
   extraReducers: (builder) => {
@@ -180,5 +182,5 @@ const adminSlice = createSlice({
       });
   },
 });
-export const { clearErrors, setSelectedUser } = adminSlice.actions;
+export const { clearStates, setSelectedUser } = adminSlice.actions;
 export default adminSlice.reducer;

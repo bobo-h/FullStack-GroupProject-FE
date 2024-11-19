@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { editLevel } from "../../../../../features/admin/adminSlice";
-import { setSelectedUser } from "../../../../../features/admin/adminSlice";
+import {
+  setSelectedUser,
+  clearStates,
+} from "../../../../../features/admin/adminSlice";
 import Alert from "../../../../../common/components/Alert";
 
 const UserLevelEditDialog = ({ showDialog, setShowDialog, selectedUser }) => {
@@ -11,7 +14,6 @@ const UserLevelEditDialog = ({ showDialog, setShowDialog, selectedUser }) => {
   const [alertContent, setAlertContent] = useState("");
   const { error, success } = useSelector((state) => state.admin);
 
-  // 상태 변경 감지 및 Alert 표시
   useEffect(() => {
     if (success) {
       setAlertContent("역할이 성공적으로 변경되었습니다!");
@@ -20,6 +22,7 @@ const UserLevelEditDialog = ({ showDialog, setShowDialog, selectedUser }) => {
       setAlertContent(`수정 실패: ${error}`);
       setShowAlert(true);
     }
+    return () => dispatch(clearStates()); // 상태 초기화
   }, [success, error]);
 
   const handleClose = () => setShowDialog(false);
@@ -35,6 +38,7 @@ const UserLevelEditDialog = ({ showDialog, setShowDialog, selectedUser }) => {
             onClose={() => {
               setShowAlert(false);
               setShowDialog(false);
+              dispatch(clearStates());
             }}
             redirectTo="/admin"
           />

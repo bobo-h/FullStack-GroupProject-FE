@@ -6,6 +6,7 @@ import UserLevelEditDialog from "./component/UserLevelEditDialog";
 import {
   setSelectedUser,
   deleteAllEligibleUsers,
+  clearStates,
 } from "../../../../features/admin/adminSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Button2 from "../../../../common/components/Button2";
@@ -22,16 +23,17 @@ const AdminUser = () => {
   const { error, success, message } = useSelector((state) => state.admin);
   const dispatch = useDispatch();
 
-  // 상태 변경 감지 및 Alert 표시
   useEffect(() => {
-    if (success) {
+    if (success && activeTab === "eligibleUsers") {
+      // 특정 탭에서만 처리
       setAlertContent(message);
       setShowAlert(true);
-    } else if (error) {
+    } else if (error && activeTab === "eligibleUsers") {
       setAlertContent("삭제에 실패하였습니다.");
       setShowAlert(true);
     }
-  }, [success, error]);
+    return () => dispatch(clearStates()); // 상태 초기화
+  }, [success, error, message, activeTab]);
 
   // 수정 버튼 클릭 시 호출
   const handleEditUser = (user) => {
@@ -51,6 +53,7 @@ const AdminUser = () => {
             message={alertContent}
             onClose={() => {
               setShowAlert(false);
+              dispatch(clearStates());
             }}
             redirectTo="/admin"
           />
