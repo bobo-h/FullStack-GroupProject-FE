@@ -5,9 +5,10 @@ import { createChatbot } from "../../features/chatbot/chatbotSlice";
 import "./style/chatbot.style.css";
 import Button from "../../common/components/Button";
 import PersonalityMBTI from "./component/PersonalityMBTI/PersonalityMBTI";
-import Button2 from "../../common/components/Button2";
 import Alert from "../../common/components/Alert";
+import Alert2 from "../../common/components/Alert2";
 import { getProductList } from "../../features/product/productSlice";
+import { updateChatbotJins } from "../../features/chatbot/chatbotSlice";
 //import PersonalityBox from './component/PersonalityBox/PersonalityBox';
 
 // ChatbotCreation 컴포넌트
@@ -19,13 +20,15 @@ const ChatbotCreation = ({ chatbotItem }) => {
   const [personality, setPersonality] = useState("");
   const [isDirectInput, setIsDirectInput] = useState(true);
   const [showAlert, setShowAlert] = useState(false);
+  const [confilmAlert, setConfilmAlert] = useState(false);
+
   const [alertContent, setAlertContent] = useState("");
+  const [alertStep, setAlertStep] = useState(1); 
   const dispatch = useDispatch();
 
   const { loading, registrationError, success } = useSelector(
     (state) => state.chatbot
   );
-
 
   const product = useSelector((state) => state.product?.productList || []);
   console.log(product);
@@ -37,35 +40,35 @@ const ChatbotCreation = ({ chatbotItem }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // if (chatbotItem) {
-    //   // 수정 로직
-    //   dispatch(
-    //     updateChatbot({
-    //       chatbotId: chatbotItem.productId._id, // ID를 전달
-    //       name,
-    //     })
-    //   )
-    //     .then(() => {
-    //       setAlertContent("수정이 완료되었습니다!");
-    //       setShowAlert(true);
-    //     })
-    //     .catch((error) => {
-    //       console.error("수정 실패", error);
-    //       setAlertContent("수정에 실패했습니다!");
-    //       setShowAlert(true);
-    //     });
-    // } else {
-    dispatch(createChatbot({ name, personality }))
-      .then(() => {
-        setAlertContent("입양에 성공했습니다!");
-        setShowAlert(true);
-      })
-      .catch((error) => {
-        console.log("입양 실패", error);
-        setAlertContent("입양에 실패했습니다!");
-        setShowAlert(true);
-      });
-    //  }
+    if (chatbotItem) {
+      // 수정 로직
+      dispatch(
+        updateChatbotJins({
+          id: chatbotItem._id, // ID를 전달
+          name,
+        })
+      )
+        .then(() => {
+          setAlertContent("수정이 완료되었습니다!");
+          setShowAlert(true);
+        })
+        .catch((error) => {
+          console.error("수정 실패", error);
+          setAlertContent("수정에 실패했습니다!");
+          setShowAlert(true);
+        });
+    } else {
+      dispatch(createChatbot({ name, personality }))
+        .then(() => {
+          setAlertContent("입양에 성공했습니다!");
+          setShowAlert(true);
+        })
+        .catch((error) => {
+          console.log("입양 실패", error);
+          setAlertContent("입양에 실패했습니다!");
+          setShowAlert(true);
+        });
+    }
   };
 
   const handlePersonalityChange = (selectedPersonality) => {
@@ -75,6 +78,13 @@ const ChatbotCreation = ({ chatbotItem }) => {
   const handleInputTypeChange = (inputType) => {
     setIsDirectInput(inputType);
     setPersonality("");
+  };
+
+  const handleAlertConfirm = () => {
+    setConfilmAlert(false);
+    if (alertStep === 1) {
+      setShowAlert(true);
+    }
   };
 
   const defaultProduct = Array.isArray(product)
@@ -99,13 +109,21 @@ const ChatbotCreation = ({ chatbotItem }) => {
           <Col style={{ flex: "0 0 35%" }} className="">
             {selectedProduct?.image ? (
               <img src={selectedProduct.image} alt="Selected Product" className="chatbot-image-size" />
+            // {chatbotItem?.product_id?.image ? (
+            //   <img
+            //     src={chatbotItem.product_id.image}
+            //     alt="Selected Product"
+            //     className="chatbot-image-size"
+            //   />
             ) : defaultProduct?.image ? (
-              <img src={defaultProduct.image} alt="Default Product" className="chatbot-image-size" />
+              <img
+                src={defaultProduct.image}
+                alt="Default Product"
+                className="chatbot-image-size"
+              />
             ) : (
               <div className="no-image-message">이미지 없음</div>
             )}
-
-
           </Col>
           <Col style={{ flex: "0 0 65%" }}>
             <Form onSubmit={handleSubmit}>
@@ -126,11 +144,7 @@ const ChatbotCreation = ({ chatbotItem }) => {
                     <Form.Control
                       type="text"
                       placeholder="이름을 입력하세요"
-                      value={
-                        chatbotItem?.productId?.name
-                          ? chatbotItem.productId?.name
-                          : name
-                      }
+                      value={chatbotItem?.name ? chatbotItem?.name : name}
                       onChange={(e) => setName(e.target.value)}
                       required
                     />
@@ -146,14 +160,14 @@ const ChatbotCreation = ({ chatbotItem }) => {
                     ""
                   ) : (
                     <Col className="btn-gap">
-                      <Button2
+                      <Button
                         variant={
                           isDirectInput ? "outline-secondary" : "primary"
                         }
                         onClick={() => handleInputTypeChange(true)}
                       >
                         직접 입력
-                      </Button2>
+                      </Button>
                       <Button
                         variant={
                           isDirectInput ? "primary" : "outline-secondary"
@@ -180,8 +194,8 @@ const ChatbotCreation = ({ chatbotItem }) => {
                         as="textarea"
                         placeholder="성격을 직접 입력하세요"
                         value={
-                          chatbotItem?.productId?.name
-                            ? chatbotItem.productId?.name
+                          chatbotItem?.personality
+                            ? chatbotItem.personality
                             : personality
                         }
                         onChange={(e) => setPersonality(e.target.value)}

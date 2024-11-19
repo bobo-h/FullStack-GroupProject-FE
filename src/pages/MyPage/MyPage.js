@@ -8,47 +8,47 @@ import ChatbotList from "./component/ChatbotList";
 import userDefaultLogo from "../../assets/userDefaultLogo.png";
 import Button2 from "../../common/components/Button2";
 import { useNavigate } from "react-router-dom";
-//import { useDispatch, useSelector } from "react-redux";
-//import { getChatbotList } from "../../features/chatbot/chatbotSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getChatbotList } from "../../features/chatbot/chatbotSlice";
 
 const MyPage = () => {
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  //const { user } = useSelector((state) => state.user);
-  // 챗봇리스트 가지고 오기 (useSelector 사용)
-  //const { chatbotList } = useSelector((state) => state.chatbot);
+  //챗봇리스트 가지고 오기 (useSelector 사용)
+  const { cats } = useSelector((state) => state.chatbot);
 
-  // 챗봇리스트를 받아오기
-  // useEffect(() => {
-  //   dispatch(getChatbotList({ userId: user._id }));
-  // }, [user]);
+  console.log("cats", cats);
+  //챗봇리스트를 받아오기
+  useEffect(() => {
+    dispatch(getChatbotList());
+  }, []);
 
-  const chatbotList = [
-    {
-      productId: {
-        id: "product123",
-        name: "스타일리시 선글라스",
-      },
-      price: 19900,
-      image: userDefaultLogo,
-    },
-    {
-      productId: {
-        id: "product456",
-        name: "따뜻한 캐시미어 스웨터",
-      },
-      price: 129000,
-      image: userDefaultLogo,
-    },
-    {
-      productId: {
-        id: "product456",
-        name: "따뜻한 캐시미어 스웨터",
-      },
-      price: 129000,
-      image: userDefaultLogo,
-    },
-  ];
+  // const chatbotList = [
+  //   {
+  //     productId: {
+  //       id: "product123",
+  //       name: "스타일리시 선글라스",
+  //     },
+  //     price: 19900,
+  //     image: userDefaultLogo,
+  //   },
+  //   {
+  //     productId: {
+  //       id: "product456",
+  //       name: "따뜻한 캐시미어 스웨터",
+  //     },
+  //     price: 129000,
+  //     image: userDefaultLogo,
+  //   },
+  //   {
+  //     productId: {
+  //       id: "product456",
+  //       name: "따뜻한 캐시미어 스웨터",
+  //     },
+  //     price: 129000,
+  //     image: userDefaultLogo,
+  //   },
+  // ];
   const handleGoToShop = () => {
     navigate("/shop");
   };
@@ -82,7 +82,7 @@ const MyPage = () => {
               </Row>
               <Row className="chatbot-list__content">
                 <Col>
-                  {chatbotList.map((item) => (
+                  {cats.map((item) => (
                     <ChatbotList chatbotItem={item} />
                   ))}
                 </Col>

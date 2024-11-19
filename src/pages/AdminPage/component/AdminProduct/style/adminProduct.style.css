@@ -26,8 +26,13 @@
   }
 
   .product-table-name{
-    border-bottom: 2px solid #000;
+    border-bottom: 2px solid #5f5f5f;
   }
+
+  .btn-gap{
+    margin-right: 3%;
+  }
+
 }
 
 .upload-image {

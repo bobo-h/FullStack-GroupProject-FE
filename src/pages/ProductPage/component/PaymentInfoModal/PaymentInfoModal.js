@@ -97,7 +97,7 @@ const PaymentInfoModal = ({ onClose }) => {
   const PaymentInfoContent = (
     <div className="modal-backdrop" onClick={handleBackdropClick}>
       {showAlert && (
-        <Alert
+        <Alert4
           message={alertContent}
           onClose={() => {
             // proceedToPayment()

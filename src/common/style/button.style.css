@@ -29,3 +29,15 @@
   background-color: var(--primary-color-lightGreen);
   color: #fff;
 }
+
+.common-button.active {
+  border: 3px solid #a9b388;
+  background-color: var(--primary-color-deepGreen);
+}
+
+.common-button2.active {
+  border: 3px solid var(--primary-color-lightGreen);
+  background-color: var(--primary-color-lightGreen);
+  color: #fff;
+}
+
