@@ -10,13 +10,17 @@ import Alert from "../../../common/components/Alert";
 
 const ChatbotList = ({ chatbotItem }) => {
   //   const dispatch = useDispatch();
-  //   const [showAlert, setShowAlert] = useState(false);
-  //   const [alertContent, setAlertContent] = useState("");
-
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertContent, setAlertContent] = useState("");
   const [isEditing, setIsEditing] = useState(false); // 수정 모드 상태 관리
   // 수정 버튼 클릭 핸들러
   const handleModifyClick = () => {
     setIsEditing(true); // 수정 모드 활성화
+  };
+  // Alert 닫힘 핸들러
+  const handleAlertClose = () => {
+    setShowAlert(false); // Alert 창 닫기
+    setIsEditing(false); // 수정 모드 비활성화
   };
 
   // 삭제 버튼 클릭 핸들러
@@ -34,12 +38,23 @@ const ChatbotList = ({ chatbotItem }) => {
   //   };
   return (
     <>
-      {/* {showAlert && (
-        <Alert message={alertContent} onClose={() => setShowAlert(false)} />
-      )} */}
+      {/* Alert 컴포넌트 */}
+      {showAlert && (
+        <Alert
+          message={alertContent}
+          onClose={handleAlertClose} // Alert 닫힘 시 호출
+          redirectTo={"/my-page"}
+        />
+      )}
       {/* 수정 모드 여부에 따라 ChatbotCreation 컴포넌트 표시 */}
       {isEditing ? (
-        <ChatbotCreation chatbotItem={chatbotItem} /> // 수정 화면 컴포넌트
+        <ChatbotCreation
+          chatbotItem={chatbotItem}
+          onEditComplete={() => {
+            setAlertContent("수정이 완료되었습니다."); // Alert 메시지 설정
+            setShowAlert(true); // Alert 표시
+          }}
+        /> // 수정 화면 컴포넌트
       ) : (
         <div className="chatbot-list-card">
           <Row className="align-items-center">
