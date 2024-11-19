@@ -6,12 +6,11 @@ import "./style/chatbot.style.css";
 import Button from "../../common/components/Button";
 import PersonalityMBTI from "./component/PersonalityMBTI/PersonalityMBTI";
 import Alert from "../../common/components/Alert";
-import Alert2 from "../../common/components/Alert2";
+import Alert4 from "../../common/components/Alert4";
 import { getProductList } from "../../features/product/productSlice";
 import { updateChatbotJins } from "../../features/chatbot/chatbotSlice";
-//import PersonalityBox from './component/PersonalityBox/PersonalityBox';
+import { useNavigate } from "react-router-dom";
 
-// ChatbotCreation 컴포넌트
 const ChatbotCreation = ({ chatbotItem }) => {
   const [name, setName] = useState(chatbotItem?.productId?.name || "");
   const { orderUserId } = useSelector((state) => state.order);
@@ -19,20 +18,27 @@ const ChatbotCreation = ({ chatbotItem }) => {
 
   const [personality, setPersonality] = useState("");
   const [isDirectInput, setIsDirectInput] = useState(true);
+  const [showAlert4, setShowAlert4] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState(null);
+  const [redirectTo, setRedirectTo] = useState("")
+  
   const [confilmAlert, setConfilmAlert] = useState(false);
-
   const [alertContent, setAlertContent] = useState("");
   const [alertStep, setAlertStep] = useState(1); 
-  const dispatch = useDispatch();
 
-  const { loading, registrationError, success } = useSelector(
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
+  const { loading, registrationError} = useSelector(
     (state) => state.chatbot
   );
 
   const product = useSelector((state) => state.product?.productList || []);
-  console.log(product);
-  console.log("orderUserId in chatbot", orderUserId)
+  // console.log(product);
+  // console.log("orderUserId in chatbot", orderUserId)
+  // console.log("selectedProduct in chatbot", selectedProduct)
 
   useEffect(() => {
     dispatch(getProductList());
@@ -40,16 +46,16 @@ const ChatbotCreation = ({ chatbotItem }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // console.log("Submitting form...");
+    // console.log("chatbotItem",chatbotItem);
+    // console.log("selectedProduct",selectedProduct);
+    
     if (chatbotItem) {
       // 수정 로직
-      dispatch(
-        updateChatbotJins({
-          id: chatbotItem._id, // ID를 전달
-          name,
-        })
-      )
+      dispatch(updateChatbotJins({ id: chatbotItem._id, name }))
         .then(() => {
           setAlertContent("수정이 완료되었습니다!");
+          setRedirectTo("/");
           setShowAlert(true);
         })
         .catch((error) => {
@@ -57,19 +63,30 @@ const ChatbotCreation = ({ chatbotItem }) => {
           setAlertContent("수정에 실패했습니다!");
           setShowAlert(true);
         });
-    } else {
-      dispatch(createChatbot({ name, personality }))
+    } else if (selectedProduct) {
+      // 알림 띄우기
+      // console.log("Showing Alert4...");
+      // setAlertType("Alert4");
+      // setAlertMessage("성격을 등록하면 수정할 수 없습니다. 계속 진행하시겠습니까?");
+      // setShowAlert(true);
+      
+      // 일반 생성 로직
+      dispatch(createChatbot({ user_id: orderUserId, product_id: selectedProduct._id, name, personality }))
         .then(() => {
-          setAlertContent("입양에 성공했습니다!");
+          setAlertMessage("입양에 성공했습니다!");
+          setAlertType("success");
+          setRedirectTo("/");
           setShowAlert(true);
         })
         .catch((error) => {
-          console.log("입양 실패", error);
-          setAlertContent("입양에 실패했습니다!");
+          console.error("입양 실패", error);
+          setAlertMessage("입양에 실패했습니다!");
+          setAlertType("danger");
           setShowAlert(true);
         });
     }
   };
+  
 
   const handlePersonalityChange = (selectedPersonality) => {
     setPersonality(selectedPersonality);
@@ -80,26 +97,59 @@ const ChatbotCreation = ({ chatbotItem }) => {
     setPersonality("");
   };
 
-  const handleAlertConfirm = () => {
-    setConfilmAlert(false);
-    if (alertStep === 1) {
-      setShowAlert(true);
-    }
-  };
-
   const defaultProduct = Array.isArray(product)
     ? product.find((product) => product.defaultProduct === "Yes")
     : null;
 
+    const handleAlertConfirm = () => {
+      if (alertType === "Alert4") {
+        dispatch(createChatbot({ user_id: orderUserId, product_id: selectedProduct._id, name, personality }))
+          .then(() => {
+            setAlertMessage("입양에 성공했습니다!");
+            setAlertType("success");
+            setRedirectTo("/");
+            setShowAlert(true);
+          })
+          .catch((error) => {
+            console.error("입양 실패", error);
+            setAlertMessage("입양에 실패했습니다!");
+            setAlertType("danger");
+            setShowAlert(true);
+          });
+      }
+      setShowAlert(false); // 알림을 닫기
+    };
+
+  // 취소 버튼 클릭 시 product_id와 user_id가 있는 페이지로 돌아가기
+  const handleAlertCancel = () => {
+    // navigate(`/product/${selectedProduct?.product_id}/user/${orderUserId}`); 
+    setShowAlert(false);
+  };
+
+  useEffect(() => {
+    console.log("showAlert:", showAlert);
+    console.log("alertType:", alertType);
+  }, [showAlert, alertType]);
+
+
   return (
     <div className="chatbot-create-modal">
-      {/* {showAlert && (
-        <Alert
-          message={alertContent}
-          onClose={() => setShowAlert(false)}
-          redirectTo="/chatbot"
+      {showAlert4 && (
+        <Alert4
+          message={alertMessage}
+          type={alertType}
+          onClose={() => setShowAlert4(false)}
+          onConfirm={handleAlertConfirm}
+          onCancel={handleAlertCancel}
         />
-      )} */}
+      )}
+      {showAlert && (
+        <Alert
+          message={alertMessage}
+          redirectTo={redirectTo}
+          onClose={() => setShowAlert(false)}
+        />
+      )}
       <Container
         className=" d-flex justify-content-center align-items-center"
         style={{ height: "100vh" }}
@@ -107,36 +157,48 @@ const ChatbotCreation = ({ chatbotItem }) => {
         <Row className="text-center chatbot-create-content">
           <h3 className="create-modal-title">입양 서류</h3>
           <Col style={{ flex: "0 0 35%" }} className="">
-            {selectedProduct?.image ? (
-              <img src={selectedProduct.image} alt="Selected Product" className="chatbot-image-size" />
-            // {chatbotItem?.product_id?.image ? (
-            //   <img
-            //     src={chatbotItem.product_id.image}
-            //     alt="Selected Product"
-            //     className="chatbot-image-size"
-            //   />
-            ) : defaultProduct?.image ? (
-              <img
-                src={defaultProduct.image}
-                alt="Default Product"
+            {chatbotItem?.product_id?.image ? (
+            <img
+                src={chatbotItem.product_id.image}
+                alt="Selected Product"
                 className="chatbot-image-size"
-              />
-            ) : (
-              <div className="no-image-message">이미지 없음</div>
-            )}
-          </Col>
+                />
+              ) : selectedProduct?.image ? (
+                  <img
+                    src={selectedProduct.image}
+                    alt="Selected Product"
+                    className="chatbot-image-size"
+                  />
+                ) : defaultProduct?.image ? (
+                  <img
+                    src={defaultProduct.image}
+                    alt="Default Product"
+                    className="chatbot-image-size"
+                  />
+                ) : (
+                  <div className="no-image-message">이미지 없음</div>
+                )}
+            </Col>
+
           <Col style={{ flex: "0 0 65%" }}>
             <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3" controlId="formName">
                 <Row className="align-items-center">
-                  {registrationError && (
+                  {/* {registrationError && (
                     <Alert variant="danger">{registrationError}</Alert>
-                  )}
+                  )} */}
                   {/* {success && (
                     <Alert variant="success">
                       챗봇이 성공적으로 생성되었습니다!
                     </Alert>
                   )} */}
+                  {registrationError && (
+                    <Alert4
+                      message={registrationError}
+                      type="danger"
+                      onClose={() => setShowAlert4(false)}
+                    />
+                  )}
                   <Col xs="auto">
                     <Form.Label>챗봇 이름</Form.Label>
                   </Col>
