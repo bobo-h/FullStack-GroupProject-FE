@@ -86,7 +86,7 @@ const PaymentInfoModal = ({ onClose }) => {
   const proceedToPayment = () => {
     //user_id도 넘겨주세용  --> 추가했어요
     console.log("orderUserId??", orderUserId)
-    navigate("/chatbot", { state: { productImage: selectedProduct._id, orderUserId: orderUserId } });
+    //navigate("/chatbot", { state: { productImage: selectedProduct._id, orderUserId: orderUserId } });
   };
   const handleBackdropClick = (event) => {
     if (event.target.classList.contains("modal-backdrop")) {
@@ -100,9 +100,10 @@ const PaymentInfoModal = ({ onClose }) => {
         <Alert
           message={alertContent}
           onClose={() => {
-            proceedToPayment()
+            // proceedToPayment()
             setShowAlert(false)
           }}
+          redirectTo="/chatbot"
         />
       )}
       {loading ? (
