@@ -85,7 +85,7 @@ const PaymentInfoModal = ({ onClose }) => {
 
   const proceedToPayment = () => {
     //user_id도 넘겨주세용  --> 추가했어요
-    console.log("orderUserId??", orderUserId)
+    console.log("orderUserId??", orderUserId);
     //navigate("/chatbot", { state: { productImage: selectedProduct._id, orderUserId: orderUserId } });
   };
   const handleBackdropClick = (event) => {
@@ -97,22 +97,22 @@ const PaymentInfoModal = ({ onClose }) => {
   const PaymentInfoContent = (
     <div className="modal-backdrop" onClick={handleBackdropClick}>
       {showAlert && (
-        <Alert4
+        <Alert
           message={alertContent}
           onClose={() => {
             // proceedToPayment()
-            setShowAlert(false)
+            setShowAlert(false);
           }}
           redirectTo="/chatbot"
         />
       )}
       {loading ? (
-          <div className="text-align-center">
-            <LoadingSpinner animation="border" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </LoadingSpinner>
-          </div>
-        ) : null }
+        <div className="text-align-center">
+          <LoadingSpinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </LoadingSpinner>
+        </div>
+      ) : null}
       <Container className="payment-modal-backdrop">
         <h3 className="modal-title">입양 절차</h3>
         <Row>
@@ -165,7 +165,7 @@ const PaymentInfoModal = ({ onClose }) => {
                         onChange={handleFormChange}
                         required
                         name="name"
-                      // value={orderInfo.name}
+                        // value={orderInfo.name}
                       />
                     </Col>
                   </Row>
