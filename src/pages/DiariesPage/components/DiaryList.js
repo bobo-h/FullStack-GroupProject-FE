@@ -65,7 +65,7 @@ const DiaryList = () => {
                     weekday: "short",
                   })}
                 </p>
-                <h3 className="diary-list__item-date-number font-weight-bold">
+                <h3 className="diary-list__item-date-number font-weight-bold mb-0">
                   {new Date(diary.selectedDate).getDate()}
                 </h3>
               </Col>
@@ -76,7 +76,6 @@ const DiaryList = () => {
                       src={diary.mood.image}
                       alt={diary.mood.name}
                       className="diary-list__item-mood-icon me-2"
-                      style={{ width: "50px", height: "50px" }}
                     />
                   </div>
                   <h5 className="diary-list__item-title mb-0 ms-2">
