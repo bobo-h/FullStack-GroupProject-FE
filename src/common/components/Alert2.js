@@ -5,13 +5,14 @@ import { Row, Col } from "react-bootstrap";
 import "../../common/style/alert.style.css";
 import { useNavigate } from "react-router-dom";
 
-const Alert2 = ({ message, onClose, redirectTo }) => {
+const Alert2 = ({ message, onClose, redirectTo, onConfirm }) => {
 
   const navigate = useNavigate();
 
   const handleConfirm = () => {
     onClose();
-    navigate(redirectTo || "/");
+    onConfirm();
+    if (redirectTo) navigate(redirectTo);
   };
 
   return (
@@ -22,7 +23,7 @@ const Alert2 = ({ message, onClose, redirectTo }) => {
             ×
           </button>
           <h4 className="alert-title">프로젝트</h4>
-          <div className="alert-content">{children}</div>
+          <div className="alert-content">{message}</div>
           <Row>
             <Col className="btn-gap">
               <Button onClick={handleConfirm} className="alert-button">

@@ -45,7 +45,7 @@ const AdminDiary = () => {
   }, [query])
 
   return (
-    <div className="admin-product-page">
+    <div className="admin-mood-page">
       <Container>
         <Row>
           <Col md={2}>

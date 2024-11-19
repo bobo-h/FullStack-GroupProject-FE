@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getDiaryDetail, clearError } from "../../features/diary/diarySlice";
 import DiaryDetail from "./components/DiaryDetail";
-import Comment from "./components/Comment";
-import { Spinner } from "react-bootstrap";
+import CommentArea from "./components/Comment/CommentArea";
+import { Spinner, Container, Col, Row } from "react-bootstrap";
 
 const DiaryDetailPage = () => {
   const { diaryId } = useParams();
@@ -37,8 +37,12 @@ const DiaryDetailPage = () => {
 
   return (
     <div>
+      <Col>
       <DiaryDetail selectedDiary={selectedDiary} />
-      <Comment />
+      </Col>
+      <Col>
+        <CommentArea diaryId = {diaryId}/>
+      </Col>
     </div>
   );
 };

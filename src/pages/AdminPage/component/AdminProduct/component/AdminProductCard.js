@@ -50,7 +50,7 @@ const AdminProductCard = ({ product, setMode, setShowDialog }) => {
             md={3}
             className="d-flex align-items-center justify-content-center"
           >
-            <Button2 onClick={handleClickEditItem}>수정</Button2>
+            <Button2 className="btn-gap" onClick={handleClickEditItem}>수정</Button2>
             <Button2 onClick={handleClickDeleteItem}>삭제</Button2>
           </Col>
         </Row>
