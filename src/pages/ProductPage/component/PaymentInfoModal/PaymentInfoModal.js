@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,13 +9,13 @@ import PaymentForm from "./PaymentForm";
 import Button from "../../../../common/components/Button";
 import Button2 from "../../../../common/components/Button2";
 import ReactDOM from "react-dom";
-import Alert4 from "../../../../common/components/Alert4";
+import Alert from "../../../../common/components/Alert";
+import LoadingSpinner from "../../../../common/components/LoadingSpinner";
 
 const PaymentInfoModal = ({ onClose }) => {
   const dispatch = useDispatch();
   const selectedProduct = useSelector((state) => state.product.selectedProduct);
-  const { orderNum } = useSelector((state) => state.order);
-  const [firstLoading, setFirstLoading] = useState(true);
+  const { orderUserId, loading } = useSelector((state) => state.order);
   const [showAlert, setShowAlert] = useState(false);
   const [alertContent, setAlertContent] = useState("");
 
@@ -34,19 +34,6 @@ const PaymentInfoModal = ({ onClose }) => {
   });
 
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   if (firstLoading) {
-  //     setFirstLoading(false);
-  //   } else {
-
-  //     // 오더번호를 받으면 어디로 갈까?
-  //     if (orderNum !== "") {
-  //       navigate("/chatbot")
-  //     }
-  //   }
-
-  // }, [orderNum]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -97,8 +84,9 @@ const PaymentInfoModal = ({ onClose }) => {
   };
 
   const proceedToPayment = () => {
-    //user_id도 넘겨주세용
-    navigate("/chatbot", { state: { productImage: selectedProduct._id } });
+    //user_id도 넘겨주세용  --> 추가했어요
+    console.log("orderUserId??", orderUserId)
+    //navigate("/chatbot", { state: { productImage: selectedProduct._id, orderUserId: orderUserId } });
   };
   const handleBackdropClick = (event) => {
     if (event.target.classList.contains("modal-backdrop")) {
@@ -111,10 +99,20 @@ const PaymentInfoModal = ({ onClose }) => {
       {showAlert && (
         <Alert4
           message={alertContent}
-          onClose={() => setShowAlert(false)}
+          onClose={() => {
+            // proceedToPayment()
+            setShowAlert(false)
+          }}
           redirectTo="/chatbot"
         />
       )}
+      {loading ? (
+          <div className="text-align-center">
+            <LoadingSpinner animation="border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </LoadingSpinner>
+          </div>
+        ) : null }
       <Container className="payment-modal-backdrop">
         <h3 className="modal-title">입양 절차</h3>
         <Row>
@@ -167,7 +165,7 @@ const PaymentInfoModal = ({ onClose }) => {
                         onChange={handleFormChange}
                         required
                         name="name"
-                        // value={orderInfo.name}
+                      // value={orderInfo.name}
                       />
                     </Col>
                   </Row>

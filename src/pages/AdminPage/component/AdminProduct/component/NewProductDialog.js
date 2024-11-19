@@ -69,7 +69,6 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
       //새 상품 만들기
       dispatch(createProduct(formData))
         .then(() => {
-          console.log("excuted here!!!");
           setAlertContent("상품 생성 완료하였습니다!");
           setShowAlert(true);
         })

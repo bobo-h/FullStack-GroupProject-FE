@@ -7,6 +7,7 @@ import ProductCard from './component/AdminProductCard';
 import NewProductDialog from './component/NewProductDialog';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedProduct, getProductList, clearError } from '../../../../features/product/productSlice';
+import LoadingSpinner from '../../../../common/components/LoadingSpinner';
 
 const AdminProduct = () => {
   const dispatch = useDispatch();
@@ -14,6 +15,7 @@ const AdminProduct = () => {
   const productList = useSelector((state) => state.product.productList);
   const selectedProduct = useSelector((state) => state.product.selectedProduct);
   const success = useSelector((state) => state.product.success);
+  const loading = useSelector((state) => state.product.loading)
   const [mode, setMode] = useState("new");
   const [showDialog, setShowDialog] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All")
@@ -61,7 +63,7 @@ const AdminProduct = () => {
             <h2>Product</h2>
           </Col>
           <Col md={3}>
-          <Form.Select
+            <Form.Select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
             >
@@ -74,20 +76,26 @@ const AdminProduct = () => {
             <Button onClick={handleClickNewItem}>add Item</Button>
           </Col>
         </Row>
-        <Row className="table-area">
-          <ProductTable className="unser-line" />
-    
-          {
-            
-          filteredProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product} // 개별 `product` 객체를 `ProductCard`에 전달
-              setMode={setMode}
-              setShowDialog={setShowDialog}
-            />
-          ))}
-        </Row>
+        {loading ? (
+          <div className="text-align-center">
+            <LoadingSpinner animation="border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </LoadingSpinner>
+          </div>
+        ) : (
+          <Row className="table-area">
+            <ProductTable className="unser-line" />
+            {
+              filteredProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product} // 개별 `product` 객체를 `ProductCard`에 전달
+                  setMode={setMode}
+                  setShowDialog={setShowDialog}
+                />
+              ))}
+          </Row>)}
+
       </Container>
       <NewProductDialog
         mode={mode}

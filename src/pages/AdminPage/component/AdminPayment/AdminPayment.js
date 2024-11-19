@@ -10,12 +10,13 @@ import {
   setSelectedOrder,
 } from "../../../../features/order/orderSlice";
 import "./style/adminPayment.style.css";
+import LoadingSpinner from "../../../../common/components/LoadingSpinner";
 
 const AdminOrderPage = () => {
   const navigate = useNavigate();
   const [query] = useSearchParams();
   const dispatch = useDispatch();
-  const { orderList, totalPageNum } = useSelector((state) => state.order);
+  const { orderList, totalPageNum, loading } = useSelector((state) => state.order);
   const [searchQuery, setSearchQuery] = useState({
     page: query.get("page") || 1,
     ordernum: query.get("ordernum") || "",
@@ -61,11 +62,20 @@ const AdminOrderPage = () => {
 
   return (
     <div>
-      <OrderTable
-        header={tableHeader}
-        data={orderList}
-        openEditForm={openEditForm}
-      />
+      {loading ? (
+        <div className="text-align-center">
+          <LoadingSpinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </LoadingSpinner>
+        </div>
+      ) : (
+        <OrderTable
+          header={tableHeader}
+          data={orderList}
+          openEditForm={openEditForm}
+        />
+      )}
+
     </div>
   );
 };

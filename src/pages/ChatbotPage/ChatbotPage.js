@@ -13,7 +13,10 @@ import { updateChatbotJins } from "../../features/chatbot/chatbotSlice";
 
 // ChatbotCreation 컴포넌트
 const ChatbotCreation = ({ chatbotItem }) => {
-  const [name, setName] = useState(chatbotItem?.name || ""); // 다희
+  const [name, setName] = useState(chatbotItem?.productId?.name || "");
+  const { orderUserId } = useSelector((state) => state.order);
+  const selectedProduct = useSelector((state) => state.product.selectedProduct);
+
   const [personality, setPersonality] = useState("");
   const [isDirectInput, setIsDirectInput] = useState(true);
   const [showAlert, setShowAlert] = useState(false);
@@ -29,6 +32,7 @@ const ChatbotCreation = ({ chatbotItem }) => {
 
   const product = useSelector((state) => state.product?.productList || []);
   console.log(product);
+  console.log("orderUserId in chatbot", orderUserId)
 
   useEffect(() => {
     dispatch(getProductList());
@@ -89,21 +93,13 @@ const ChatbotCreation = ({ chatbotItem }) => {
 
   return (
     <div className="chatbot-create-modal">
-      {showAlert && (
+      {/* {showAlert && (
         <Alert
           message={alertContent}
           onClose={() => setShowAlert(false)}
-          redirectTo="/"
+          redirectTo="/chatbot"
         />
-      )}
-      {confilmAlert && (
-       <Alert2
-       message={alertContent}
-       onClose={() => setConfilmAlert(false)}
-       redirectTo="/chatbot"
-       onConfirm={handleAlertConfirm}
-     />
-      )}
+      )} */}
       <Container
         className=" d-flex justify-content-center align-items-center"
         style={{ height: "100vh" }}
@@ -111,12 +107,14 @@ const ChatbotCreation = ({ chatbotItem }) => {
         <Row className="text-center chatbot-create-content">
           <h3 className="create-modal-title">입양 서류</h3>
           <Col style={{ flex: "0 0 35%" }} className="">
-            {chatbotItem?.product_id?.image ? (
-              <img
-                src={chatbotItem.product_id.image}
-                alt="Selected Product"
-                className="chatbot-image-size"
-              />
+            {selectedProduct?.image ? (
+              <img src={selectedProduct.image} alt="Selected Product" className="chatbot-image-size" />
+            // {chatbotItem?.product_id?.image ? (
+            //   <img
+            //     src={chatbotItem.product_id.image}
+            //     alt="Selected Product"
+            //     className="chatbot-image-size"
+            //   />
             ) : defaultProduct?.image ? (
               <img
                 src={defaultProduct.image}
@@ -134,11 +132,11 @@ const ChatbotCreation = ({ chatbotItem }) => {
                   {registrationError && (
                     <Alert variant="danger">{registrationError}</Alert>
                   )}
-                  {success && (
+                  {/* {success && (
                     <Alert variant="success">
                       챗봇이 성공적으로 생성되었습니다!
                     </Alert>
-                  )}
+                  )} */}
                   <Col xs="auto">
                     <Form.Label>챗봇 이름</Form.Label>
                   </Col>
@@ -224,8 +222,8 @@ const ChatbotCreation = ({ chatbotItem }) => {
                       {loading
                         ? "생성 중..."
                         : chatbotItem
-                        ? "수정하기"
-                        : "입양하기"}
+                          ? "수정하기"
+                          : "입양하기"}
                     </Button>
                   </Col>
                 </Row>
