@@ -20,7 +20,9 @@ const AdminUser = () => {
   const [alertContent, setAlertContent] = useState("");
 
   const selectedUser = useSelector((state) => state.admin.selectedUser);
-  const { error, success, message } = useSelector((state) => state.admin);
+  const { error, success, message, totalUserNum } = useSelector(
+    (state) => state.admin
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -71,6 +73,11 @@ const AdminUser = () => {
               <option>등록순</option>
             </Form.Select>
           </Col>
+          {activeTab === "allUser" && (
+            <Col md={7} className="total-user-num">
+              <p>총 회원수 : {totalUserNum}</p>
+            </Col>
+          )}
         </Row>
         <Row className="table-area">
           {/* 탭 메뉴 */}

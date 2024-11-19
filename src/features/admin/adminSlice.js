@@ -91,6 +91,7 @@ const adminSlice = createSlice({
     eligibleUser: [], //탈퇴로부터 90일이상의 회원리스트
     allAdmin: [],
     selectedUser: null,
+    totalUserNum: null,
     loading: false,
     error: null,
     success: false,
@@ -114,6 +115,7 @@ const adminSlice = createSlice({
       .addCase(getAllUserList.fulfilled, (state, action) => {
         state.loading = false;
         state.allUser = action.payload.allUsers;
+        state.totalUserNum = action.payload.totalUserNum;
       })
       .addCase(getAllUserList.rejected, (state, action) => {
         state.loading = false;
