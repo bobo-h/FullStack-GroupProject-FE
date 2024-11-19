@@ -18,7 +18,20 @@ export const getDiaryList = createAsyncThunk(
   async (page, { rejectWithValue }) => {
     try {
       const response = await api.get(`/diary?page=${page}`);
+      console.log("API Response:", response.data);
       return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getDiaryDetail = createAsyncThunk(
+  "diary/getDiaryDetail",
+  async (diaryId, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/diary/${diaryId}`);
+      return response.data.diary; // 서버에서 반환되는 diary 데이터를 가져옴
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -48,6 +61,8 @@ const diarySlice = createSlice({
     },
     clearDiaryList: (state) => {
       state.diaryList = [];
+      state.currentPage = 1;
+      state.totalPages = 1;
     },
   },
   extraReducers: (builder) => {
@@ -69,15 +84,31 @@ const diarySlice = createSlice({
         state.loading = true;
       })
       .addCase(getDiaryList.fulfilled, (state, action) => {
+        console.log("Before Update:", state.diaryList); // 업데이트 전 상태
+        console.log("New Data:", action.payload.data); // 새 데이터
         state.loading = false;
         state.error = null;
         state.diaryList = [...state.diaryList, ...action.payload.data];
+        console.log("After Update:", state.diaryList); // 업데이트 후 상태
         state.currentPage = action.payload.currentPage;
         state.totalPages = action.payload.totalPages;
       })
       .addCase(getDiaryList.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to fetch diaries.";
+      })
+      .addCase(getDiaryDetail.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.selectedDiary = null;
+      })
+      .addCase(getDiaryDetail.fulfilled, (state, action) => {
+        state.loading = false;
+        state.selectedDiary = action.payload;
+      })
+      .addCase(getDiaryDetail.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to fetch diary detail.";
       });
   },
 });
