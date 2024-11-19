@@ -117,11 +117,26 @@ export const deleteChatbot = createAsyncThunk(
 // updateChatbot action
 export const updateChatbotJins = createAsyncThunk(
   "chatbot/updateChatbotJins",
-  async ({ id, updateData }, { rejectWithValue }) => {
+  async ({ id, updateData }, { getState, rejectWithValue }) => {
     try {
+      // API 요청
       const response = await api.put(`/chatbot/${id}`, updateData);
 
-      return response.data; // 서버에서 반환한 데이터를 그대로 사용
+      // 상태 가져오기
+      const state = getState();
+      // console.log("뭐니 문제가 뭐니", state.chatbot.cats);
+      const clonedCats = JSON.parse(JSON.stringify(state.chatbot.cats)); // Proxy 객체를 평범한 객체로 변환
+      // console.log("뭐니 문제가 뭐니2", response);
+      // 상태 업데이트
+      const updatedCats = clonedCats.map((cat) =>
+        String(cat._id) === String(id) ? response.data.data : cat
+      );
+      // console.log("변환 완료", updatedCats);
+      // 토나올거 같애 살려줘
+      // 으악!! 해결!!! ㅠㅠㅠㅠㅠ
+
+      // 업데이트된 배열 반환
+      return updatedCats;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
     }
@@ -176,10 +191,14 @@ const chatbotSlice = createSlice({
     registrationError: null,
     success: false,
     cats: [], // 서버에서 가져온 쳇봇리스트를 저장
+    catsLength: 0,
   },
   reducers: {
     clearErrors: (state) => {
       state.registrationError = null;
+    },
+    getListLenght: (state) => {
+      state.catsLength = state.cats.length;
     },
   },
   extraReducers: (builder) => {
@@ -210,6 +229,7 @@ const chatbotSlice = createSlice({
         state.success = true;
         state.registrationError = null;
         state.cats = action.payload; // 서버 데이터로 상태 업데이트
+        // console.log("궁금하오1", state.cats);
       })
       .addCase(getChatbotList.rejected, handleRejected)
       .addCase(getChatbotDetail.pending, handlePending)
@@ -226,17 +246,14 @@ const chatbotSlice = createSlice({
       .addCase(printLineChatbot.rejected, handleRejected)
       .addCase(updateChatbotJins.pending, handlePending)
       .addCase(updateChatbotJins.fulfilled, (state, action) => {
+        state.cats = action.payload; // 업데이트된 배열을 상태에 반영
         state.loading = false;
         state.success = true;
         state.registrationError = null;
-        const updatedCat = action.payload;
-        state.cats = state.cats.map((cat) =>
-          cat._id === updatedCat._id ? { ...cat, ...updatedCat } : cat
-        );
       })
       .addCase(updateChatbotJins.rejected, handleRejected);
   },
 });
 
-export const { clearErrors } = chatbotSlice.actions;
+export const { clearErrors, getListLenght } = chatbotSlice.actions;
 export default chatbotSlice.reducer;
