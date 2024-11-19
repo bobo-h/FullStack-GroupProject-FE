@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import React, { useState } from "react";
 import "./style/adminMenu.style.css";
 import { Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
