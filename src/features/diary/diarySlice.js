@@ -38,6 +38,18 @@ export const getDiaryDetail = createAsyncThunk(
   }
 );
 
+export const updateDiary = createAsyncThunk(
+  "diary/updateDiary",
+  async ({ diaryId, payload }, { rejectWithValue }) => {
+    try {
+      const response = await api.put(`/diary/${diaryId}`, payload); // PUT 요청
+      return response.data.data; // 서버에서 반환되는 데이터
+    } catch (error) {
+      return rejectWithValue(error.response.data || "Failed to update diary.");
+    }
+  }
+);
+
 const diarySlice = createSlice({
   name: "diary",
   initialState: {
@@ -84,12 +96,9 @@ const diarySlice = createSlice({
         state.loading = true;
       })
       .addCase(getDiaryList.fulfilled, (state, action) => {
-        console.log("Before Update:", state.diaryList); // 업데이트 전 상태
-        console.log("New Data:", action.payload.data); // 새 데이터
         state.loading = false;
         state.error = null;
         state.diaryList = [...state.diaryList, ...action.payload.data];
-        console.log("After Update:", state.diaryList); // 업데이트 후 상태
         state.currentPage = action.payload.currentPage;
         state.totalPages = action.payload.totalPages;
       })
@@ -109,6 +118,22 @@ const diarySlice = createSlice({
       .addCase(getDiaryDetail.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to fetch diary detail.";
+      })
+      .addCase(updateDiary.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(updateDiary.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+        state.selectedDiary = action.payload;
+      })
+      .addCase(updateDiary.rejected, (state, action) => {
+        state.loading = false;
+        state.success = false;
+        state.error = action.payload || "Failed to update diary.";
       });
   },
 });
