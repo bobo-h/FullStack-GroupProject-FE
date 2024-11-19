@@ -6,6 +6,7 @@ import {
   getChatbotList,
   updateChatbotJins,
   getListLenght,
+  logoutChatBot,
 } from "../../features/chatbot/chatbotSlice";
 import "../style/sidebar.style.css";
 import debounce from "lodash.debounce";
@@ -224,6 +225,7 @@ const LogoutButton = () => {
   const handleLogout = () => {
     // Redux 상태 초기화
     dispatch(logout());
+    dispatch(logoutChatBot());
 
     // 로그인 페이지로 리디렉션
     navigate("/login");

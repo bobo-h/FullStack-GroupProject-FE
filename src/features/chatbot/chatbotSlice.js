@@ -200,6 +200,10 @@ const chatbotSlice = createSlice({
     getListLenght: (state) => {
       state.catsLength = state.cats.length;
     },
+    logoutChatBot: (state) => {
+      state.cats = [];
+      state.catsLength = 0;
+    },
   },
   extraReducers: (builder) => {
     const handlePending = (state) => {
@@ -255,5 +259,6 @@ const chatbotSlice = createSlice({
   },
 });
 
-export const { clearErrors, getListLenght } = chatbotSlice.actions;
+export const { clearErrors, getListLenght, logoutChatBot } =
+  chatbotSlice.actions;
 export default chatbotSlice.reducer;
