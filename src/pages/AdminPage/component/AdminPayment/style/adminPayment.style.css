@@ -1,0 +1,45 @@
+.admin-payment-page{
+    .payment-table-name {
+      margin-top: 2%;
+      margin-bottom: 2%;
+      padding: 1%;
+    }
+    
+    .payment-table-name .payment-table-content .container {
+      border-radius: 10px;
+    }
+    
+    .payment-table-name .payment-table-content .row {
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .payment-table-name .payment-table-content .col {
+      display: flex;
+      align-items: center; 
+    }
+    
+    .table-area {
+      margin-top: 3%;
+      background-color: #fff; 
+      border-radius: 20px;
+    }
+  
+    .payment-table-name{
+      border-bottom: 2px solid #5f5f5f;
+    }
+
+    .btn-gap{
+      margin-right: 3%;
+    }
+
+  }
+  .upload-image {
+    max-width: 100%;
+    max-height: 200px; /* 최대 높이를 200px로 제한 */
+    display: block;
+    margin: 0 auto; /* 이미지를 가운데 정렬 */
+    object-fit: contain; /* 이미지 비율 유지 */
+  }
+  
+  
