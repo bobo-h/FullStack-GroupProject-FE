@@ -1,6 +1,9 @@
 .chatbot-list-card {
   margin-bottom: 30px;
 
+  .general-chatbot-area {
+    align-items: center;
+  }
   .chatbot-num-area {
     text-align: center;
     font-weight: bolder;
@@ -16,8 +19,16 @@
   .chatbot-info-area {
     color: gray;
   }
+  .chatbot-btn-list {
+    padding: 0;
+  }
   .chatbot-btn__modify {
     margin-right: 6px;
+  }
+  .chatbot-btn__modify,
+  .chatbot-btn__toggle-visualization {
+    font-size: 15px; /* 글자 크기 줄이기 */
+    padding: 5px 10px; /* 버튼 안쪽 여백 (상하, 좌우) */
   }
 }
 
@@ -25,5 +36,43 @@
   background-color: var(--primary-color-brown);
   .chatbot-info-area {
     color: white;
+  }
+}
+
+@media (max-width: 768px) {
+  .chatbot-list-card {
+    max-width: 700px;
+
+    .general-chatbot-area {
+      justify-content: center;
+    }
+    .chatbot-image-area {
+      width: 60px;
+      padding: 0;
+    }
+    .chatbot-image {
+      width: 60px;
+      height: 60px;
+      border-radius: 20px;
+      object-fit: cover; /* 비율을 유지하면서 크기에 맞게 자름 */
+      display: block; /* 부모와의 여백 제거 */
+    }
+
+    .chatbot-info-area {
+      width: 150px;
+      padding: 0 1;
+    }
+    .chatbot-btn-list {
+      padding: 0;
+      width: 60px;
+    }
+    .chatbot-btn__modify {
+      margin-bottom: 2px;
+    }
+    .chatbot-btn__modify,
+    .chatbot-btn__toggle-visualization {
+      font-size: 11px; /* 글자 크기 줄이기 */
+      padding: 5px 10px; /* 버튼 안쪽 여백 (상하, 좌우) */
+    }
   }
 }

@@ -69,7 +69,7 @@ const ChatbotList = ({ chatbotItem, index }) => {
             chatbotItem.visualization ? "" : "disabled-card"
           }`}
         >
-          <Row className="align-items-center">
+          <Row className="general-chatbot-area">
             <Col xs={1} className="chatbot-num-area">
               {index + 1}
             </Col>
@@ -80,7 +80,7 @@ const ChatbotList = ({ chatbotItem, index }) => {
                 className="chatbot-image"
               />
             </Col>
-            <Col xs={5} md={5} className="chatbot-info-area">
+            <Col xs={6} md={6} className="chatbot-info-area">
               <div className="chatbot-info__name">
                 <strong>챗봇명: {chatbotItem?.name || "챗봇 이름"}</strong>
               </div>
@@ -90,7 +90,7 @@ const ChatbotList = ({ chatbotItem, index }) => {
                 </strong>
               </div>
             </Col>
-            <Col xs={3} className="vertical-middle">
+            <Col xs={2} className="chatbot-btn-list">
               <Button2
                 className="chatbot-btn__modify"
                 onClick={handleModifyClick}

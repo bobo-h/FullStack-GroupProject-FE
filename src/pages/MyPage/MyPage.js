@@ -23,32 +23,6 @@ const MyPage = () => {
     dispatch(getChatbotList());
   }, []);
 
-  // const chatbotList = [
-  //   {
-  //     productId: {
-  //       id: "product123",
-  //       name: "스타일리시 선글라스",
-  //     },
-  //     price: 19900,
-  //     image: userDefaultLogo,
-  //   },
-  //   {
-  //     productId: {
-  //       id: "product456",
-  //       name: "따뜻한 캐시미어 스웨터",
-  //     },
-  //     price: 129000,
-  //     image: userDefaultLogo,
-  //   },
-  //   {
-  //     productId: {
-  //       id: "product456",
-  //       name: "따뜻한 캐시미어 스웨터",
-  //     },
-  //     price: 129000,
-  //     image: userDefaultLogo,
-  //   },
-  // ];
   const handleGoToShop = () => {
     navigate("/shop");
   };
@@ -63,17 +37,15 @@ const MyPage = () => {
           </Col>
 
           {/* 콘텐츠: 사이드바 옆으로 오프셋 적용 */}
-          <Col
-            xs={12}
-            md={{ span: 9, offset: 3 }}
-            className="userInfo-area fixed-offset"
-          >
+          <Col xs={12} className="mypage-area">
             {/* 유저 정보 섹션 */}
-            <Row className="mt-4">
-              <Col>
-                <UserInfo />
-              </Col>
-            </Row>
+            <div className="userInfo-area">
+              <Row>
+                <Col>
+                  <UserInfo />
+                </Col>
+              </Row>
+            </div>
             {/* 추가 콘텐츠 섹션 */}
             {/* ex) 주소가 /my-page일 경우에만 보이도록 지정 */}
             <div className="chatbot-list-area">
