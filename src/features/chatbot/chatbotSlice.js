@@ -19,9 +19,9 @@ export const getChatbotList = createAsyncThunk(
 // getChatbotDetail action
 export const getChatbotDetail = createAsyncThunk(
   "chatbot/getChatbotDetail",
-  async ({ userId, chatbotId }, { rejectWithValue }) => {
+  async (_,{ chatbotId }, { rejectWithValue }) => {
     try {
-      const response = await api.get(`/chatbot/${userId}/${chatbotId}`);
+      const response = await api.get(`/chatbot/me/${chatbotId}`);
       return response.data;
     } catch (err) {
       return rejectWithValue(err.message);
@@ -32,20 +32,12 @@ export const getChatbotDetail = createAsyncThunk(
 // createChatbot action
 export const createChatbot = createAsyncThunk(
   "chatbot/createChatbot",
-  async ({ name, personality }, dispatch) => {
+  async ({ user_id, product_id, name, personality }, { rejectWithValue }) => {
     try {
-      const response = await api.post("/chatbot", { name, personality });
-      dispatch({
-        type: "CREATE_CHATBOT_SUCCESS",
-        payload: response.data,
-      });
-      return Promise.resolve();
+      const response = await api.post("/chatbot", { user_id, product_id, name, personality });
+      return response.data;
     } catch (error) {
-      dispatch({
-        type: "CREATE_CHATBOT_FAILURE",
-        payload: error.response?.data || error.message,
-      });
-      return Promise.reject(error);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );

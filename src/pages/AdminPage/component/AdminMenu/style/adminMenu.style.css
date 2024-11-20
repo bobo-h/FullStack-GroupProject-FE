@@ -1,97 +1,93 @@
 .admin-menubar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 20%; /* Fixed width for the menu */
-    height: 100%; /* Full height of the screen */
-    background-color: #B99470;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Center content horizontally */
-    padding-top: 20px; /* Space from the top */
-
-    .titles {
-        display: flex;
-        flex-direction: column; /* Ensure the titles are stacked vertically */
-        justify-content: center; /* Center titles horizontally */
-        align-items: center; /* Center titles vertically */
-        width: 100%; /* Full width */
-        text-align: center; /* Center the text inside titles */
-    }
-
-    .project-logo{
-      width: 80%;
-    }
-  
-    .project-title {
-        margin-top: 20%; /* Space below the title */
-    }
-    
-    .project-subtitle {
-        margin-bottom: 10%; /* Space below the title */
-    }
-    
-  .button-container {
-    display: flex;
-    flex-direction: row; /* Horizontal layout for buttons */
-    justify-content: center; /* Center buttons horizontally */
-    width: 100%; /* Ensure the container takes up full width */
-  }
-  
-  .admin-button {
-    background-color: #B99470;
-    color: white;
-    border: none;
-    padding: 15px;
-    font-size: 18px;
-    cursor: pointer;
-    width: 100%; 
-    margin: 0%; 
-  }
-  
-  
-  .admin-button:hover {
-    background-color: #FEFAE0;
-    color: #000;
-  }
-  
-  .admin-button:focus {
-    outline: none;
-    color: #000;
-  }
-  .admin-button.active {
-    background-color: #FEFAE0;
-    color: #000;
-  }
-
- 
+  transition: transform 0.3s ease-in-out;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 20%; /* Fixed width for the menu */
+  height: 100%; /* Full height of the screen */
+  background-color: #b99470;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content horizontally */
+  padding-top: 20px; /* Space from the top */
 }
 
-@media (min-width: 1300px) {
-  .project-logo {
-    width: 40%;
-  }
+.admin-menubar.open {
+  transform: translateX(0);
 }
 
-@media (max-width: 700px) {
+.admin-menubar.closed {
+  transform: translateX(-100%);
+}
+
+.menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+}
+
+
+.menu-toggle-button {
+  background-color: #b99470;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  width: 50px; /* 버튼의 너비 */
+  height: 50px; /* 버튼의 높이 */
+  border-radius: 50%; /* 원형 모양 */
+  display: flex;
+  justify-content: center; /* 텍스트를 중앙 정렬 */
+  align-items: center; /* 텍스트를 중앙 정렬 */
+}
+
+.menu-toggle-button:hover {
+  background-color: #fefae0;
+  color: #000;
+}
+
+.menu-title {
+  cursor: pointer;
+  width: 50%;
+
+}
+
+.button-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-button {
+  background-color: #b99470;
+  color: white;
+  border: none;
+  padding: 15px;
+  font-size: 18px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.admin-button.active {
+  background-color: #fefae0;
+  color: #000;
+}
+
+.admin-button:hover {
+  background-color: #fefae0;
+  color: #000;
+}
+
+@media (max-width: 1210px) {
   .admin-menubar {
-    width: 70%; /* Sidebar takes 70% of screen width */
+    z-index: 1000;
   }
 
-  /* Show the toggle button only on mobile screens */
-  .toggle-button {
-    display: block;
-    background-color: #000;
-    color: #fff;
-    padding: 10px;
-    border: none;
-    cursor: pointer;
-    margin-bottom: 20px;
+  .admin-menubar.open {
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
   }
-
-  /* When the sidebar is closed, it will slide out */
-  .admin-menubar.closed {
-    transform: translateX(-100%);
-  }
-} 
+}

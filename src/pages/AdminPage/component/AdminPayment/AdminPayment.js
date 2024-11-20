@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import ReactPaginate from "react-paginate";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import AdminPaymentTable from "./component/AdminPaymentTable";
 import Button from '../../../../common/components/Button';
@@ -9,6 +8,10 @@ import AdminPaymentCard from "./component/AdminPaymentCard";
 import { getOrderList } from "../../../../features/order/orderSlice";
 import "./style/adminPayment.style.css";
 import LoadingSpinner from "../../../../common/components/LoadingSpinner";
+import "./style/adminPayment.style.css";
+import Button from '../../../../common/components/Button';
+
+import OrderCard from "./component/OrderCard";
 
 const AdminPaymentPage = () => {
   const navigate = useNavigate();
@@ -43,15 +46,22 @@ const AdminPaymentPage = () => {
     dispatch(getOrderList({ ...searchQuery }));
   }, [query]);
 
-  useEffect(() => {
-    if (searchQuery.ordernum === "") {
-      delete searchQuery.ordernum;
-    }
-    const params = new URLSearchParams(searchQuery);
-    const queryString = params.toString();
+//주문도 필터링..?
+// 필터링 카테고리 옵션 선택 시 검색박스 등장
+// 검색박스에 검색어 없이 검색버튼 클릭 시 해당 카테고리의 전 항목 출력
+// 검색박스에 검색어 포함 검색버튼 클릭 시 해당 카테고리의 검색 결과 항목 출력
+// ex. 카테고리 User 선택 후 검색어 없이 클릭 -> 구매내역이 있는 전 유저 출력
+// ex. 카테고리 Product 선택 후 검색어 "스노우" -> "스노우" 상품이 구매된 리스트 출력
 
-    navigate("?" + queryString);
-  }, [searchQuery]);
+  // useEffect(() => {
+  //   if (searchQuery.ordernum === "") {
+  //     delete searchQuery.ordernum;
+  //   }
+  //   const params = new URLSearchParams(searchQuery);
+  //   const queryString = params.toString();
+
+  //   navigate("?" + queryString);
+  // }, [searchQuery]);
 
   const handlePageClick = ({ selected }) => {
     setSearchQuery({ ...searchQuery, page: selected + 1 });

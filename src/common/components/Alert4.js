@@ -1,22 +1,22 @@
 import React from "react";
 import Button from "../../common/components/Button";
+import Button2 from "../../common/components/Button2";
 import "../../common/style/alert.style.css";
-import { useNavigate } from "react-router-dom";
 
-const Alert4 = ({ message, onClose, redirectTo, children }) => {
-  const navigate = useNavigate();
 
+const Alert4 = ({ message, onClose, onCancel , onConfirm  }) => {
+  if (!message) {
+    return null; // Don't render if message is null
+  }
   const handleConfirm = () => {
-    if (onClose) {
-      onClose();
+    if (onConfirm) {
+      onConfirm();
     }
-    if (redirectTo) {
-      navigate(redirectTo, {
-        state: children && typeof children === "object" ? {
-          orderUserId: children?.orderUserId,
-          productImage: children?.productImage,
-        } : undefined,
-      });
+  };
+
+  const handleCancel = () => {
+    if (onCancel) {
+      onCancel();
     }
   };
 
@@ -29,12 +29,17 @@ const Alert4 = ({ message, onClose, redirectTo, children }) => {
           </button>
           <h4 className="alert-title">MeowMemo</h4>
           <div className="alert-content">
-            {message || (typeof children === "string" || React.isValidElement(children) ? children : "알림 내용이 없습니다.")}
+            {message || "알림 내용이 없습니다."}
           </div>
-          <Button onClick={handleConfirm} className="alert-button">
-            확인
-          </Button>
-        </div>
+          <div className="alert-buttons">
+            <Button onClick={handleConfirm} className="alert-button">
+              확인
+            </Button>
+            <Button2 onClick={handleCancel} className="alert-button">
+              취소
+            </Button2>
+          </div>
+          </div>
       </div>
     </div>
   );

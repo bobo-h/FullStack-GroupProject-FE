@@ -13,7 +13,6 @@ body {
   }
 
   .admin-content {
-    width: 80%; /* 콘텐츠의 너비를 80%로 설정 */
     padding-top: 5%; /* 콘텐츠에 패딩 추가 */
     overflow-y: auto; /* 콘텐츠가 넘칠 경우 스크롤 표시 */
     position: relative; /* 위치 조정을 위해 필요 */
@@ -28,6 +27,28 @@ body {
   .content-component {
     padding-top: 50px; 
   }
+
+
+    .open-menu-button {
+      background-color: #b99470;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      width: 50px; /* 버튼의 너비 */
+      height: 50px; /* 버튼의 높이 */
+      border-radius: 50%; /* 원형 모양 */
+      display: flex;
+      justify-content: center; /* 텍스트를 중앙 정렬 */
+      align-items: center; /* 텍스트를 중앙 정렬 */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 살짝 그림자 추가 */
+    }
+    
+    .open-menu-button:hover {
+      background-color: #fefae0;
+      color: #000;
+    }
+  
 
   /* .sidebar-toggle-image{
     width: 50px;
