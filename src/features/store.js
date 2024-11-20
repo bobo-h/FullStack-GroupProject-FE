@@ -5,7 +5,7 @@ import productReducer from "./product/productSlice";
 import orderRecuder from "./order/orderSlice";
 import diarySlice from "./diary/diarySlice";
 import moodSlice from "./mood/moodSlice";
-import uiSlice from "../common/components/uiSlice";
+import uiSlice from "./common/uiSlice"
 import adminSlice from "./admin/adminSlice";
 
 const store = configureStore({

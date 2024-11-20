@@ -16,6 +16,7 @@ const PaymentInfoModal = ({ onClose }) => {
   const dispatch = useDispatch();
   const selectedProduct = useSelector((state) => state.product.selectedProduct);
   const { orderUserId, loading } = useSelector((state) => state.order);
+  const user = useSelector((state) => state.user.user);
   const [showAlert, setShowAlert] = useState(false);
   const [alertContent, setAlertContent] = useState("");
 
@@ -28,15 +29,68 @@ const PaymentInfoModal = ({ onClose }) => {
   });
 
   const [orderPersonInfo, setOrderPersonInfo] = useState({
-    name: "",
-    email: "",
+    name: user?.name,
+    email: user?.email,
     phoneNumber: "",
   });
 
+  const [phoneValidationMessage, setPhoneValidationMessage] = useState("");
+  const [emailValidationMessage, setEmailValidationMessage] = useState("");
+
   const navigate = useNavigate();
+
+  const validatePhoneNumber = (phone) => {
+    const phoneRegex = /^010-\d{4}-\d{4}$/;
+    if (phoneRegex.test(phone)) {
+      setPhoneValidationMessage("적합한 전화번호입니다.");
+      return true;
+    } else {
+      setPhoneValidationMessage("양식에 맞게 전화번호를 넣어주세요!");
+      return false;
+    }
+  };
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (emailRegex.test(email)) {
+      setEmailValidationMessage("적합한 이메일 주소입니다.");
+      return true;
+    } else {
+      setEmailValidationMessage("이메일 주소를 정확하게 넣어주세요!");
+      return false;
+    }
+  };
+
+  const handleFormChange = (event) => {
+    const { name, value } = event.target;
+    setOrderPersonInfo((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+
+    if (name === "phoneNumber") {
+      validatePhoneNumber(value);
+    }
+
+    if (name === "email") {
+      validateEmail(value);
+    }
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    if (
+      !validatePhoneNumber(orderPersonInfo.phoneNumber) ||
+      !validateEmail(orderPersonInfo.email)
+    ) {
+      setAlertContent("전화번호 또는 이메일 주소를 확인해주세요.");
+      setShowAlert(true);
+      return;
+    }
+
+    // const handleSubmit = (event) => {
+    //   event.preventDefault();
 
     // 선택한 상품 정보를 사용하여 주문 생성
     dispatch(
@@ -62,11 +116,11 @@ const PaymentInfoModal = ({ onClose }) => {
       });
   };
 
-  const handleFormChange = (event) => {
-    // 이름, 이메일 주소 입력
-    const { name, value } = event.target;
-    setOrderPersonInfo({ ...orderPersonInfo, [name]: value }); // 입력 필드 업데이트
-  };
+  // const handleFormChange = (event) => {
+  //   // 이름, 이메일 주소 입력
+  //   const { name, value } = event.target;
+  //   setOrderPersonInfo({ ...orderPersonInfo, [name]: value }); // 입력 필드 업데이트
+  // };
 
   const handlePaymentInfoChange = (event) => {
     //카드정보 넣어주기
@@ -162,10 +216,10 @@ const PaymentInfoModal = ({ onClose }) => {
                     <Col>
                       <Form.Control
                         type="text"
+                        name="name"
+                        value={orderPersonInfo.name} // 초기값 반영
                         onChange={handleFormChange}
                         required
-                        name="name"
-                        // value={orderInfo.name}
                       />
                     </Col>
                   </Row>
@@ -182,12 +236,26 @@ const PaymentInfoModal = ({ onClose }) => {
                     <Col>
                       <Form.Control
                         type="email"
+                        name="email"
+                        value={orderPersonInfo.email}
                         onChange={handleFormChange}
                         required
-                        name="email"
-                        // value={orderInfo.email}
                         placeholder="example@example.com"
                       />
+                      {emailValidationMessage && (
+                        <small
+                          style={{
+                            color: emailValidationMessage.includes("적합")
+                              ? "#A9B388"
+                              : "red",
+                            textAlign: "left", // 왼쪽 정렬
+                            display: "block", // block 스타일로 설정해 텍스트가 줄바꿈됨
+                            marginTop: "0.5rem", // 위 요소와 간격 추가
+                          }}
+                        >
+                          {emailValidationMessage}
+                        </small>
+                      )}
                     </Col>
                   </Row>
                 </Form.Group>
@@ -203,12 +271,26 @@ const PaymentInfoModal = ({ onClose }) => {
                     <Col>
                       <Form.Control
                         type="tel"
-                        onChange={handleFormChange}
-                        required
                         name="phoneNumber"
-                        // value={orderInfo.phoneNumber}
+                        value={orderPersonInfo.phoneNumber}
+                        onChange={handleFormChange}
                         placeholder="010-XXXX-XXXX"
+                        required
                       />
+                      {phoneValidationMessage && (
+                        <small
+                          style={{
+                            color: phoneValidationMessage.includes("적합")
+                              ? "#A9B388"
+                              : "red",
+                            textAlign: "left", // 왼쪽 정렬
+                            display: "block", // block 스타일로 설정해 텍스트가 줄바꿈됨
+                            marginTop: "0.5rem", // 위 요소와 간격 추가
+                          }}
+                        >
+                          {phoneValidationMessage}
+                        </small>
+                      )}
                     </Col>
                   </Row>
                 </Form.Group>

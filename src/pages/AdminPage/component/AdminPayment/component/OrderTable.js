@@ -1,36 +1,35 @@
-import React from "react";
-import { Table, Badge } from "react-bootstrap";
-import { currencyFormat } from "../../../../../utils/number";
+import React from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
+import "../style/adminPayment.style.css"; 
 
-const OrderTable = ({ header, data, openEditForm }) => {
+const OrderTable = () => {
   return (
-    <div className="overflow-x">
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            {header.map((title) => (
-              <th>{title}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {data.length > 0 ? (
-            data.map((item, index) => (
-              <tr onClick={() => openEditForm(item)}>
-                <th>{index}</th>
-                <th>{item.orderNum}</th>
-                <th>{item.createdAt.slice(0, 10)}</th>
-                <th>{item.name}</th>
-                <th>{item.productName}</th>
-                <th>{item.productCategory}</th>
-                <th>{item.price}</th>
-              </tr>
-            ))
-          ) : (
-            <tr>No Data to show</tr>
-          )}
-        </tbody>
-      </Table>
+    <div className='payment-table-name'>
+      <Container>
+        <Row className="mb-4">
+          <Col md={1} className="d-flex align-items-center">
+            <strong>#</strong>
+          </Col>
+          <Col md={2} className="d-flex align-items-center">
+            <strong>주문번호</strong>
+          </Col>
+          <Col md={2} className="d-flex align-items-center">
+            <strong>주문일</strong>
+          </Col>
+          <Col md={1} className="d-flex align-items-center">
+            <strong>이름</strong>
+          </Col>
+          <Col md={2} className="d-flex align-items-center justify-content-center">
+            <strong>상품명</strong>
+          </Col>
+          <Col md={2} className="d-flex align-items-center justify-content-center">
+            <strong>상품카테고리</strong>
+          </Col>
+          <Col md={2} className="d-flex align-items-center justify-content-center">
+            <strong>가격</strong>
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 };

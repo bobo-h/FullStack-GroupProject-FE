@@ -2,12 +2,16 @@ import React, { useState, useEffect, useRef } from "react";
 import Draggable from "react-draggable";
 import { debounce } from "lodash";
 import { useSelector, useDispatch } from "react-redux";
-import { updateChatbotJins } from "../../../features/chatbot/chatbotSlice";
+import ToastChatbotComponent from "./ToastChatbotComponent";
+import {
+  updateChatbotJins,
+  updateChatbotMany,
+} from "../../../features/chatbot/chatbotSlice";
 
 function MyCatsComponent() {
   const dispatch = useDispatch();
   const parentRef = useRef(null); // 부모 요소를 참조
-  const [size, setSize] = useState({ width: 0, height: 0 });
+  const [size, setSize] = useState({});
   const { cats, loading } = useSelector((state) => state.chatbot);
   const [localCats, setLocalCats] = useState(cats || []);
 
@@ -15,67 +19,51 @@ function MyCatsComponent() {
     if (!loading) {
       setLocalCats(cats);
     }
-  }, [cats, loading]);
+  }, [cats, size]);
+
+  const updateSize = async () => {
+    if (parentRef.current) {
+      const { width, height } = parentRef.current.getBoundingClientRect();
+      setSize({ width, height });
+
+      // 상태를 함수형으로 업데이트
+      setLocalCats((prevCats) => {
+        const updatedCats = prevCats.map((cat) => {
+          const updatedX = (cat.position.x / 100) * width;
+          const updatedY = (cat.position.y / 100) * height;
+
+          const percentageX = (updatedX / width) * 100;
+          const percentageY = (updatedY / height) * 100;
+
+          return {
+            ...cat,
+            position: { x: percentageX, y: percentageY },
+            defaultPosition: { x: updatedX, y: updatedY },
+          };
+        });
+
+        // Redux 업데이트
+        dispatch(updateChatbotMany({ updates: updatedCats }));
+
+        return updatedCats; // 상태에 반영
+      });
+    }
+  };
+
+  // 디바운싱 적용
+  const debouncedUpdate = debounce(updateSize, 300);
 
   useEffect(() => {
-    const updateSize = async () => {
-      if (parentRef.current) {
-        const { width, height } = parentRef.current.getBoundingClientRect();
-        setSize({ width, height });
-        // 고양이 정보를 출력
-        // 로컬 상태를 먼저 업데이트
-        setLocalCats((prevCats) =>
-          prevCats.map((cat) => ({
-            ...cat,
-            defaultPosition: {
-              x: (cat.position.x / 100) * width,
-              y: (cat.position.y / 100) * height,
-            },
-          }))
-        );
+    updateSize(); // 초기 크기 계산 및 상태 업데이트
 
-        try {
-          // 모든 요청을 Promise.all로 감싸서 실행
-          const updatedCats = await Promise.all(
-            cats.map(async (cat) => {
-              await dispatch(
-                updateChatbotJins({
-                  id: cat._id,
-                  updateData: {
-                    defaultPosition: {
-                      x: (cat.position.x / 100) * width,
-                      y: (cat.position.y / 100) * height,
-                    },
-                  },
-                })
-              );
-              console.log(`Cat ${cat._id} updated successfully in DB`);
-              return cat._id; // 성공한 cat의 ID 반환
-            })
-          );
-          console.log("업데이트 완료", updatedCats); // 성공한 cat ID들 출력
-        } catch (error) {
-          console.error("Failed to update one or more cats:", error);
-        }
-      }
-    };
-
-    const debouncedUpdate = debounce(updateSize, 300); // 300ms 대기
-
-    updateSize();
-
-    // 창 크기 변경 시 업데이트
+    // 창 크기 변경 이벤트 등록
     window.addEventListener("resize", debouncedUpdate);
 
     return () => {
-      window.removeEventListener("resize", debouncedUpdate); // 이벤트 클린업
-      debouncedUpdate.cancel(); // 타이머 정리
+      window.removeEventListener("resize", debouncedUpdate);
+      debouncedUpdate.cancel();
     };
-  }, []);
-
-  useEffect(() => {
-    console.log("크기", size); // size가 업데이트될 때 로그 출력
-  }, [size]);
+  }, [parentRef]); // 의존성 관리
 
   // 드래그 완료 시 위치 저장 (픽셀 값을 %로 변환하여 저장)
   const handleDragStop = async (id, data) => {
@@ -162,14 +150,14 @@ function MyCatsComponent() {
     }
   };
 
-  const renderedCats = !loading ? cats : localCats; // 사용 보류
+  // const renderedCats = !loading ? cats : localCats; // cats만 줘야 로컬 포지션 관리 가능
 
   return (
     <div
       ref={parentRef}
       style={{ position: "relative", width: "100%", height: "100%" }}
     >
-      {localCats
+      {cats
         .filter((cat) => cat.visualization) // visualization이 true인 것만 필터링
         .map((cat) => (
           <DraggableCat
@@ -182,6 +170,7 @@ function MyCatsComponent() {
             onZIndexChange={handleZIndexChange}
             onFlip={handleFlip}
             onDragStop={handleDragStop}
+            personality={cat.personality}
           />
         ))}
     </div>
@@ -197,6 +186,7 @@ function DraggableCat({
   onZIndexChange,
   onFlip,
   onDragStop,
+  personality,
 }) {
   // 말풍선 표시 상태와 타이머 참조 추가
   const [isSpeechBubbleVisible, setIsSpeechBubbleVisible] = useState(false);
@@ -204,6 +194,10 @@ function DraggableCat({
   const { loading } = useSelector((state) => state.chatbot);
   const [localPosition, setLocalPosition] = useState(defaultPosition); // 로딩중 임시 좌표
   const timerRef = useRef(null);
+
+  useEffect(() => {
+    setLocalPosition(defaultPosition);
+  }, [defaultPosition]); // 이게 정답이였던 것 ㅠㅠㅠㅠ
 
   // 로딩중일때 임시 좌표
   const handleDragStopLoding = (e, data) => {
@@ -225,11 +219,11 @@ function DraggableCat({
       clearTimeout(timerRef.current);
     }
 
-    // 3초 후에 말풍선 숨기기
+    // 15초 후에 말풍선 숨기기
     timerRef.current = setTimeout(() => {
       setIsSpeechBubbleVisible(false);
       timerRef.current = null; // 타이머 참조 초기화
-    }, 3000);
+    }, 15000);
   };
 
   const handleContextMenu = (e) => {
@@ -248,7 +242,7 @@ function DraggableCat({
 
   return (
     <Draggable
-      position={!loading ? localPosition : localPosition} // defaultPosition 사용 보류
+      position={!loading ? defaultPosition : localPosition} // defaultPosition 사용 보류
       onStop={(e, data) => handleDragStopLoding(id, data)}
       bounds="parent"
     >
@@ -268,7 +262,7 @@ function DraggableCat({
               bottom: "100%",
               left: "50%",
               transform: "translateX(-50%)",
-              marginBottom: 10,
+              // marginBottom: 10,
               background: "#fff",
               padding: "5px 10px",
               borderRadius: "10px",
@@ -277,7 +271,7 @@ function DraggableCat({
               whiteSpace: "nowrap",
             }}
           >
-            야옹!
+            <ToastChatbotComponent catPersonality={personality} />
           </div>
         )}
         <img
