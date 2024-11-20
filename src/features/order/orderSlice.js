@@ -21,7 +21,6 @@ export const createOrder = createAsyncThunk(
     async (payload, { dispatch, rejectWithValue }) => {
         try {
 
-            console.log("payload??", payload)
             const response = await api.post("/order", payload)
             if (response.status !== 200) throw new Error(response.error)
 
@@ -55,7 +54,6 @@ export const getOrderList = createAsyncThunk(
             const response = await api.get("/order", {
                 params: { ...query },
             });
-
             if (response.status !== 200) throw new Error(response.error)
             return response.data
         } catch (error) {
@@ -91,31 +89,31 @@ const orderSlice = createSlice({
             })
             .addCase(getOrder.pending, (state, action) => {
                 state.loading = true;
-              })
-              .addCase(getOrder.fulfilled, (state, action) => {
+            })
+            .addCase(getOrder.fulfilled, (state, action) => {
                 state.loading = false;
                 state.error = "";
-        
+
                 state.orderList = action.payload.data; // 전체 주문 리스트 상태에 반영
                 state.totalPageNum = action.payload.totalPageNum || 1; // 페이지 정보 상태에 반영
-              })
-              .addCase(getOrder.rejected, (state, action) => {
+            })
+            .addCase(getOrder.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
-              })
-              .addCase(getOrderList.pending, (state, action) => {
+            })
+            .addCase(getOrderList.pending, (state, action) => {
                 state.loading = true;
-              })
-              .addCase(getOrderList.fulfilled, (state, action) => {
+            })
+            .addCase(getOrderList.fulfilled, (state, action) => {
                 state.loading = false;
                 state.error = "";
                 state.orderList = action.payload.data; // 전체 주문 리스트 상태에 반영
                 state.totalPageNum = action.payload.totalPageNum || 1; // 페이지 정보 상태에 반영
-              })
-              .addCase(getOrderList.rejected, (state, action) => {
+            })
+            .addCase(getOrderList.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
-              })
+            })
     },
 });
 
