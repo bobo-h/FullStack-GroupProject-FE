@@ -23,6 +23,7 @@ const AdminProduct = () => {
     page: query.get("page") || 1,
     name: query.get("name") || "",
   }); //검색 조건들을 저장하는 객체
+  const [isMobile, setIsMobile] = useState(false);
 
   const handleClickNewItem = () => {
     //new 모드로 설정하고
@@ -46,6 +47,14 @@ const AdminProduct = () => {
   useEffect(() => {
     dispatch(getProductList({ ...searchQuery }));
   }, [query])
+
+  useEffect(() => {
+    // Update isMobile state based on window size
+    const handleResize = () => setIsMobile(window.innerWidth <= 770);
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Check on mount
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // 카테고리 필터링된 리스트 생성
   const filteredProducts = productList.filter((product) => {
@@ -84,7 +93,7 @@ const AdminProduct = () => {
           </div>
         ) : (
           <Row className="table-area">
-            <ProductTable className="unser-line" />
+            {!isMobile && <ProductTable className="unser-line" />}
             {
               filteredProducts.map((product) => (
                 <ProductCard

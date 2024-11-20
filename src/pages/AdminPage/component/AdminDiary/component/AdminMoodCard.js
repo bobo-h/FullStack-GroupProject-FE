@@ -48,21 +48,21 @@ const AdminMoodCard = ({ mood, setMode, setShowDialog }) => {
           redirectTo="/admin"
         />
       )}
-      <Container>
+      <Container className="mood-card-content">
         <Row className="mb-4">
-          <Col md={1} className="d-flex align-items-center">
+          <Col md={1} className="d-flex align-items-center mood-id">
             {mood.id}
           </Col>
-          <Col md={2} className="d-flex align-items-center">
-            <img src={mood.image} alt={mood.name} className="img-fluid" />
+          <Col md={2} className="d-flex align-items-center mood-img">
+            <img src={mood.image} alt={mood.name} className="img-fluid mood-admin-img" />
           </Col>
-          <Col md={2} className="d-flex align-items-center">
+          <Col md={2} className="d-flex align-items-center mood-name ">
             {mood.name}
           </Col>
-          <Col md={3} className="d-flex align-items-center">
+          <Col md={3} className="d-flex align-items-center mood-description">
             {mood.description}
           </Col>
-          <Col md={1} className="d-flex align-items-center">
+          <Col md={1} className="d-flex align-items-cente mood-btn">
             {/* 추가 하려면 이곳에 */}
           </Col>
 
