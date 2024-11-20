@@ -7,7 +7,6 @@ const AdminMenu = ({ setSelectedComponent, selectedComponent }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const navigate = useNavigate();
 
-
   return (
     <div className={`admin-menubar ${isSidebarOpen ? "open" : "closed"}`}>
       <div className="menu-header">
@@ -17,7 +16,6 @@ const AdminMenu = ({ setSelectedComponent, selectedComponent }) => {
           alt="project-title"
           onClick={() => navigate(`/`)}
         />
-        
       </div>
       {isSidebarOpen && (
         <Row className="button-container">

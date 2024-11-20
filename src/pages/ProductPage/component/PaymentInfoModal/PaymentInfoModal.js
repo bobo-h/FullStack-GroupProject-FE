@@ -137,7 +137,7 @@ const PaymentInfoModal = ({ onClose }) => {
 
   const proceedToPayment = () => {
     //user_id도 넘겨주세용  --> 추가했어요
-    console.log("orderUserId??", orderUserId)
+    console.log("orderUserId??", orderUserId);
     //navigate("/chatbot", { state: { productImage: selectedProduct._id, orderUserId: orderUserId } });
   };
   const handleBackdropClick = (event) => {
@@ -153,7 +153,7 @@ const PaymentInfoModal = ({ onClose }) => {
           message={alertContent}
           onClose={() => {
             // proceedToPayment()
-            setShowAlert(false)
+            setShowAlert(false);
           }}
           redirectTo="/chatbot"
         />
@@ -218,7 +218,6 @@ const PaymentInfoModal = ({ onClose }) => {
                         value={orderPersonInfo.name} // 초기값 반영
                         onChange={handleFormChange}
                         required
-                      // value={orderInfo.name}
                       />
                     </Col>
                   </Row>
