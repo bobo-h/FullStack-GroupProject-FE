@@ -191,6 +191,10 @@ export const printLineChatbot = createAsyncThunk(
       // "야옹!" 또는 "zzz"일 경우 API 요청 생략
       if (randomMessage === "야옹!" || randomMessage === "Zzz") {
         const response = randomMessage; // 그대로 반환
+        // 딜레이를 위한 함수 // 너무 빠르면 로딩 펄스 되는 문제 해결
+        const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+        // 딜레이 추가 (예: 1초)
+        await delay(1000);
         return response;
       }
 
@@ -280,7 +284,6 @@ const chatbotSlice = createSlice({
       .addCase(deleteChatbot.pending, handlePending)
       .addCase(deleteChatbot.fulfilled, handleFulfilled)
       .addCase(deleteChatbot.rejected, handleRejected)
-      .addCase(printLineChatbot.pending, handlePending)
       .addCase(printLineChatbot.fulfilled, handleFulfilled)
       .addCase(printLineChatbot.rejected, handleRejected)
       .addCase(updateChatbotJins.pending, handlePending)
