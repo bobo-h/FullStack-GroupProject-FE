@@ -90,6 +90,7 @@
   }
   .mypage-style {
     width: 100vw;
+
     .sidebar-toggle {
       display: none;
     }
@@ -111,6 +112,7 @@
       top: 0;
       left: 0;
     }
+
     .mypage-area {
       width: 100vw;
     }
@@ -122,5 +124,28 @@
       width: 100%;
       padding: 10px; /* 모바일에서 내부 여백 추가 */
     }
+  }
+}
+
+.offcanvas-header {
+  background-color: var(--primary-color-ivory);
+}
+.offcanvas-body {
+  background-color: var(--primary-color-ivory);
+  font-family: "HakgyoansimBunpilR";
+
+  .logo-image {
+    width: 200px;
+  }
+  .sidebar-general-style {
+    margin-top: 15px;
+  }
+
+  .sidebar-item {
+    color: #5f6f52;
+    font-weight: bold;
+    padding: 10px 10px;
+    list-style-type: none;
+    font-size: 20px;
   }
 }

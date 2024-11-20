@@ -2,9 +2,8 @@ import { set } from "@cloudinary/url-gen/actions/variable";
 import React, { useEffect, useState } from "react";
 import { Offcanvas, Navbar, Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import Button2 from "../../../common/components/Button2";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../../features/user/userSlice";
+import "../style/sidebarForMyPage.style.css";
 
 const SidebarForMyPage = () => {
   const dispatch = useDispatch();

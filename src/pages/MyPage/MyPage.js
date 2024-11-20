@@ -5,7 +5,6 @@ import { Col, Container, Row } from "react-bootstrap";
 import "./style/sidebarForMyPage.style.css";
 import "./style/myPage.style.css";
 import ChatbotList from "./component/ChatbotList";
-import userDefaultLogo from "../../assets/userDefaultLogo.png";
 import Button2 from "../../common/components/Button2";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
