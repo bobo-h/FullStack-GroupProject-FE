@@ -288,7 +288,6 @@ const chatbotSlice = createSlice({
       .addCase(deleteChatbot.pending, handlePending)
       .addCase(deleteChatbot.fulfilled, handleFulfilled)
       .addCase(deleteChatbot.rejected, handleRejected)
-      .addCase(printLineChatbot.pending, handlePending)
       .addCase(printLineChatbot.fulfilled, handleFulfilled)
       .addCase(printLineChatbot.rejected, handleRejected)
       .addCase(updateChatbotJins.pending, handlePending)
