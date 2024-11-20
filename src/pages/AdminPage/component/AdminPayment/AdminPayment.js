@@ -82,8 +82,8 @@ const AdminPaymentPage = () => {
     if (selectedSearchType !== 'All') {
       filtered = filtered.filter(order => {
         if (selectedSearchType === 'User Email') {
-          return order.name.toLowerCase().includes(searchParam.toLowerCase());
-        } else if (selectedSearchType === 'Product') {
+          return order.email.toLowerCase().includes(searchParam.toLowerCase());
+        } else if (selectedSearchType === 'Order Item') {
           return order.productName.toLowerCase().includes(searchParam.toLowerCase());
         }
         return false;
@@ -132,7 +132,7 @@ const AdminPaymentPage = () => {
                 onChange={handleSearchTypeChange}
               >
                 <option>All</option>
-                <option>Product</option>
+                <option>Order Item</option>
                 <option>User Email</option>
               </Form.Select>
             </Form.Group>
