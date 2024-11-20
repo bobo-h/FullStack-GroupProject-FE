@@ -165,7 +165,7 @@ const diarySlice = createSlice({
       .addCase(deleteDiary.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
-        state.error = action.payload;
+        state.error = action.payload || "Failed to delete diary.";
       });
   },
 });

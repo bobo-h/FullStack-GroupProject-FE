@@ -1,17 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { deleteDiary } from "../../../features/diary/diarySlice";
 import "./../style/diaryDetail.style.css";
 import Button from "./../../../common/components/Button";
-import Modal from "./../../../common/components/Alert";
 
 const DiaryDetail = ({ selectedDiary }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [showDeleteSuccess, setShowDeleteSuccess] = useState(false);
   const { selectedDate, title, content, image, mood, _id } = selectedDiary;
 
   const formattedDate = new Date(selectedDate).toLocaleDateString("en-US", {
@@ -25,27 +22,15 @@ const DiaryDetail = ({ selectedDiary }) => {
     navigate(`/diaries/${_id}/edit`);
   };
 
-  const handleDeleteClick = () => {
-    setShowDeleteConfirm(true);
-  };
-
-  const handleDeleteConfirm = async () => {
-    try {
-      console.log("Deleting diary with ID:", _id);
-      await dispatch(deleteDiary(_id)).unwrap();
-      console.log("Diary deleted successfully");
-      setShowDeleteConfirm(false);
-      setShowDeleteSuccess(true);
-    } catch (error) {
-      console.error("Failed to delete diary:", error);
-      alert(`Failed to delete diary: ${error.message}`);
+  const handleDeleteClick = async () => {
+    if (window.confirm("Are you sure you want to delete this diary?")) {
+      try {
+        await dispatch(deleteDiary(_id)).unwrap();
+        navigate("/diaries");
+      } catch (error) {
+        console.error("Failed to delete diary:", error);
+      }
     }
-  };
-
-  const handleDeleteSuccess = () => {
-    console.log("Navigating to /diaries");
-    setShowDeleteSuccess(false);
-    navigate("/diaries");
   };
 
   return (
@@ -106,26 +91,6 @@ const DiaryDetail = ({ selectedDiary }) => {
           </Button>
         </Col>
       </Row>
-      {showDeleteConfirm && (
-        <Modal
-          title="Confirm Deletion"
-          message="Are you sure you want to delete this diary?"
-          onClose={() => setShowDeleteConfirm(false)}
-          onConfirm={handleDeleteConfirm}
-          confirmButtonText="Delete"
-          cancelButtonText="Cancel"
-          showCancelButton={true}
-        />
-      )}
-      {showDeleteSuccess && (
-        <Modal
-          title="Diary Deleted"
-          message="The diary has been successfully deleted."
-          onClose={handleDeleteSuccess}
-          confirmButtonText="OK"
-          showCancelButton={false}
-        />
-      )}
     </Container>
   );
 };
