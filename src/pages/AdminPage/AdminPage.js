@@ -7,6 +7,8 @@ import AdminPayment from './component/AdminPayment/AdminPayment'
 import AdminDiary from './component/AdminDiary/AdminDiary'
 import Button2 from '../../common/components/Button2';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars , faHouse} from "@fortawesome/free-solid-svg-icons";
 
 
 const AdminPage = () => {
@@ -39,24 +41,31 @@ const AdminPage = () => {
 
   return (
     <div className="admin-page">
-      <div className="sidebar-toggle">
-        {/* <img
-          src="logo4.png"
-          className="sidebar-toggle-image"
-          alt="Toggle Sidebar"
-          onClick={toggleSidebar}
-        /> */}
-      </div>
-      <div className={`admin-menu ${isSidebarOpen ? "" : "closed"}`}>
+      {isSidebarOpen && (
         <AdminMenu
           setSelectedComponent={setSelectedComponent}
           selectedComponent={selectedComponent}
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
         />
-      </div>
+      )}
       <div className="admin-content">
-        <div className="home-btn">
-          <Button2 onClick={goToMainPage}>메인으로</Button2>
-        </div>
+        <div className="" >
+          {!isSidebarOpen && (
+            <button
+              className="open-menu-button"
+              onClick={() => setIsSidebarOpen(true)}
+            >
+              <FontAwesomeIcon icon={faBars} />
+            </button>
+          )}
+            <button
+              className="open-menu-button"
+              onClick={goToMainPage}
+            >
+             <FontAwesomeIcon icon={faHouse} />
+            </button>
+         </div>
         <div className="content-component">
           {renderSelectedComponent()}
         </div>
