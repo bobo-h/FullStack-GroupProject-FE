@@ -50,6 +50,20 @@ export const updateDiary = createAsyncThunk(
   }
 );
 
+export const deleteDiary = createAsyncThunk(
+  "diary/deleteDiary",
+  async (diaryId, { rejectWithValue }) => {
+    try {
+      const response = await api.delete(`/diary/${diaryId}`);
+      console.log("API Response for delete:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("API Error for delete:", error.response || error.message);
+      return rejectWithValue(error.response.data || "Failed to delete diary.");
+    }
+  }
+);
+
 const diarySlice = createSlice({
   name: "diary",
   initialState: {
@@ -133,7 +147,25 @@ const diarySlice = createSlice({
       .addCase(updateDiary.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
-        state.error = action.payload || "Failed to update diary.";
+        state.error = action.payload;
+      })
+      .addCase(deleteDiary.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteDiary.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+        state.diaryList = state.diaryList.filter(
+          (diary) => diary.id !== action.payload.diary.id
+        );
+        state.selectedDiary = null;
+      })
+      .addCase(deleteDiary.rejected, (state, action) => {
+        state.loading = false;
+        state.success = false;
+        state.error = action.payload;
       });
   },
 });
