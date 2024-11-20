@@ -11,34 +11,37 @@ import { getProductList } from "../../features/product/productSlice";
 import { updateChatbotJins } from "../../features/chatbot/chatbotSlice";
 import { useNavigate } from "react-router-dom";
 
-const ChatbotCreation = ({ chatbotItem }) => {
-  const [name, setName] = useState(chatbotItem?.productId?.name || "");
-  const { orderUserId } = useSelector((state) => state.order);
-  const selectedProduct = useSelector((state) => state.product.selectedProduct);
+// ChatbotCreation 컴포넌트
 
-  const [personality, setPersonality] = useState("");
-  const [isDirectInput, setIsDirectInput] = useState(true);
-  const [showAlert4, setShowAlert4] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
-  const [alertType, setAlertType] = useState(null);
-  const [redirectTo, setRedirectTo] = useState("")
-  
-  const [confilmAlert, setConfilmAlert] = useState(false);
-  const [alertContent, setAlertContent] = useState("");
-  const [alertStep, setAlertStep] = useState(1); 
+const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
+const [name, setName] = useState(chatbotItem?.name || "");
+const { orderUserId } = useSelector((state) => state.order);
+const selectedProduct = useSelector((state) => state.product.selectedProduct);
+const [personality, setPersonality] = useState(
+ chatbotItem?.personality || ""
+);
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+const [isDirectInput, setIsDirectInput] = useState(true);
+const [showAlert4, setShowAlert4] = useState(false);
+const [showAlert, setShowAlert] = useState(false);
+const [alertMessage, setAlertMessage] = useState("");
+const [alertType, setAlertType] = useState(null);
+const [redirectTo, setRedirectTo] = useState("")
+
+const [confilmAlert, setConfilmAlert] = useState(false);
+const [alertContent, setAlertContent] = useState("");
+const [alertStep, setAlertStep] = useState(1); 
+const dispatch = useDispatch();
+const navigate = useNavigate();
+
   
+
   const { loading, registrationError} = useSelector(
     (state) => state.chatbot
   );
 
   const product = useSelector((state) => state.product?.productList || []);
-  // console.log(product);
-  // console.log("orderUserId in chatbot", orderUserId)
-  // console.log("selectedProduct in chatbot", selectedProduct)
+
 
   useEffect(() => {
     dispatch(getProductList());
@@ -46,22 +49,21 @@ const ChatbotCreation = ({ chatbotItem }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log("Submitting form...");
-    // console.log("chatbotItem",chatbotItem);
-    // console.log("selectedProduct",selectedProduct);
-    
+
+  
     if (chatbotItem) {
       // 수정 로직
-      dispatch(updateChatbotJins({ id: chatbotItem._id, name }))
+      dispatch(
+        updateChatbotJins({
+          id: chatbotItem._id, // ID를 전달
+          updateData: { name },
+        })
+      )
         .then(() => {
-          setAlertContent("수정이 완료되었습니다!");
-          setRedirectTo("/");
-          setShowAlert(true);
+          if (onEditComplete) onEditComplete(); // 수정 완료 콜백 호출
         })
         .catch((error) => {
           console.error("수정 실패", error);
-          setAlertContent("수정에 실패했습니다!");
-          setShowAlert(true);
         });
     } else if (selectedProduct) {
       // 알림 띄우기
@@ -134,22 +136,13 @@ const ChatbotCreation = ({ chatbotItem }) => {
 
   return (
     <div className="chatbot-create-modal">
-      {showAlert4 && (
-        <Alert4
-          message={alertMessage}
-          type={alertType}
-          onClose={() => setShowAlert4(false)}
-          onConfirm={handleAlertConfirm}
-          onCancel={handleAlertCancel}
-        />
-      )}
       {showAlert && (
         <Alert
-          message={alertMessage}
-          redirectTo={redirectTo}
+          message={alertContent}
           onClose={() => setShowAlert(false)}
+          redirectTo="/chatbot"
         />
-      )}
+        )}
       <Container
         className=" d-flex justify-content-center align-items-center"
         style={{ height: "100vh" }}
@@ -158,40 +151,31 @@ const ChatbotCreation = ({ chatbotItem }) => {
           <h3 className="create-modal-title">입양 서류</h3>
           <Col style={{ flex: "0 0 35%" }} className="">
             {chatbotItem?.product_id?.image ? (
-            <img
+              <img
                 src={chatbotItem.product_id.image}
                 alt="Selected Product"
                 className="chatbot-image-size"
-                />
-              ) : selectedProduct?.image ? (
-                  <img
-                    src={selectedProduct.image}
-                    alt="Selected Product"
-                    className="chatbot-image-size"
-                  />
-                ) : defaultProduct?.image ? (
-                  <img
-                    src={defaultProduct.image}
-                    alt="Default Product"
-                    className="chatbot-image-size"
-                  />
-                ) : (
-                  <div className="no-image-message">이미지 없음</div>
-                )}
-            </Col>
-
+              />
+            ) : selectedProduct?.image ? (
+              <img
+                src={selectedProduct.image}
+                alt="Selected Product"
+                className="chatbot-image-size"
+              />
+            ) : defaultProduct?.image ? (
+              <img
+                src={defaultProduct.image}
+                alt="Default Product"
+                className="chatbot-image-size"
+              />
+            ) : (
+              <div className="no-image-message">이미지 없음</div>
+            )}
+          </Col>
           <Col style={{ flex: "0 0 65%" }}>
             <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3" controlId="formName">
                 <Row className="align-items-center">
-                  {/* {registrationError && (
-                    <Alert variant="danger">{registrationError}</Alert>
-                  )} */}
-                  {/* {success && (
-                    <Alert variant="success">
-                      챗봇이 성공적으로 생성되었습니다!
-                    </Alert>
-                  )} */}
                   {registrationError && (
                     <Alert4
                       message={registrationError}
@@ -206,7 +190,7 @@ const ChatbotCreation = ({ chatbotItem }) => {
                     <Form.Control
                       type="text"
                       placeholder="이름을 입력하세요"
-                      value={chatbotItem?.name ? chatbotItem?.name : name}
+                      value={name}
                       onChange={(e) => setName(e.target.value)}
                       required
                     />
@@ -255,11 +239,7 @@ const ChatbotCreation = ({ chatbotItem }) => {
                       <Form.Control
                         as="textarea"
                         placeholder="성격을 직접 입력하세요"
-                        value={
-                          chatbotItem?.personality
-                            ? chatbotItem.personality
-                            : personality
-                        }
+                        value={personality}
                         onChange={(e) => setPersonality(e.target.value)}
                         required
                         disabled={Boolean(chatbotItem)}
@@ -284,8 +264,8 @@ const ChatbotCreation = ({ chatbotItem }) => {
                       {loading
                         ? "생성 중..."
                         : chatbotItem
-                          ? "수정하기"
-                          : "입양하기"}
+                        ? "수정하기"
+                        : "입양하기"}
                     </Button>
                   </Col>
                 </Row>

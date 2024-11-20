@@ -35,7 +35,7 @@
   }
 
   .sidebar {
-    max-width: 300px;
+    max-width: 250px;
     padding: 20px;
     background-color: rgb(248, 249, 250);
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
@@ -44,28 +44,60 @@
     height: 100vh;
     margin-left: 20px; /* navbar의 너비만큼 왼쪽 여백 */
   }
+
+  /* 기본 스타일 */
+  .mypage-area {
+    display: flex;
+    flex-direction: column; /* 세로 정렬 */
+    align-items: center; /* 가로 중앙 정렬 */
+    padding: 20px; /* 콘텐츠 패딩 */
+    gap: 20px; /* 요소 간 간격 */
+  }
   .userInfo-area {
-    padding-top: 30px; /* 콘텐츠 상단 여백 */
-    padding-left: 20px; /* 콘텐츠 왼쪽 여백 */
+    width: 100%; /* 넓이를 부모 컨테이너에 맞춤 */
+    max-width: 800px; /* 콘텐츠 최대 너비 */
   }
 
-  .fixed-offset {
-    margin-left: 350px; /* 3 칸(offset: 3)을 약 25%로 설정 */
+  .chatbot-list-area {
+    width: 100%; /* 넓이를 부모 컨테이너에 맞춤 */
+    max-width: 800px; /* 콘텐츠 최대 너비 */
   }
 
-  /* 화면 너비가 768px 이하일 때 (모바일) */
-  @media (max-width: 768px) {
-    .mobile-sidebar-toggle {
-      /* 보이도록 설정 */
-      display: block;
-    }
+  .chatbot-list__title {
+    text-align: center; /* 타이틀 중앙 정렬 */
+    margin-bottom: 10px; /* 타이틀 하단 간격 */
+  }
+
+  .chatbot-list__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .chatbot-list__btn-list {
+    text-align: center; /* 버튼 중앙 정렬 */
+    margin-top: 20px; /* 버튼 상단 간격 */
+  }
+}
+
+/* 화면 너비가 768px 이하일 때 (모바일) */
+@media (max-width: 768px) {
+  .my-page-toptop {
+    position: absolute;
+    top: 0;
+    width: 100vw;
+  }
+  .mypage-style {
+    width: 100vw;
 
     .sidebar-toggle {
       display: none;
     }
 
-    .sidebar-style {
-      padding-top: 0px;
+    .mobile-sidebar-toggle {
+      /* 보이도록 설정 */
+      display: block;
     }
 
     .sidebar {
@@ -81,8 +113,39 @@
       left: 0;
     }
 
-    .fixed-offset {
-      margin-left: 0;
+    .mypage-area {
+      width: 100vw;
     }
+    .userInfo-area {
+      margin-top: 50px;
+    }
+
+    .chatbot-list-area {
+      width: 100%;
+      padding: 10px; /* 모바일에서 내부 여백 추가 */
+    }
+  }
+}
+
+.offcanvas-header {
+  background-color: var(--primary-color-ivory);
+}
+.offcanvas-body {
+  background-color: var(--primary-color-ivory);
+  font-family: "HakgyoansimBunpilR";
+
+  .logo-image {
+    width: 200px;
+  }
+  .sidebar-general-style {
+    margin-top: 15px;
+  }
+
+  .sidebar-item {
+    color: #5f6f52;
+    font-weight: bold;
+    padding: 10px 10px;
+    list-style-type: none;
+    font-size: 20px;
   }
 }

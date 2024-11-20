@@ -18,6 +18,10 @@
     font-weight: bolder;
     width: 60px;
   }
+  .userInfo-form-style {
+    margin-top: 30px;
+    padding-left: 20px;
+  }
   .form-item-style {
     border: 1px solid #ccc; /* 테두리 색상과 너비 설정 */
     border-top: none; /* 상단 테두리 제거 */
@@ -37,6 +41,10 @@
   }
 
   @media (max-width: 768px) {
+    .userInfo-form-style {
+      margin-top: 30px;
+      padding-left: 50px;
+    }
     .userInfo-form__btnList {
       display: flex;
       justify-content: flex-start;

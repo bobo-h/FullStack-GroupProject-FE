@@ -7,7 +7,7 @@
   .chatbot-list__btn-list {
     display: flex;
     justify-content: flex-end; /* 버튼들을 오른쪽 끝으로 정렬 */
-    margin-right: 38px;
+    margin-right: px;
   }
   .btn__selected-delete {
     margin-right: 6px;

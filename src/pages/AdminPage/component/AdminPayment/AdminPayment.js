@@ -1,26 +1,46 @@
 import React, { useEffect, useState } from "react";
-import { Col, Row, Form, Container } from 'react-bootstrap';
+import { Container, Row, Col, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import ReactPaginate from "react-paginate";
-import { getOrderList } from '../../../../features/order/orderSlice';
-import OrderTable from "./component/OrderTable";
+import AdminPaymentTable from "./component/AdminPaymentTable";
+import Button from '../../../../common/components/Button';
+import AdminPaymentCard from "./component/AdminPaymentCard";
+import { getOrderList } from "../../../../features/order/orderSlice";
+import "./style/adminPayment.style.css";
 import LoadingSpinner from "../../../../common/components/LoadingSpinner";
 import "./style/adminPayment.style.css";
 import Button from '../../../../common/components/Button';
 
 import OrderCard from "./component/OrderCard";
 
-const AdminOrderPage = () => {
+const AdminPaymentPage = () => {
+  const navigate = useNavigate();
   const [query] = useSearchParams();
   const dispatch = useDispatch();
-  const { orderList, loading } = useSelector((state) => state.order);
+  const { orderList, totalPageNum, loading } = useSelector((state) => state.order);
+  const [mode, setMode] = useState("new");
+  const [showDialog, setShowDialog] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("All")
+  const [selectedSearchType, setSelectedSearchType] = useState("All")
   const [filteredOrders, setFilteredOrders] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState({
     page: query.get("page") || 1,
     ordernum: query.get("ordernum") || "",
   });
+  const [searchParam, setSearchParam] = useState("")
+  const [open, setOpen] = useState(false);
+
+  const handleClickNewItem = () => {
+    //new 모드로 설정하고
+    setMode("new")
+
+    //selectedProduct 는 null로
+    // dispatch(setSelectedProduct(null));
+
+    // 다이얼로그 열어주기
+    setShowDialog(true);
+
+  };
 
   useEffect(() => {
     dispatch(getOrderList({ ...searchQuery }));
@@ -43,102 +63,162 @@ const AdminOrderPage = () => {
   //   navigate("?" + queryString);
   // }, [searchQuery]);
 
-const handleCategoryChange = (e) => {
-  setSelectedCategory(e.target.value);
-  setSearchQuery(''); 
-};
+  const handlePageClick = ({ selected }) => {
+    setSearchQuery({ ...searchQuery, page: selected + 1 });
+  };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-const handleSearchInputChange = (e) => {
-  setSearchQuery(e.target.value);
-};
+  const filteredPayments = orderList.filter((payment) => {
+    if (selectedCategory === "All") return true; // "All" 선택 시 모든 상품 표시
+    if (selectedCategory === "고양이") return payment.productCategory[0] === "Cat";
+    if (selectedCategory === "배경지") return payment.productCategory[0] === "BG_IMG";
+    return false; // 기본적으로 필터링 조건에 맞지 않으면 제외
+  });
 
-const handleSearchClick = () => {
-  let filtered = orderList;
+  const handleSearchTypeChange = (e) => {
+    setSelectedSearchType(e.target.value);
+    setSearchParam('');
+  };
 
-  if (selectedCategory !== 'All') {
-    filtered = filtered.filter(order => {
-      if (selectedCategory === 'User') {
-        return order.name.toLowerCase().includes(searchQuery.toLowerCase());
-      } else if (selectedCategory === 'Product') {
-        return order.productName.toLowerCase().includes(searchQuery.toLowerCase());
+  const handleSearchInputChange = (e) => {
+    setSearchParam(e.target.value);
+  };
+
+  const handleSearchClick = () => {
+    let filtered = filteredPayments;
+    if (selectedSearchType !== 'All') {
+      filtered = filtered.filter(order => {
+        if (selectedSearchType === 'User Email') {
+          return order.email.toLowerCase().includes(searchParam.toLowerCase());
+        } else if (selectedSearchType === 'Order Item') {
+          return order.productName.toLowerCase().includes(searchParam.toLowerCase());
+        }
+        return false;
+      });
+    }
+    setFilteredOrders(filtered);
+  };
+
+  useEffect(() => {
+    if(loading === false){
+      if (selectedCategory === "All" & selectedSearchType === 'All') {
+        setFilteredOrders(orderList);
+      } else {
+        setFilteredOrders(filteredPayments);
       }
-      return false;
-    });
-  }
+    }
+  }, [loading, selectedSearchType, selectedCategory, searchParam]);
 
-  setFilteredOrders(filtered);
-};
-
-useEffect(() => {
-  dispatch(getOrderList());
-}, [dispatch]);
-
-useEffect(() => {
-  if (selectedCategory === 'All') {
-    setFilteredOrders(orderList);
-  }
-}, [selectedCategory, orderList]);
 
   return (
-        <div className="admin-payment-page">
-          <Container>
-            <Row>
-              <Col md={2}>
-                <h2>Payment</h2>
-              </Col>
-              <Col md={3}>
-          <Form.Select
-            value={selectedCategory}
-            onChange={handleCategoryChange}
-          >
-            <option>All</option>
-            <option>Product</option>
-            <option>User</option>
-          </Form.Select>
-        </Col>
-        <Col md={3}>
-          {selectedCategory !== 'All' && (
-            <Form.Control
-              type="text"
-              placeholder={`Search ${selectedCategory}`}
-              value={searchQuery}
-              onChange={handleSearchInputChange}
-            />
-          )}
-        </Col>
-        <Col md={3}>
-        {selectedCategory !== 'All' && (
-          <Button onClick={handleSearchClick}>Search</Button>
-        )}
-        </Col>
-            </Row>
-            {loading ? (
-              <div className="text-align-center">
-                <LoadingSpinner animation="border" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </LoadingSpinner>
-              </div>
-            ) : (
-              <Row className="table-area">
-                <OrderTable className="unser-line" />
-                {orderList.length > 0 ? (
-                  orderList.map((order, index) => (
-                    <OrderCard
-                      key={order.id}
-                      order={order}
-                      index={index}
-                    />
-                  ))
-                ) : (
-                  <p>No order available.</p>
-                )}
-              </Row>
+    <div className="admin-payment-page">
+      <Container>
+        <Row>
+          <Col md={2}>
+            <h2>Payment History</h2>
+          </Col>
+          <Col md={2}>
+            <Form.Group controlId="categorySelect">
+              <Form.Label> Category </Form.Label>
+              <Form.Select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+              >
+                <option>All</option>
+                <option>고양이</option>
+                <option>배경지</option>
+              </Form.Select>
+            </Form.Group>
+          </Col>
+
+          <Col md={2}>
+            <Form.Group controlId="searchType">
+              <Form.Label>Search</Form.Label>
+              <Form.Select
+                value={selectedSearchType}
+                onChange={handleSearchTypeChange}
+              >
+                <option>All</option>
+                <option>Order Item</option>
+                <option>User Email</option>
+              </Form.Select>
+            </Form.Group>
+
+          </Col>
+          <Col md={2}>
+            {selectedSearchType !== 'All' && (
+              <Form.Control
+                type="text"
+                placeholder={`Search ${selectedSearchType}`}
+                value={searchParam}
+                onChange={handleSearchInputChange}
+              />
             )}
-          </Container>
-        </div>
-      )}
 
+          </Col>
+          <Col md={2}>
+            {selectedSearchType !== 'All' && (
+              <Button onClick={handleSearchClick}>Search</Button>
+            )}
+          </Col>
 
+          {/* <Col md={2} className='text-end'>
+            <Button onClick={handleClickNewItem}>Dashboard</Button>
+          </Col> */}
+        </Row>
+        {loading ? (
+          <div className="text-align-center">
+            <LoadingSpinner animation="border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </LoadingSpinner>
+          </div>
+        ) : (
+          <Row className="table-area">
+            <AdminPaymentTable className="unser-line" />
+            {
+              filteredOrders && filteredOrders.length > 0 ? (
+                filteredOrders.map((payment) => (
+                  <AdminPaymentCard
+                    key={payment._id}
+                    payment={payment} // 개별 `product` 객체를 `ProductCard`에 전달
+                    setMode={setMode}
+                    setShowDialog={setShowDialog}
+                  />
+                ))
+              ) : (
+                <div className="text-center">
+                  <p>No Payments List</p>
+                </div>
+              )
+            }
+          </Row>)}
 
-export default AdminOrderPage;
+        <ReactPaginate className="pagination"
+          nextLabel="next >"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={totalPageNum}
+          forcePage={searchQuery.page - 1}
+          previousLabel="< previous"
+          renderOnZeroPageCount={null}
+          pageClassName="page-item"
+          pageLinkClassName="page-link"
+          previousClassName="page-item"
+          previousLinkClassName="page-link"
+          nextClassName="page-item"
+          nextLinkClassName="page-link"
+          breakLabel="..."
+          breakClassName="page-item"
+          breakLinkClassName="page-link"
+          containerClassName="pagination"
+          activeClassName="active"
+        />
+      </Container>
+    </div>
+  );
+};
+
+export default AdminPaymentPage;

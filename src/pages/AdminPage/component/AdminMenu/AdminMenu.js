@@ -13,21 +13,7 @@ const AdminMenu = ({
  }) => {
   // const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth > 1210);
   const navigate = useNavigate();
- 
-  const handleResize = () => {
-    const isNowMobile = window.innerWidth <= 1210;
-    if (isNowMobile) {
-      setIsSidebarOpen(false);
-      setIsSidebarOpen(true);
-    }
-  };
 
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   return (
     <div className={`admin-menubar ${isSidebarOpen ? "open" : "closed"}`}>
@@ -38,12 +24,7 @@ const AdminMenu = ({
           alt="menu-title"
           onClick={() => navigate(`/`)}
         />
-        <button
-          className="menu-toggle-button"
-          onClick={() => setIsSidebarOpen(false)}
-        >
-          <FontAwesomeIcon icon={faBars} />
-        </button>
+        
       </div>
       <Row className="button-container">
         <button
