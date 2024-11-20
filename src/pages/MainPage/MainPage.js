@@ -68,7 +68,7 @@ const MainPage = () => {
         <div className="cat-calendar-container" ref={calendarRef}>
           <CalendarComponent
             onDateClick={(date) => navigate(`/diaries/${date}`)}
-          />{" "}
+          />
           <CloseButton
             opt={"calendar-close"}
             onClick={() => setIsCalendarOpen(false)}
