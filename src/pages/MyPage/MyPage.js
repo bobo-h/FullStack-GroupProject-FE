@@ -82,16 +82,13 @@ const MyPage = () => {
               </Row>
               <Row className="chatbot-list__content">
                 <Col>
-                  {cats.map((item) => (
-                    <ChatbotList chatbotItem={item} />
+                  {cats.map((item, index) => (
+                    <ChatbotList chatbotItem={item} index={index} />
                   ))}
                 </Col>
               </Row>
               <Row>
                 <Col className="chatbot-list__btn-list">
-                  <Button2 className="btn__selected-delete">
-                    선택한 거 삭제하기
-                  </Button2>
                   <Button2 className="btn__go-shop" onClick={handleGoToShop}>
                     상점가기
                   </Button2>

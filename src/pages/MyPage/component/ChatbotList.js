@@ -5,11 +5,11 @@ import "../style/chatbotList.style.css";
 import Button2 from "../../../common/components/Button2";
 import ChatbotCreation from "../../ChatbotPage/ChatbotPage";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteChatbot } from "../../../features/chatbot/chatbotSlice";
+import { updateChatbotJins } from "../../../features/chatbot/chatbotSlice";
 import Alert from "../../../common/components/Alert";
 
-const ChatbotList = ({ chatbotItem }) => {
-  //   const dispatch = useDispatch();
+const ChatbotList = ({ chatbotItem, index }) => {
+  const dispatch = useDispatch();
   const [showAlert, setShowAlert] = useState(false);
   const [alertContent, setAlertContent] = useState("");
   const [isEditing, setIsEditing] = useState(false); // 수정 모드 상태 관리
@@ -23,19 +23,27 @@ const ChatbotList = ({ chatbotItem }) => {
     setIsEditing(false); // 수정 모드 비활성화
   };
 
-  // 삭제 버튼 클릭 핸들러
-  //   const handleDeleteClick = () => {
-  //     dispatch(deleteChatbot({ chatbotId: chatbotItem?._id }))
-  //       .then(() => {
-  //         setAlertContent("해당 챗봇이 삭제되었습니다.");
-  //         setShowAlert(true);
-  //       })
-  //       .catch((error) => {
-  //         console.log("삭제 실패", error);
-  //         setAlertContent("삭제에 실패했습니다!");
-  //         setShowAlert(true);
-  //       });
-  //   };
+  // 비활성화 클릭 핸들러
+  const handleToggleVisualization = () => {
+    const newVisualizationValue = !chatbotItem.visualization; // 현재 값의 반대
+    dispatch(
+      updateChatbotJins({
+        id: chatbotItem?._id,
+        updateData: { visualization: newVisualizationValue },
+      })
+    )
+      .then(() => {
+        setAlertContent(
+          `챗봇이 ${newVisualizationValue ? "활성화" : "비활성화"}되었습니다.`
+        );
+        setShowAlert(true);
+      })
+      .catch((error) => {
+        console.log("상태 변경 실패", error);
+        setAlertContent("상태 변경에 실패했습니다!");
+        setShowAlert(true);
+      });
+  };
   return (
     <>
       {/* Alert 컴포넌트 */}
@@ -56,10 +64,14 @@ const ChatbotList = ({ chatbotItem }) => {
           }}
         /> // 수정 화면 컴포넌트
       ) : (
-        <div className="chatbot-list-card">
+        <div
+          className={`chatbot-list-card ${
+            chatbotItem.visualization ? "" : "disabled-card"
+          }`}
+        >
           <Row className="align-items-center">
-            <Col xs={1} className="radio-check">
-              <Form.Check aria-label="option 1" />
+            <Col xs={1} className="chatbot-num-area">
+              {index + 1}
             </Col>
             <Col xs={3} md={3} className="chatbot-image-area">
               <img
@@ -82,14 +94,15 @@ const ChatbotList = ({ chatbotItem }) => {
               <Button2
                 className="chatbot-btn__modify"
                 onClick={handleModifyClick}
+                disabled={!chatbotItem.visualization}
               >
                 수정
               </Button2>
               <Button2
-                className="chatbot-btn__delete"
-                // onClick={handleDeleteClick}
+                className="chatbot-btn__toggle-visualization"
+                onClick={handleToggleVisualization}
               >
-                삭제
+                {chatbotItem.visualization ? "비활성화" : "활성화"}
               </Button2>
             </Col>
           </Row>
