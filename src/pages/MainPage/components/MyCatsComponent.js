@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Draggable from "react-draggable";
 import { debounce } from "lodash";
 import { useSelector, useDispatch } from "react-redux";
+import ToastChatbotComponent from "./ToastChatbotComponent";
 import {
   updateChatbotJins,
   updateChatbotMany,
@@ -169,6 +170,7 @@ function MyCatsComponent() {
             onZIndexChange={handleZIndexChange}
             onFlip={handleFlip}
             onDragStop={handleDragStop}
+            personality={cat.personality}
           />
         ))}
     </div>
@@ -184,6 +186,7 @@ function DraggableCat({
   onZIndexChange,
   onFlip,
   onDragStop,
+  personality,
 }) {
   // 말풍선 표시 상태와 타이머 참조 추가
   const [isSpeechBubbleVisible, setIsSpeechBubbleVisible] = useState(false);
@@ -216,11 +219,11 @@ function DraggableCat({
       clearTimeout(timerRef.current);
     }
 
-    // 3초 후에 말풍선 숨기기
+    // 15초 후에 말풍선 숨기기
     timerRef.current = setTimeout(() => {
       setIsSpeechBubbleVisible(false);
       timerRef.current = null; // 타이머 참조 초기화
-    }, 3000);
+    }, 15000);
   };
 
   const handleContextMenu = (e) => {
@@ -259,7 +262,7 @@ function DraggableCat({
               bottom: "100%",
               left: "50%",
               transform: "translateX(-50%)",
-              marginBottom: 10,
+              // marginBottom: 10,
               background: "#fff",
               padding: "5px 10px",
               borderRadius: "10px",
@@ -268,7 +271,7 @@ function DraggableCat({
               whiteSpace: "nowrap",
             }}
           >
-            야옹!
+            <ToastChatbotComponent catPersonality={personality} />
           </div>
         )}
         <img

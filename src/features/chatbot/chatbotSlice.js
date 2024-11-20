@@ -170,36 +170,58 @@ export const printLineChatbot = createAsyncThunk(
   async ({ catPersonality }, dispatch) => {
     try {
       const messages = [
+        "야옹!",
+        "Zzz",
+        "지금 뭐 해?",
+        "오늘 뭐 했어?",
         "오늘 날씨 어때?",
         "오늘 기분 어때?",
-        "뭐해?",
-        "야옹!",
-        "zzz",
+        "창밖에서 뭐 봤어?",
+        "왜 그렇게 조용해?",
+        "나를 위로 해줘",
+        "고생한 나에게 아무 힘이 되는 말 해줘",
+        "내가 행복해질 말을 해줘",
       ];
-
+      // const randomMessage =
+      //   messages[Math.floor(Math.random() * messages.length)];
+      // const finalMessage =
+      //   randomMessage === "야옹!" || randomMessage === "zzz"
+      //     ? randomMessage
+      //     : `${randomMessage} (Respond in 10 characters or less.)`;
+      // const response = await api.post("/chatbot/printLine", {
+      //   message: finalMessage,
+      //   catPersonality,
+      // });
       const randomMessage =
         messages[Math.floor(Math.random() * messages.length)];
+      // console.log("랜덤 메시지:", randomMessage);
 
-      const finalMessage =
-        randomMessage === "야옹!" || randomMessage === "zzz"
-          ? randomMessage
-          : `${randomMessage} (Respond in 10 characters or less.)`;
+      // "야옹!" 또는 "zzz"일 경우 API 요청 생략
+      if (randomMessage === "야옹!" || randomMessage === "Zzz") {
+        const response = randomMessage; // 그대로 반환
+        return response;
+      }
 
+      // 다른 경우에만 API 요청
+      const finalMessage = `${randomMessage} (Respond in 10 characters or less.)`;
       const response = await api.post("/chatbot/printLine", {
         message: finalMessage,
         catPersonality,
       });
-
-      dispatch({
-        type: "PRINTLINE_CHATBOT_SUCCESS",
-        payload: response.data,
-      });
-      return Promise.resolve(response.data);
+      // console.log("ai답변", response);
+      return response.data.reply;
+      // dispatch({
+      //   type: "PRINTLINE_CHATBOT_SUCCESS",
+      //   payload: response.data,
+      // });
+      // // 리스폰이 오지 않음
+      // console.log("API Response:", response.data); // API 응답 확인
+      // return Promise.resolve(response.data);
     } catch (error) {
-      dispatch({
-        type: "PRINTLINE_CHATBOT_FAILURE",
-        payload: error.response?.data || error.message,
-      });
+      // dispatch({
+      //   type: "PRINTLINE_CHATBOT_FAILURE",
+      //   payload: error.response?.data || error.message,
+      // });
       return Promise.reject(error);
     }
   }
