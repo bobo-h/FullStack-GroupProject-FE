@@ -12,18 +12,20 @@ import { updateChatbotJins } from "../../features/chatbot/chatbotSlice";
 //import PersonalityBox from './component/PersonalityBox/PersonalityBox';
 
 // ChatbotCreation 컴포넌트
-const ChatbotCreation = ({ chatbotItem }) => {
-  const [name, setName] = useState(chatbotItem?.productId?.name || "");
+const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
+  const [name, setName] = useState(chatbotItem?.name || "");
   const { orderUserId } = useSelector((state) => state.order);
   const selectedProduct = useSelector((state) => state.product.selectedProduct);
 
-  const [personality, setPersonality] = useState("");
+  const [personality, setPersonality] = useState(
+    chatbotItem?.personality || ""
+  );
   const [isDirectInput, setIsDirectInput] = useState(true);
   const [showAlert, setShowAlert] = useState(false);
   const [confilmAlert, setConfilmAlert] = useState(false);
 
   const [alertContent, setAlertContent] = useState("");
-  const [alertStep, setAlertStep] = useState(1); 
+  const [alertStep, setAlertStep] = useState(1);
   const dispatch = useDispatch();
 
   const { loading, registrationError, success } = useSelector(
@@ -32,7 +34,7 @@ const ChatbotCreation = ({ chatbotItem }) => {
 
   const product = useSelector((state) => state.product?.productList || []);
   console.log(product);
-  console.log("orderUserId in chatbot", orderUserId)
+  console.log("orderUserId in chatbot", orderUserId);
 
   useEffect(() => {
     dispatch(getProductList());
@@ -45,17 +47,14 @@ const ChatbotCreation = ({ chatbotItem }) => {
       dispatch(
         updateChatbotJins({
           id: chatbotItem._id, // ID를 전달
-          name,
+          updateData: { name },
         })
       )
         .then(() => {
-          setAlertContent("수정이 완료되었습니다!");
-          setShowAlert(true);
+          if (onEditComplete) onEditComplete(); // 수정 완료 콜백 호출
         })
         .catch((error) => {
           console.error("수정 실패", error);
-          setAlertContent("수정에 실패했습니다!");
-          setShowAlert(true);
         });
     } else {
       dispatch(createChatbot({ name, personality }))
@@ -93,13 +92,13 @@ const ChatbotCreation = ({ chatbotItem }) => {
 
   return (
     <div className="chatbot-create-modal">
-      {/* {showAlert && (
+      {showAlert && (
         <Alert
           message={alertContent}
           onClose={() => setShowAlert(false)}
           redirectTo="/chatbot"
         />
-      )} */}
+      )}
       <Container
         className=" d-flex justify-content-center align-items-center"
         style={{ height: "100vh" }}
@@ -107,14 +106,18 @@ const ChatbotCreation = ({ chatbotItem }) => {
         <Row className="text-center chatbot-create-content">
           <h3 className="create-modal-title">입양 서류</h3>
           <Col style={{ flex: "0 0 35%" }} className="">
-            {selectedProduct?.image ? (
-              <img src={selectedProduct.image} alt="Selected Product" className="chatbot-image-size" />
-            // {chatbotItem?.product_id?.image ? (
-            //   <img
-            //     src={chatbotItem.product_id.image}
-            //     alt="Selected Product"
-            //     className="chatbot-image-size"
-            //   />
+            {chatbotItem?.product_id?.image ? (
+              <img
+                src={chatbotItem.product_id.image}
+                alt="Selected Product"
+                className="chatbot-image-size"
+              />
+            ) : selectedProduct?.image ? (
+              <img
+                src={selectedProduct.image}
+                alt="Selected Product"
+                className="chatbot-image-size"
+              />
             ) : defaultProduct?.image ? (
               <img
                 src={defaultProduct.image}
@@ -144,7 +147,7 @@ const ChatbotCreation = ({ chatbotItem }) => {
                     <Form.Control
                       type="text"
                       placeholder="이름을 입력하세요"
-                      value={chatbotItem?.name ? chatbotItem?.name : name}
+                      value={name}
                       onChange={(e) => setName(e.target.value)}
                       required
                     />
@@ -193,11 +196,7 @@ const ChatbotCreation = ({ chatbotItem }) => {
                       <Form.Control
                         as="textarea"
                         placeholder="성격을 직접 입력하세요"
-                        value={
-                          chatbotItem?.personality
-                            ? chatbotItem.personality
-                            : personality
-                        }
+                        value={personality}
                         onChange={(e) => setPersonality(e.target.value)}
                         required
                         disabled={Boolean(chatbotItem)}
@@ -222,8 +221,8 @@ const ChatbotCreation = ({ chatbotItem }) => {
                       {loading
                         ? "생성 중..."
                         : chatbotItem
-                          ? "수정하기"
-                          : "입양하기"}
+                        ? "수정하기"
+                        : "입양하기"}
                     </Button>
                   </Col>
                 </Row>
