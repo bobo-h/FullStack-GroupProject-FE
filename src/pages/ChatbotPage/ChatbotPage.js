@@ -6,37 +6,26 @@ import "./style/chatbot.style.css";
 import Button from "../../common/components/Button";
 import PersonalityMBTI from "./component/PersonalityMBTI/PersonalityMBTI";
 import Alert from "../../common/components/Alert";
-import Alert4 from "../../common/components/Alert4";
 import { getProductList } from "../../features/product/productSlice";
 import { updateChatbotJins } from "../../features/chatbot/chatbotSlice";
-import { useNavigate } from "react-router-dom";
 
 // ChatbotCreation 컴포넌트
 
 const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
-const [name, setName] = useState(chatbotItem?.name || "");
-const { orderUserId } = useSelector((state) => state.order);
-const selectedProduct = useSelector((state) => state.product.selectedProduct);
-const [personality, setPersonality] = useState(
- chatbotItem?.personality || ""
-);
+  const [name, setName] = useState(chatbotItem?.name || "");
+  const selectedProduct = useSelector((state) => state.product.selectedProduct);
+  const [personality, setPersonality] = useState(
+  chatbotItem?.personality || ""
+  );
 
-const [isDirectInput, setIsDirectInput] = useState(true);
-const [showAlert4, setShowAlert4] = useState(false);
-const [showAlert, setShowAlert] = useState(false);
-const [alertMessage, setAlertMessage] = useState("");
-const [alertType, setAlertType] = useState(null);
-const [redirectTo, setRedirectTo] = useState("")
+  const [isDirectInput, setIsDirectInput] = useState(true);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertType, setAlertType] = useState(null);
+  const [redirectTo, setRedirectTo] = useState("")
+  const [alertContent, setAlertContent] = useState("");
+  const dispatch = useDispatch();
 
-const [confilmAlert, setConfilmAlert] = useState(false);
-const [alertContent, setAlertContent] = useState("");
-const [alertStep, setAlertStep] = useState(1); 
-const dispatch = useDispatch();
-const navigate = useNavigate();
-
-  
-
-  const { loading, registrationError} = useSelector(
+  const { loading} = useSelector(
     (state) => state.chatbot
   );
 
@@ -66,23 +55,22 @@ const navigate = useNavigate();
           console.error("수정 실패", error);
         });
     } else if (selectedProduct) {
-      // 알림 띄우기
-      // console.log("Showing Alert4...");
-      // setAlertType("Alert4");
-      // setAlertMessage("성격을 등록하면 수정할 수 없습니다. 계속 진행하시겠습니까?");
-      // setShowAlert(true);
-      
       // 일반 생성 로직
-      dispatch(createChatbot({ user_id: orderUserId, product_id: selectedProduct._id, name, personality }))
+      dispatch(
+        createChatbot(
+          { product_id: selectedProduct._id, 
+            name, 
+            personality,
+          }))
         .then(() => {
-          setAlertMessage("입양에 성공했습니다!");
+          setAlertContent("입양에 성공했습니다!");
           setAlertType("success");
           setRedirectTo("/");
           setShowAlert(true);
         })
         .catch((error) => {
           console.error("입양 실패", error);
-          setAlertMessage("입양에 실패했습니다!");
+          setAlertContent("입양에 실패했습니다!");
           setAlertType("danger");
           setShowAlert(true);
         });
@@ -103,31 +91,6 @@ const navigate = useNavigate();
     ? product.find((product) => product.defaultProduct === "Yes")
     : null;
 
-    const handleAlertConfirm = () => {
-      if (alertType === "Alert4") {
-        dispatch(createChatbot({ user_id: orderUserId, product_id: selectedProduct._id, name, personality }))
-          .then(() => {
-            setAlertMessage("입양에 성공했습니다!");
-            setAlertType("success");
-            setRedirectTo("/");
-            setShowAlert(true);
-          })
-          .catch((error) => {
-            console.error("입양 실패", error);
-            setAlertMessage("입양에 실패했습니다!");
-            setAlertType("danger");
-            setShowAlert(true);
-          });
-      }
-      setShowAlert(false); // 알림을 닫기
-    };
-
-  // 취소 버튼 클릭 시 product_id와 user_id가 있는 페이지로 돌아가기
-  const handleAlertCancel = () => {
-    // navigate(`/product/${selectedProduct?.product_id}/user/${orderUserId}`); 
-    setShowAlert(false);
-  };
-
   useEffect(() => {
     console.log("showAlert:", showAlert);
     console.log("alertType:", alertType);
@@ -140,7 +103,7 @@ const navigate = useNavigate();
         <Alert
           message={alertContent}
           onClose={() => setShowAlert(false)}
-          redirectTo="/chatbot"
+          redirectTo={redirectTo}
         />
         )}
       <Container
@@ -176,13 +139,6 @@ const navigate = useNavigate();
             <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3" controlId="formName">
                 <Row className="align-items-center">
-                  {registrationError && (
-                    <Alert4
-                      message={registrationError}
-                      type="danger"
-                      onClose={() => setShowAlert4(false)}
-                    />
-                  )}
                   <Col xs="auto">
                     <Form.Label>챗봇 이름</Form.Label>
                   </Col>
