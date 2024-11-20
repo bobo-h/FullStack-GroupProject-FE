@@ -5,7 +5,6 @@ import axios from "axios";
 const BACKEND_PROXY = process.env.REACT_APP_BACKEND_PROXY;
 
 const api = axios.create({
-  // baseURL: `${BACKEND_PROXY}/api`,
   baseURL: `${BACKEND_PROXY}/api`,
   headers: {
     "Content-Type": "application/json",
