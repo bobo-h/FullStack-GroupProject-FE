@@ -5,7 +5,6 @@ import AdminUser from './component/AdminUser/AdminUser';
 import AdminMenu from './component/AdminMenu/AdminMenu';
 import AdminPayment from './component/AdminPayment/AdminPayment'
 import AdminDiary from './component/AdminDiary/AdminDiary'
-import Button2 from '../../common/components/Button2';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars , faHouse} from "@fortawesome/free-solid-svg-icons";
@@ -49,24 +48,24 @@ const AdminPage = () => {
           setIsSidebarOpen={setIsSidebarOpen}
         />
       )}
-      <div className="admin-content">
-        <div className="" >
-          {!isSidebarOpen && (
-            <button
-              className="open-menu-button"
-              onClick={() => setIsSidebarOpen(true)}
-            >
-              <FontAwesomeIcon icon={faBars} />
-            </button>
-          )}
-            <button
-              className="open-menu-button"
-              onClick={goToMainPage}
-            >
-             <FontAwesomeIcon icon={faHouse} />
-            </button>
-         </div>
+      <div className="admin-content" style={{ marginLeft: isSidebarOpen ? '250px' : '0px' }}>
         <div className="content-component">
+          <div className="admin-menu-btns">
+            {!isSidebarOpen && (
+              <button
+                className="open-menu-button"
+                onClick={toggleSidebar}
+              >
+                <FontAwesomeIcon icon={faBars} />
+              </button>
+            )}
+              <button
+                className="open-menu-button"
+                onClick={goToMainPage}
+              >
+              <FontAwesomeIcon icon={faHouse} />
+              </button>
+          </div>
           {renderSelectedComponent()}
         </div>
       </div>

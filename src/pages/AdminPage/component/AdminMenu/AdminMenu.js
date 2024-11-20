@@ -16,13 +16,20 @@ const AdminMenu = ({
 
   return (
     <div className={`admin-menubar ${isSidebarOpen ? "open" : "closed"}`}>
-      <div className="menu-header">
+      <div className="admin-menu-header">
+      <button
+              className="menu-toggle-button"
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            >
+              <FontAwesomeIcon icon={faBars} />
+            </button>
         <img
           className="menu-title"
           src="logo2.png"
           alt="menu-title"
           onClick={() => navigate(`/`)}
         />
+
       </div>
       <Row className="button-container">
         <button
