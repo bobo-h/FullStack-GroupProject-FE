@@ -17,11 +17,13 @@ const DiaryFormPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [selectedDate, setSelectedDate] = useState("");
-  const [mood, setMood] = useState("");
-  const [title, setTitle] = useState("");
-  const [image, setImage] = useState("");
-  const [content, setContent] = useState("");
+  const [formValues, setFormValues] = useState({
+    selectedDate: "",
+    mood: "",
+    title: "",
+    image: "",
+    content: "",
+  });
 
   const { moodList = [], loading: moodLoading } = useSelector(
     (state) => state.mood || {}
@@ -38,11 +40,13 @@ const DiaryFormPage = () => {
 
   useEffect(() => {
     if (diaryId && selectedDiary) {
-      setSelectedDate(selectedDiary.selectedDate || "");
-      setMood(selectedDiary.mood || "");
-      setTitle(selectedDiary.title || "");
-      setImage(selectedDiary.image || "");
-      setContent(selectedDiary.content || "");
+      setFormValues({
+        selectedDate: selectedDiary.selectedDate || "",
+        mood: selectedDiary.mood || "",
+        title: selectedDiary.title || "",
+        image: selectedDiary.image || "",
+        content: selectedDiary.content || "",
+      });
     }
   }, [diaryId, selectedDiary]);
 
@@ -50,26 +54,28 @@ const DiaryFormPage = () => {
     dispatch(fetchAllMoods());
   }, [dispatch]);
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const payload = {
-      selectedDate,
-      mood,
-      title,
-      image,
-      content,
-    };
+    const payload = { ...formValues };
 
     if (diaryId) {
       dispatch(updateDiary({ diaryId, payload }))
         .unwrap()
         .then(() => {
           alert("Diary updated successfully!");
-          navigate(`/diaries/${diaryId}/edit`);
+          navigate(`/diaries/${diaryId}`);
         })
         .catch((error) => {
-          alert(`Failed to update diary: ${error}`);
+          console.error("Failed to update diary:", error);
+          alert(
+            `Failed to update diary: ${error.message || "An error occurred."}`
+          );
         });
     } else {
       dispatch(createDiary(payload))
@@ -85,7 +91,7 @@ const DiaryFormPage = () => {
   };
 
   const handleImageUpload = (url) => {
-    setImage(url);
+    setFormValues((prev) => ({ ...prev, image: url }));
   };
 
   return (
@@ -101,8 +107,9 @@ const DiaryFormPage = () => {
                 <Form.Label>Date</Form.Label>
                 <Form.Control
                   type="date"
-                  value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
+                  name="selectedDate"
+                  value={formValues.selectedDate}
+                  onChange={handleChange}
                   required
                 />
               </Form.Group>
@@ -111,8 +118,9 @@ const DiaryFormPage = () => {
               <Form.Group controlId="mood">
                 <Form.Label>Today's Mood</Form.Label>
                 <Form.Select
-                  value={mood}
-                  onChange={(e) => setMood(e.target.value)}
+                  name="mood"
+                  value={formValues.mood}
+                  onChange={handleChange}
                   required
                 >
                   <option value="">Select a mood</option>
@@ -136,9 +144,10 @@ const DiaryFormPage = () => {
             <Form.Label>Title</Form.Label>
             <Form.Control
               type="text"
+              name="title"
               placeholder="Enter diary title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={formValues.title}
+              onChange={handleChange}
               required
             />
           </Form.Group>
@@ -146,9 +155,9 @@ const DiaryFormPage = () => {
           <Form.Group controlId="image" className="mb-3">
             <Form.Label>Attach an Image</Form.Label>
             <CloudinaryUploadWidget uploadImage={handleImageUpload} />
-            {image && (
+            {formValues.image && (
               <img
-                src={image}
+                src={formValues.image}
                 alt="Uploaded preview"
                 className="mt-3"
                 style={{
@@ -164,10 +173,11 @@ const DiaryFormPage = () => {
             <Form.Label>Content</Form.Label>
             <Form.Control
               as="textarea"
+              name="content"
               rows={6}
               placeholder="Write your diary entry here..."
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
+              value={formValues.content}
+              onChange={handleChange}
               required
             />
           </Form.Group>
