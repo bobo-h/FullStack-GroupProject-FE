@@ -25,7 +25,6 @@
   position: relative;
 }
 
-/* X 버튼 스타일 */
 .CustomModal__close-btn {
   position: absolute;
   top: 10px;
