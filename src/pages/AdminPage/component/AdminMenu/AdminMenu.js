@@ -5,15 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
-const AdminMenu = ({ 
-  setSelectedComponent, 
+const AdminMenu = ({
+  setSelectedComponent,
   selectedComponent,
   isSidebarOpen,
-  setIsSidebarOpen
- }) => {
+  setIsSidebarOpen,
+}) => {
   // const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth > 1210);
   const navigate = useNavigate();
-
 
   return (
     <div className={`admin-menubar ${isSidebarOpen ? "open" : "closed"}`}>
@@ -24,7 +23,6 @@ const AdminMenu = ({
           alt="menu-title"
           onClick={() => navigate(`/`)}
         />
-        
       </div>
       <Row className="button-container">
         <button

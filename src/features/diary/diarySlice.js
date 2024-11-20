@@ -31,7 +31,7 @@ export const getDiaryDetail = createAsyncThunk(
   async (diaryId, { rejectWithValue }) => {
     try {
       const response = await api.get(`/diary/${diaryId}`);
-      return response.data.diary; // 서버에서 반환되는 diary 데이터를 가져옴
+      return response.data.diary;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -42,10 +42,24 @@ export const updateDiary = createAsyncThunk(
   "diary/updateDiary",
   async ({ diaryId, payload }, { rejectWithValue }) => {
     try {
-      const response = await api.put(`/diary/${diaryId}`, payload); // PUT 요청
-      return response.data.data; // 서버에서 반환되는 데이터
+      const response = await api.put(`/diary/${diaryId}`, payload);
+      return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response.data || "Failed to update diary.");
+    }
+  }
+);
+
+export const deleteDiary = createAsyncThunk(
+  "diary/deleteDiary",
+  async (diaryId, { rejectWithValue }) => {
+    try {
+      const response = await api.delete(`/diary/${diaryId}`);
+      console.log("API Response for delete:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("API Error for delete:", error.response || error.message);
+      return rejectWithValue(error.response.data || "Failed to delete diary.");
     }
   }
 );
@@ -133,7 +147,25 @@ const diarySlice = createSlice({
       .addCase(updateDiary.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
-        state.error = action.payload || "Failed to update diary.";
+        state.error = action.payload;
+      })
+      .addCase(deleteDiary.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteDiary.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+        state.diaryList = state.diaryList.filter(
+          (diary) => diary.id !== action.payload.diary.id
+        );
+        state.selectedDiary = null;
+      })
+      .addCase(deleteDiary.rejected, (state, action) => {
+        state.loading = false;
+        state.success = false;
+        state.error = action.payload || "Failed to delete diary.";
       });
   },
 });

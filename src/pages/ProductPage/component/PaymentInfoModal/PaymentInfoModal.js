@@ -16,7 +16,7 @@ const PaymentInfoModal = ({ onClose }) => {
   const dispatch = useDispatch();
   const selectedProduct = useSelector((state) => state.product.selectedProduct);
   const { orderUserId, loading } = useSelector((state) => state.order);
-  const user = useSelector((state) => state.user.user)
+  const user = useSelector((state) => state.user.user);
   const [showAlert, setShowAlert] = useState(false);
   const [alertContent, setAlertContent] = useState("");
 
@@ -38,7 +38,6 @@ const PaymentInfoModal = ({ onClose }) => {
   const [emailValidationMessage, setEmailValidationMessage] = useState("");
 
   const navigate = useNavigate();
-
 
   const validatePhoneNumber = (phone) => {
     const phoneRegex = /^010-\d{4}-\d{4}$/;
@@ -81,7 +80,10 @@ const PaymentInfoModal = ({ onClose }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (!validatePhoneNumber(orderPersonInfo.phoneNumber) || !validateEmail(orderPersonInfo.email)) {
+    if (
+      !validatePhoneNumber(orderPersonInfo.phoneNumber) ||
+      !validateEmail(orderPersonInfo.email)
+    ) {
       setAlertContent("전화번호 또는 이메일 주소를 확인해주세요.");
       setShowAlert(true);
       return;
@@ -243,9 +245,11 @@ const PaymentInfoModal = ({ onClose }) => {
                       {emailValidationMessage && (
                         <small
                           style={{
-                            color: emailValidationMessage.includes("적합") ? "#A9B388" : "red",
+                            color: emailValidationMessage.includes("적합")
+                              ? "#A9B388"
+                              : "red",
                             textAlign: "left", // 왼쪽 정렬
-                            display: "block",  // block 스타일로 설정해 텍스트가 줄바꿈됨
+                            display: "block", // block 스타일로 설정해 텍스트가 줄바꿈됨
                             marginTop: "0.5rem", // 위 요소와 간격 추가
                           }}
                         >
@@ -276,9 +280,11 @@ const PaymentInfoModal = ({ onClose }) => {
                       {phoneValidationMessage && (
                         <small
                           style={{
-                            color: phoneValidationMessage.includes("적합") ? "#A9B388" : "red",
+                            color: phoneValidationMessage.includes("적합")
+                              ? "#A9B388"
+                              : "red",
                             textAlign: "left", // 왼쪽 정렬
-                            display: "block",  // block 스타일로 설정해 텍스트가 줄바꿈됨
+                            display: "block", // block 스타일로 설정해 텍스트가 줄바꿈됨
                             marginTop: "0.5rem", // 위 요소와 간격 추가
                           }}
                         >

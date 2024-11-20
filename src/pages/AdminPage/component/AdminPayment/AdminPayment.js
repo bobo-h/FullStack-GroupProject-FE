@@ -3,55 +3,55 @@ import { Container, Row, Col, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import AdminPaymentTable from "./component/AdminPaymentTable";
-import Button from '../../../../common/components/Button';
+import Button from "../../../../common/components/Button";
 import AdminPaymentCard from "./component/AdminPaymentCard";
 import { getOrderList } from "../../../../features/order/orderSlice";
 import "./style/adminPayment.style.css";
 import LoadingSpinner from "../../../../common/components/LoadingSpinner";
 import "./style/adminPayment.style.css";
-import Button from '../../../../common/components/Button';
-
 import OrderCard from "./component/OrderCard";
+import { ReactPaginate } from "react-paginate";
 
 const AdminPaymentPage = () => {
   const navigate = useNavigate();
   const [query] = useSearchParams();
   const dispatch = useDispatch();
-  const { orderList, totalPageNum, loading } = useSelector((state) => state.order);
+  const { orderList, totalPageNum, loading } = useSelector(
+    (state) => state.order
+  );
   const [mode, setMode] = useState("new");
   const [showDialog, setShowDialog] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("All")
-  const [selectedSearchType, setSelectedSearchType] = useState("All")
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedSearchType, setSelectedSearchType] = useState("All");
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [searchQuery, setSearchQuery] = useState({
     page: query.get("page") || 1,
     ordernum: query.get("ordernum") || "",
   });
-  const [searchParam, setSearchParam] = useState("")
+  const [searchParam, setSearchParam] = useState("");
   const [open, setOpen] = useState(false);
 
   const handleClickNewItem = () => {
     //new 모드로 설정하고
-    setMode("new")
+    setMode("new");
 
     //selectedProduct 는 null로
     // dispatch(setSelectedProduct(null));
 
     // 다이얼로그 열어주기
     setShowDialog(true);
-
   };
 
   useEffect(() => {
     dispatch(getOrderList({ ...searchQuery }));
   }, [query]);
 
-//주문도 필터링..?
-// 필터링 카테고리 옵션 선택 시 검색박스 등장
-// 검색박스에 검색어 없이 검색버튼 클릭 시 해당 카테고리의 전 항목 출력
-// 검색박스에 검색어 포함 검색버튼 클릭 시 해당 카테고리의 검색 결과 항목 출력
-// ex. 카테고리 User 선택 후 검색어 없이 클릭 -> 구매내역이 있는 전 유저 출력
-// ex. 카테고리 Product 선택 후 검색어 "스노우" -> "스노우" 상품이 구매된 리스트 출력
+  //주문도 필터링..?
+  // 필터링 카테고리 옵션 선택 시 검색박스 등장
+  // 검색박스에 검색어 없이 검색버튼 클릭 시 해당 카테고리의 전 항목 출력
+  // 검색박스에 검색어 포함 검색버튼 클릭 시 해당 카테고리의 검색 결과 항목 출력
+  // ex. 카테고리 User 선택 후 검색어 없이 클릭 -> 구매내역이 있는 전 유저 출력
+  // ex. 카테고리 Product 선택 후 검색어 "스노우" -> "스노우" 상품이 구매된 리스트 출력
 
   // useEffect(() => {
   //   if (searchQuery.ordernum === "") {
@@ -73,14 +73,16 @@ const AdminPaymentPage = () => {
 
   const filteredPayments = orderList.filter((payment) => {
     if (selectedCategory === "All") return true; // "All" 선택 시 모든 상품 표시
-    if (selectedCategory === "고양이") return payment.productCategory[0] === "Cat";
-    if (selectedCategory === "배경지") return payment.productCategory[0] === "BG_IMG";
+    if (selectedCategory === "고양이")
+      return payment.productCategory[0] === "Cat";
+    if (selectedCategory === "배경지")
+      return payment.productCategory[0] === "BG_IMG";
     return false; // 기본적으로 필터링 조건에 맞지 않으면 제외
   });
 
   const handleSearchTypeChange = (e) => {
     setSelectedSearchType(e.target.value);
-    setSearchParam('');
+    setSearchParam("");
   };
 
   const handleSearchInputChange = (e) => {
@@ -89,12 +91,14 @@ const AdminPaymentPage = () => {
 
   const handleSearchClick = () => {
     let filtered = filteredPayments;
-    if (selectedSearchType !== 'All') {
-      filtered = filtered.filter(order => {
-        if (selectedSearchType === 'User Email') {
+    if (selectedSearchType !== "All") {
+      filtered = filtered.filter((order) => {
+        if (selectedSearchType === "User Email") {
           return order.email.toLowerCase().includes(searchParam.toLowerCase());
-        } else if (selectedSearchType === 'Order Item') {
-          return order.productName.toLowerCase().includes(searchParam.toLowerCase());
+        } else if (selectedSearchType === "Order Item") {
+          return order.productName
+            .toLowerCase()
+            .includes(searchParam.toLowerCase());
         }
         return false;
       });
@@ -103,15 +107,14 @@ const AdminPaymentPage = () => {
   };
 
   useEffect(() => {
-    if(loading === false){
-      if (selectedCategory === "All" & selectedSearchType === 'All') {
+    if (loading === false) {
+      if ((selectedCategory === "All") & (selectedSearchType === "All")) {
         setFilteredOrders(orderList);
       } else {
         setFilteredOrders(filteredPayments);
       }
     }
   }, [loading, selectedSearchType, selectedCategory, searchParam]);
-
 
   return (
     <div className="admin-payment-page">
@@ -146,10 +149,9 @@ const AdminPaymentPage = () => {
                 <option>User Email</option>
               </Form.Select>
             </Form.Group>
-
           </Col>
           <Col md={2}>
-            {selectedSearchType !== 'All' && (
+            {selectedSearchType !== "All" && (
               <Form.Control
                 type="text"
                 placeholder={`Search ${selectedSearchType}`}
@@ -157,10 +159,9 @@ const AdminPaymentPage = () => {
                 onChange={handleSearchInputChange}
               />
             )}
-
           </Col>
           <Col md={2}>
-            {selectedSearchType !== 'All' && (
+            {selectedSearchType !== "All" && (
               <Button onClick={handleSearchClick}>Search</Button>
             )}
           </Col>
@@ -178,25 +179,25 @@ const AdminPaymentPage = () => {
         ) : (
           <Row className="table-area">
             <AdminPaymentTable className="unser-line" />
-            {
-              filteredOrders && filteredOrders.length > 0 ? (
-                filteredOrders.map((payment) => (
-                  <AdminPaymentCard
-                    key={payment._id}
-                    payment={payment} // 개별 `product` 객체를 `ProductCard`에 전달
-                    setMode={setMode}
-                    setShowDialog={setShowDialog}
-                  />
-                ))
-              ) : (
-                <div className="text-center">
-                  <p>No Payments List</p>
-                </div>
-              )
-            }
-          </Row>)}
+            {filteredOrders && filteredOrders.length > 0 ? (
+              filteredOrders.map((payment) => (
+                <AdminPaymentCard
+                  key={payment._id}
+                  payment={payment} // 개별 `product` 객체를 `ProductCard`에 전달
+                  setMode={setMode}
+                  setShowDialog={setShowDialog}
+                />
+              ))
+            ) : (
+              <div className="text-center">
+                <p>No Payments List</p>
+              </div>
+            )}
+          </Row>
+        )}
 
-        <ReactPaginate className="pagination"
+        <ReactPaginate
+          className="pagination"
           nextLabel="next >"
           onPageChange={handlePageClick}
           pageRangeDisplayed={5}

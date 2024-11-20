@@ -1,12 +1,15 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { deleteDiary } from "../../../features/diary/diarySlice";
 import "./../style/diaryDetail.style.css";
 import Button from "./../../../common/components/Button";
 
 const DiaryDetail = ({ selectedDiary }) => {
   const navigate = useNavigate();
-  const { selectedDate, title, content, image, mood } = selectedDiary;
+  const dispatch = useDispatch();
+  const { selectedDate, title, content, image, mood, _id } = selectedDiary;
 
   const formattedDate = new Date(selectedDate).toLocaleDateString("en-US", {
     weekday: "long",
@@ -14,6 +17,21 @@ const DiaryDetail = ({ selectedDiary }) => {
     month: "long",
     day: "numeric",
   });
+
+  const handleEditClick = () => {
+    navigate(`/diaries/${_id}/edit`);
+  };
+
+  const handleDeleteClick = async () => {
+    if (window.confirm("Are you sure you want to delete this diary?")) {
+      try {
+        await dispatch(deleteDiary(_id)).unwrap();
+        navigate("/diaries");
+      } catch (error) {
+        console.error("Failed to delete diary:", error);
+      }
+    }
+  };
 
   return (
     <Container className="diary-detail">
@@ -60,10 +78,17 @@ const DiaryDetail = ({ selectedDiary }) => {
           </Button>
         </Col>
         <Col>
-          <Button className="diary-detail__edit-btn">Edit</Button>
+          <Button className="diary-detail__edit-btn" onClick={handleEditClick}>
+            Edit
+          </Button>
         </Col>
         <Col>
-          <Button className="diary-detail__delete-btn">Delete</Button>
+          <Button
+            className="diary-detail__delete-btn"
+            onClick={handleDeleteClick}
+          >
+            Delete
+          </Button>
         </Col>
       </Row>
     </Container>
