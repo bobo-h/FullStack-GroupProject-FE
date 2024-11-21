@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Form } from "react-bootstrap";
+import { Container, Row, Col, Form, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import AdminPaymentTable from "./component/AdminPaymentTable";
@@ -8,9 +8,9 @@ import AdminPaymentCard from "./component/AdminPaymentCard";
 import { getOrderList } from "../../../../features/order/orderSlice";
 import "./style/adminPayment.style.css";
 import LoadingSpinner from "../../../../common/components/LoadingSpinner";
-import "./style/adminPayment.style.css";
 import OrderCard from "./component/OrderCard";
-import { ReactPaginate } from "react-paginate";
+import ReactPaginate from "react-paginate";
+import AdminDashboard from "./component/AdminDashboard";
 
 const AdminPaymentPage = () => {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const AdminPaymentPage = () => {
     (state) => state.order
   );
   const [mode, setMode] = useState("new");
-  const [showDialog, setShowDialog] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedSearchType, setSelectedSearchType] = useState("All");
   const [filteredOrders, setFilteredOrders] = useState([]);
@@ -29,17 +29,9 @@ const AdminPaymentPage = () => {
     ordernum: query.get("ordernum") || "",
   });
   const [searchParam, setSearchParam] = useState("");
-  const [open, setOpen] = useState(false);
 
-  const handleClickNewItem = () => {
-    //new 모드로 설정하고
-    setMode("new");
-
-    //selectedProduct 는 null로
-    // dispatch(setSelectedProduct(null));
-
-    // 다이얼로그 열어주기
-    setShowDialog(true);
+  const handleClickDashboard = () => {
+    setShowModal(true);
   };
 
   useEffect(() => {
@@ -68,7 +60,7 @@ const AdminPaymentPage = () => {
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setShowModal(false);
   };
 
   const filteredPayments = orderList.filter((payment) => {
@@ -166,9 +158,9 @@ const AdminPaymentPage = () => {
             )}
           </Col>
 
-          {/* <Col md={2} className='text-end'>
-            <Button onClick={handleClickNewItem}>Dashboard</Button>
-          </Col> */}
+          <Col md={2} >
+            <Button onClick={handleClickDashboard}>Dashboard</Button>
+          </Col>
         </Row>
         {loading ? (
           <div className="text-align-center">
@@ -184,8 +176,6 @@ const AdminPaymentPage = () => {
                 <AdminPaymentCard
                   key={payment._id}
                   payment={payment} // 개별 `product` 객체를 `ProductCard`에 전달
-                  setMode={setMode}
-                  setShowDialog={setShowDialog}
                 />
               ))
             ) : (
@@ -218,6 +208,19 @@ const AdminPaymentPage = () => {
           activeClassName="active"
         />
       </Container>
+      {showModal && (
+        <Modal show={showModal} onHide={() => setShowModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Dashboard</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <AdminDashboard showModal={showModal}/>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={() => setShowModal(false)}>Close</Button>
+          </Modal.Footer>
+        </Modal>
+      )}
     </div>
   );
 };
