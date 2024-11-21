@@ -11,6 +11,7 @@ import ProductPage from "../pages/ProductPage/ProductPage";
 import DiariesPage from "./../pages/DiariesPage/DiariesPage";
 import DiaryDetailPage from "./../pages/DiaryDetailPage/DiaryDetailPage";
 import DiaryFormPage from "./../pages/DiaryFormPage/DiaryFormPage";
+import DiaryBinPage from "./../pages/DiaryBinPage/DiaryBinPage";
 import PrivateRoute from "./PrivateRoute";
 
 const AppRouter = () => {
@@ -29,6 +30,7 @@ const AppRouter = () => {
         }
       />
       <Route path="/my-page" element={<MyPage />} />
+      <Route path="/my-page/diary-bin" element={<DiaryBinPage />} />
       <Route path="/shop" element={<ProductPage />} />
       {/* <Route path="/payment" element={<PaymentPage />} /> */}
       <Route path="/diaries" element={<DiariesPage />} />

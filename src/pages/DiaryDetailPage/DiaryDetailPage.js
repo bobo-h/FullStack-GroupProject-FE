@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { getDiaryDetail, clearError } from "../../features/diary/diarySlice";
 import DiaryDetail from "./components/DiaryDetail";
 import CommentArea from "./components/Comment/CommentArea";
-import { Spinner, Container, Col, Row } from "react-bootstrap";
+import { Col } from "react-bootstrap";
 
 const DiaryDetailPage = () => {
   const { diaryId } = useParams();

@@ -18,14 +18,19 @@
     margin-top: 15px;
   }
 
-  .sidebar-item {
+  .sidebar-item__title,
+  .sidebar-item__menu {
     color: #5f6f52;
     font-weight: bold;
     padding: 20px 10px;
     list-style-type: none;
   }
 
-  .sidebar-item:hover {
+  .sidebar-item__menu {
+    margin-left: 10px;
+  }
+
+  .sidebar-item__menu:hover {
     color: white;
     background-color: #a9b388;
     font-weight: bold;

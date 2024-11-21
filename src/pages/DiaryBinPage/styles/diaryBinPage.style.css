@@ -1,0 +1,78 @@
+.diary-bin {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.diary-bin__title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.diary-bin__spinner {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.diary-bin__error {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.diary-bin__error-message {
+  color: red;
+  font-size: 16px;
+}
+
+.diary-bin__table {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.diary-bin__header {
+  border-bottom: 2px solid #ccc;
+  padding: 10px 0;
+  font-weight: bold;
+}
+
+.diary-bin__header-item {
+  font-size: 16px;
+  text-align: left;
+}
+
+.diary-bin__header-item--center {
+  text-align: center;
+}
+
+.diary-bin__row {
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.diary-bin__row:last-child {
+  border-bottom: none;
+}
+
+.diary-bin__cell {
+  font-size: 14px;
+}
+
+.diary-bin__cell--center {
+  text-align: center;
+}
+
+.diary-bin__image {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.diary-bin__pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
