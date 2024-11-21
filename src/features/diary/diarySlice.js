@@ -26,6 +26,23 @@ export const getDiaryList = createAsyncThunk(
   }
 );
 
+export const getFilteredDiaryList = createAsyncThunk(
+  "diary/getFilteredDiaryList",
+  async ({ year, month }, { rejectWithValue }) => {
+    try {
+      const query = [];
+      if (year) query.push(`year=${year}`);
+      if (month) query.push(`month=${month}`);
+      const response = await api.get(`/diary/filter?${query.join("&")}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response.data || "Failed to filter diaries."
+      );
+    }
+  }
+);
+
 export const getDiaryDetail = createAsyncThunk(
   "diary/getDiaryDetail",
   async (diaryId, { rejectWithValue }) => {
@@ -70,6 +87,7 @@ const diarySlice = createSlice({
     loading: false,
     error: "",
     diaryList: [],
+    filter: { year: "", month: "" },
     deletedDiaryList: [],
     selectedDiary: null,
     currentPage: 1,
@@ -90,6 +108,9 @@ const diarySlice = createSlice({
       state.currentPage = 1;
       state.totalPages = 1;
     },
+    // setFilter: (state, action) => {
+    //   state.filter = action.payload;
+    // }
   },
   extraReducers: (builder) => {
     builder

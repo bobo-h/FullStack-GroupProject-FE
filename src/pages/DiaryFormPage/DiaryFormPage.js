@@ -10,12 +10,10 @@ import {
   updateDiary,
 } from "../../features/diary/diarySlice";
 import { fetchAllMoods } from "../../features/mood/moodSlice";
-import { useParams, useNavigate } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { useParams } from "react-router-dom";
 
 const DiaryFormPage = () => {
   const { diaryId } = useParams();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [formValues, setFormValues] = useState({
@@ -25,8 +23,8 @@ const DiaryFormPage = () => {
     image: "",
     content: "",
   });
-  const [confirmModalVisible, setConfirmModalVisible] = useState(false);
-  const [successModalVisible, setSuccessModalVisible] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [modalMessage, setModalMessage] = useState(null);
 
   const { moodList = [], loading: moodLoading } = useSelector(
@@ -72,7 +70,7 @@ const DiaryFormPage = () => {
         ? "Are you sure you want to update this diary with these details?"
         : "Are you sure you want to register this diary?"
     );
-    setConfirmModalVisible(true); // 첫 번째 모달 표시
+    setShowConfirmModal(true); // 첫 번째 모달 표시
   };
 
   const handleConfirmSubmit = (event) => {
@@ -90,8 +88,8 @@ const DiaryFormPage = () => {
             ? "The diary has been successfully updated."
             : "The diary has been successfully registered."
         );
-        setConfirmModalVisible(false);
-        setSuccessModalVisible(true); // 성공 모달 표시
+        setShowConfirmModal(false);
+        setShowSuccessModal(true);
       })
       .catch((error) => {
         console.error("Failed to submit diary:", error);
@@ -100,7 +98,7 @@ const DiaryFormPage = () => {
             error.message || "An error occurred."
           }`
         );
-        setConfirmModalVisible(false);
+        setShowConfirmModal(false);
       });
   };
 
@@ -110,8 +108,8 @@ const DiaryFormPage = () => {
 
   const handleClose = () => {
     setModalMessage(null);
-    setConfirmModalVisible(false);
-    setSuccessModalVisible(false);
+    setShowConfirmModal(false);
+    setShowSuccessModal(false);
   };
 
   return (
@@ -205,7 +203,7 @@ const DiaryFormPage = () => {
           <Button type="submit">{diaryId ? "Update" : "Submit"}</Button>
         </Form>
       )}
-      {confirmModalVisible && (
+      {showConfirmModal && (
         <CustomModal
           message={modalMessage}
           onClose={handleClose} // 취소 버튼
@@ -213,7 +211,7 @@ const DiaryFormPage = () => {
           showCancelButton={true}
         />
       )}
-      {successModalVisible && (
+      {showSuccessModal && (
         <CustomModal
           message={modalMessage}
           onClose={handleClose} // 단순히 모달 닫기
