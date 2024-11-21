@@ -23,16 +23,7 @@ const CommentArea = ({ diaryId }) => {
     <div>
       {comments && comments.length > 0 ? (
         <>
-          {/* 첫 번째 댓글 */}
-          {/* <Comment comment={comments[0]} /> */}
           <Comment comments={comments} />
-
-          {/* 나머지 댓글 */}
-          {/* {comments.slice(1).map((comment, index) => (
-            <CommentReply key={comment.id || index} comment={comment} />
-          ))} */}
-          {/* 댓글 입력 */}
-          {/* <CommentForm diaryId={diaryId} /> */}
         </>
       ) : (
         <p>No comments yet.</p>
