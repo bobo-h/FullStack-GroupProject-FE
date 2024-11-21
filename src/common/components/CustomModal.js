@@ -10,7 +10,7 @@ const CustomModal = ({
   title = "MeowMemo",
   message,
   onClose,
-  onConfirm,
+  onConfirm, // 함수 값으로 보내주세요
   redirectTo,
   confirmButtonText = "확인",
   cancelButtonText = "취소",
@@ -19,7 +19,7 @@ const CustomModal = ({
 }) => {
   const navigate = useNavigate();
   const handleConfirm = () => {
-    if (onConfirm) {
+    if (typeof onConfirm === "function") {
       onConfirm();
     } else if (redirectTo) {
       navigate(redirectTo);

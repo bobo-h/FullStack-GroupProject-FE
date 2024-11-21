@@ -15,7 +15,7 @@ const DiaryDetail = ({ selectedDiary }) => {
   const { selectedDate, title, content, image, mood, _id } = selectedDiary;
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(true);
   const [modalMessage, setModalMessage] = useState(null);
 
   const formattedDate = new Date(selectedDate).toLocaleDateString("en-US", {
