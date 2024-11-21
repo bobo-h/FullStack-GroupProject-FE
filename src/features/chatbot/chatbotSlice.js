@@ -32,9 +32,9 @@ export const getChatbotDetail = createAsyncThunk(
 // createChatbot action
 export const createChatbot = createAsyncThunk(
   "chatbot/createChatbot",
-  async ({ user_id, product_id, name, personality }, { rejectWithValue }) => {
+  async ({ product_id, name, personality }, { rejectWithValue }) => {
     try {
-      const response = await api.post("/chatbot", { user_id, product_id, name, personality });
+      const response = await api.post("/chatbot", { product_id, name, personality });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
@@ -86,12 +86,10 @@ export const updateChatbot = createAsyncThunk(
 
 export const deleteChatbot = createAsyncThunk(
   "chatbot/deleteChatbot",
-  async (chatbotId, { dispatch, rejectWithValue }) => {
+  async (chatbotId, { rejectWithValue }) => {
     try {
       const response = await api.delete(`/chatbot/${chatbotId}`);
       console.log("Chatbot deleted successfully");
-
-      // dispatch(getChatbotList({ page: 1 }));
 
       return response.data;
     } catch (error) {
@@ -174,16 +172,6 @@ export const printLineChatbot = createAsyncThunk(
         "고생한 나에게 아무 힘이 되는 말 해줘",
         "내가 행복해질 말을 해줘",
       ];
-      // const randomMessage =
-      //   messages[Math.floor(Math.random() * messages.length)];
-      // const finalMessage =
-      //   randomMessage === "야옹!" || randomMessage === "zzz"
-      //     ? randomMessage
-      //     : `${randomMessage} (Respond in 10 characters or less.)`;
-      // const response = await api.post("/chatbot/printLine", {
-      //   message: finalMessage,
-      //   catPersonality,
-      // });
       const randomMessage =
         messages[Math.floor(Math.random() * messages.length)];
       // console.log("랜덤 메시지:", randomMessage);

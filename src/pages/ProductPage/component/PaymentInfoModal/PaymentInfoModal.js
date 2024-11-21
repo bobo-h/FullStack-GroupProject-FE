@@ -11,6 +11,7 @@ import Button2 from "../../../../common/components/Button2";
 import ReactDOM from "react-dom";
 import Alert from "../../../../common/components/Alert";
 import LoadingSpinner from "../../../../common/components/LoadingSpinner";
+import { useMediaQuery } from "react-responsive";
 
 const PaymentInfoModal = ({ onClose }) => {
   const dispatch = useDispatch();
@@ -19,6 +20,7 @@ const PaymentInfoModal = ({ onClose }) => {
   const user = useSelector((state) => state.user.user);
   const [showAlert, setShowAlert] = useState(false);
   const [alertContent, setAlertContent] = useState("");
+  const isMobile = useMediaQuery({ query: "(max-width: 700px)" });
 
   const [cardValue, setCardValue] = useState({
     cvc: "",
@@ -149,7 +151,7 @@ const PaymentInfoModal = ({ onClose }) => {
   };
 
   const PaymentInfoContent = (
-    <div className="modal-backdrop" onClick={handleBackdropClick}>
+    <div className="modal-backdrop payment-info-mobile" onClick={handleBackdropClick}>
       {showAlert && (
         <Alert
           message={alertContent}
@@ -171,27 +173,30 @@ const PaymentInfoModal = ({ onClose }) => {
         <h3 className="modal-title">입양 절차</h3>
         <Row>
           {/* 고양이 카드 */}
-          <Col lg={4}>
-            <Row className="mb-4">
+          <Col {...(!isMobile && { lg: 4 })}>
+            <Row className="mb-4 no-h">
               {/* 상단 공백 */}
               <Col>
-                <div style={{ height: "20px" }}></div>
+                <div className="no-h" style={{ height: "20px" }}></div>
               </Col>
             </Row>
             {selectedProduct ? (
-              <div className="payment-product-card">
+              <div className="payment-modal-product-card-area">
+                <div className="payment-modal-product-card">
                 <img
                   src={selectedProduct.image}
                   alt={selectedProduct.name}
                   className="img-fluid product-image"
                 />
-                <Row className="mt-3 justify-content-center text-center">
+                <Row className="mt-3 justify-content-center text-center ">
                   {/* 결제 금액 표시 */}
                   <Col>
                     <h5>결제 금액: {selectedProduct.price}₩ </h5>
                   </Col>
                 </Row>
               </div>
+              </div>
+              
             ) : (
               <p>상품 정보를 불러올 수 없습니다.</p>
             )}
@@ -204,17 +209,19 @@ const PaymentInfoModal = ({ onClose }) => {
 
           {/* 구매자, 카드 정보 */}
           <Col lg={7}>
-            <h4 className="payment-title">구매자 정보</h4>
+            <h4 className="payment-title no-h">구매자 정보</h4>
             <Form onSubmit={handleSubmit}>
               {/* 구매자 이름 입력 */}
               <Row className="mb-3">
                 <Form.Group controlId="buyer-name">
                   <Row>
                     <Col lg={2} xs="auto">
-                      <Form.Label>이름</Form.Label>
+                      <Form.Label className="no-h">이름</Form.Label>
+                      <Form.Label className="yes-h"><i class="ri-user-line"></i></Form.Label>
                     </Col>
                     <Col>
                       <Form.Control
+                        className="input-box"
                         type="text"
                         name="name"
                         value={orderPersonInfo.name} // 초기값 반영
@@ -231,10 +238,12 @@ const PaymentInfoModal = ({ onClose }) => {
                 <Form.Group controlId="email">
                   <Row>
                     <Col lg={2} xs="auto">
-                      <Form.Label>이메일</Form.Label>
+                      <Form.Label className="no-h">이메일</Form.Label>
+                      <Form.Label className="yes-h"><i class="ri-mail-line"></i></Form.Label>
                     </Col>
                     <Col>
                       <Form.Control
+                        className="input-box"
                         type="email"
                         name="email"
                         value={orderPersonInfo.email}
@@ -266,10 +275,13 @@ const PaymentInfoModal = ({ onClose }) => {
                 <Form.Group controlId="phone">
                   <Row>
                     <Col lg={2} xs="auto">
-                      <Form.Label>전화번호</Form.Label>
+                      <Form.Label className="no-h">전화번호</Form.Label>
+                      <Form.Label className="yes-h"><i class="ri-phone-line"></i></Form.Label>
+                      
                     </Col>
                     <Col>
                       <Form.Control
+                        className="input-box"
                         type="tel"
                         name="phoneNumber"
                         value={orderPersonInfo.phoneNumber}
@@ -297,7 +309,7 @@ const PaymentInfoModal = ({ onClose }) => {
               </Row>
 
               {/* 카드 정보 입력 폼 */}
-              <h4 className="payment-title">카드 정보</h4>
+              <h4 className="payment-title no-h">카드 정보</h4>
               <PaymentForm
                 cardValue={cardValue}
                 handleInputFocus={handleInputFocus}

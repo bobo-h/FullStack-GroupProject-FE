@@ -65,3 +65,11 @@
       }
   }
 }
+@media (max-width: 375px) {
+  .payment-product-card {
+      width: 30%;
+  }
+  .text-left {
+    font-size:0.9rem;
+  }
+}

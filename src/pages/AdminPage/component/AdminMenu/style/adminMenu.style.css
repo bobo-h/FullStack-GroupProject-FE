@@ -1,9 +1,8 @@
 .admin-menubar {
-  transition: transform 0.3s ease-in-out;
   position: fixed;
   top: 0;
   left: 0;
-  width: 20%; /* Fixed width for the menu */
+  width: 18%; 
   height: 100%; /* Full height of the screen */
   background-color: #b99470;
   color: white;
@@ -11,6 +10,8 @@
   flex-direction: column;
   align-items: center; /* Center content horizontally */
   padding-top: 20px; /* Space from the top */
+  transition: transform 0.3s ease;
+  z-index: 100;
 }
 
 .admin-menubar.open {
@@ -21,16 +22,19 @@
   transform: translateX(-100%);
 }
 
-.menu-header {
+/* .menu-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   padding: 10px;
-}
+} */
 
 
 .menu-toggle-button {
+  position: absolute;
+  top: 10px;                
+  right: 10px;               
   background-color: #b99470;
   color: white;
   border: none;
@@ -39,14 +43,19 @@
   width: 50px; /* 버튼의 너비 */
   height: 50px; /* 버튼의 높이 */
   border-radius: 50%; /* 원형 모양 */
-  display: flex;
-  justify-content: center; /* 텍스트를 중앙 정렬 */
-  align-items: center; /* 텍스트를 중앙 정렬 */
 }
 
 .menu-toggle-button:hover {
   background-color: #fefae0;
   color: #000;
+}
+
+.admin-menu-header {
+  display: flex;
+  justify-content: center;   /* 중앙 정렬 */
+  align-items: center;       /* 수직 중앙 정렬 */
+  position: relative;        /* 자식 요소의 위치를 절대 위치로 설정할 수 있게 함 */
+  width: 100%;               /* 부모의 전체 너비를 사용 */
 }
 
 .menu-title {
@@ -69,7 +78,7 @@
   font-size: 18px;
   cursor: pointer;
   width: 100%;
-  text-align: left;
+  text-align: right;
 }
 
 .admin-button.active {
