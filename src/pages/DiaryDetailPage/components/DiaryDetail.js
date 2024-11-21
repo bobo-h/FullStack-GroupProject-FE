@@ -7,23 +7,26 @@ import CustomModal from "./../../../common/components/CustomModal";
 import Button from "./../../../common/components/Button";
 import "./../style/diaryDetail.style.css";
 
-const DiaryDetail = ({ selectedDiary }) => {
+const DiaryDetail = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { diaryId } = useParams();
-  const { loading } = useSelector((state) => state.diary);
-  const { selectedDate, title, content, image, mood, _id } = selectedDiary;
+  const { loading, selectedDiary } = useSelector((state) => state.diary);
+  const { selectedDate, title, content, image, mood, _id } =
+    selectedDiary || {};
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(true);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [modalMessage, setModalMessage] = useState(null);
 
-  const formattedDate = new Date(selectedDate).toLocaleDateString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  const formattedDate = selectedDate
+    ? new Date(selectedDate).toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : "Loading date...";
 
   const handleEditClick = () => {
     navigate(`/diaries/${_id}/edit`);
