@@ -50,7 +50,7 @@ export const addUserComment = createAsyncThunk(
   "diary/createUserComment",
 
   async (
-    { diaryId, userId, chatbotId, parentCommentId, content },
+    { diaryId, userId, chatbotId, personality, parentCommentId, content },
     { rejectWithValue }
   ) => {
     try {
@@ -59,6 +59,7 @@ export const addUserComment = createAsyncThunk(
         diaryId,
         userId,
         chatbotId,
+        personality,
         parentCommentId,
         content,
       });

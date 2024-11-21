@@ -12,12 +12,15 @@ const CommentForm = ({ comment, lastReplyId }) => {
     e.preventDefault();
 
     if (reply.trim()) {
+      const parentCommentId = lastReplyId || comment._id; // lastReplyId가 null일 경우 comment._id 사용
+
       dispatch(
         addUserComment({
           diaryId: comment.diaryId,
           userId: comment.userId,
           chatbotId: comment.chatbotId,
-          parentCommentId: lastReplyId,
+          personality: comment.chatbotId.personality,
+          parentCommentId,
           content: reply,
         })
       );
