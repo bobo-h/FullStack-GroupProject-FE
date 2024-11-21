@@ -56,6 +56,13 @@
     margin-bottom: 15px;
 }
 
+.payment-info-mobile .no-h {
+    display: block; /* 기본값 */
+  }
+ .yse-h{
+    display: none;
+}
+
 /* Custom media query to make sure the two columns stack properly on small screens */
 @media (max-width: 1800px) {
     .credit-card-preview,
@@ -63,6 +70,7 @@
         /* Full width for both the card preview and form on smaller screens */
         width: 100%;
     }
+    
 
     .payment-modal-backdrop {
         padding: 5%;
@@ -95,8 +103,56 @@
     }
 }
 
-@media (max-width: 992px) {
-    .payment-product-card {
-        width: 50%;
+
+@media (max-width: 990px) {
+    .payment-info-mobile{
+        display: flex;
+        gap:1%
     }
-}
+
+    .payment-modal-product-card-area{
+        font-size: 0.5em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 5%
+
+    }
+    .payment-modal-product-card {
+      width: 90%;
+      display: flex;
+      justify-content: center;
+        align-items: center;
+        padding:3%;
+        gap: 3%;
+        background-color:#FFFFFF;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  
+    .payment-modal-product-card .product-image {
+      width: 20%; /* 이미지 크기 조정 */
+      max-width: 70px; /* 너무 작거나 커지지 않도록 제한 */
+    }
+  
+    .payment-modal-product-card h5 {
+      margin: 0; /* 불필요한 여백 제거 */
+
+    }
+
+    .payment-info-mobile .no-h {
+        display: none; /* 모바일에서는 숨김 */
+      }
+    
+      .payment-info-mobile .yes-h {
+        display: block; /* 모바일에서는 표시 */
+      }
+    .credit-card-preview {
+        display: none; /* 모바일에서 카드 미리보기 숨기기 */
+      }
+
+    .payment-info-mobile .input-box{
+        margin-bottom: 2%
+    }  
+  }
+  

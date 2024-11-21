@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import "./style/adminMenu.style.css";
 import { Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 const AdminMenu = ({
   setSelectedComponent,
@@ -21,7 +19,7 @@ const AdminMenu = ({
               className="menu-toggle-button"
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             >
-              <FontAwesomeIcon icon={faBars} />
+              <i class="ri-menu-line"></i>
             </button>
         <img
           className="menu-title"

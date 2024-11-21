@@ -22,6 +22,7 @@ const PaymentForm = ({
         />
       </Col>
       <Col md={6} xs={12} className="form-area">
+      <Form.Label className="yes-h"><i class="ri-mastercard-line"></i> <i class="ri-visa-line"></i></Form.Label>
           <Form.Control
             type="tel"
             name="number"

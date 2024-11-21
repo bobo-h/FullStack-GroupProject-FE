@@ -167,6 +167,7 @@ const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
                           isDirectInput ? "outline-secondary" : "primary"
                         }
                         onClick={() => handleInputTypeChange(true)}
+                        className="hide-button"
                       >
                         직접 입력
                       </Button>
@@ -175,6 +176,7 @@ const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
                           isDirectInput ? "primary" : "outline-secondary"
                         }
                         onClick={() => handleInputTypeChange(false)}
+                        className="hide-button"
                       >
                         성격 선택
                       </Button>

@@ -6,8 +6,6 @@ import AdminMenu from './component/AdminMenu/AdminMenu';
 import AdminPayment from './component/AdminPayment/AdminPayment';
 import AdminDiary from './component/AdminDiary/AdminDiary';
 import { useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars , faHouse} from "@fortawesome/free-solid-svg-icons";
 
 const AdminPage = () => {
   const [selectedComponent, setSelectedComponent] = useState('products');
@@ -72,14 +70,14 @@ const AdminPage = () => {
                 className="open-menu-button"
                 onClick={toggleSidebar}
               >
-                <FontAwesomeIcon icon={faBars} />
+                <i class="ri-menu-line"></i>
               </button>
             )}
             <button
               className="open-menu-button"
               onClick={goToMainPage}
             >
-              <FontAwesomeIcon icon={faHouse} />
+              <i class="ri-home-4-fill"></i>
             </button>
           </div>
           {renderSelectedComponent()}
