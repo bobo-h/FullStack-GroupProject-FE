@@ -5,8 +5,9 @@ import productReducer from "./product/productSlice";
 import orderRecuder from "./order/orderSlice";
 import diarySlice from "./diary/diarySlice";
 import moodSlice from "./mood/moodSlice";
-import uiSlice from "./common/uiSlice"
+import uiSlice from "./common/uiSlice";
 import adminSlice from "./admin/adminSlice";
+import commentSlice from "./comment/commentSlice";
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
     mood: moodSlice,
     ui: uiSlice,
     admin: adminSlice,
+    comment: commentSlice,
   },
 });
 

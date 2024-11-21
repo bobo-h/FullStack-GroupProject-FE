@@ -1,27 +1,35 @@
-import React, { useState } from 'react';
-import { Container, Row, Col, Form } from 'react-bootstrap';
-import { useDispatch} from "react-redux";
-import Button from "../../../../../common/components/Button"
+import React, { useState } from "react";
+import { Container, Row, Col, Form } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import Button from "../../../../../common/components/Button";
 import { addUserComment } from "../../../../../features/comment/commentSlice";
 
-const CommentForm = ({diaryId}) => {
-    const [comment, setComment] = useState("");
-    const dispatch = useDispatch();
+const CommentForm = ({ comment, lastReplyId }) => {
+  const [reply, setReply] = useState("");
+  const dispatch = useDispatch();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-        if (comment.trim()) {
-            dispatch(addUserComment({ diaryId, content: comment }));
-            setComment("");
-          }
-    };
+    if (reply.trim()) {
+      dispatch(
+        addUserComment({
+          diaryId: comment.diaryId,
+          userId: comment.userId,
+          chatbotId: comment.chatbotId,
+          parentCommentId: lastReplyId,
+          content: reply,
+        })
+      );
+      setReply("");
+    }
+  };
 
-    return (
+  return (
     <Container>
       <Row>
         <Col lg={2}>
-            유저 이미지
+          유저 이미지
           {/* <img alt="User" src="" /> */}
         </Col>
         <Col>
@@ -30,8 +38,8 @@ const CommentForm = ({diaryId}) => {
               <Form.Control
                 type="text"
                 placeholder="댓글 추가..."
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
+                value={reply}
+                onChange={(e) => setReply(e.target.value)}
               />
             </Form.Group>
             <Button variant="primary" type="submit" className="mt-2">
@@ -43,6 +51,5 @@ const CommentForm = ({diaryId}) => {
     </Container>
   );
 };
-
 
 export default CommentForm;
