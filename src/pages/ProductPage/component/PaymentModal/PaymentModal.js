@@ -41,7 +41,7 @@ const PaymentModal = ({ selectedProduct, onClose, onProceedToPayment }) => {
                             <Col className="text-left">
                                 <div className="name">이름: {selectedProduct.name}</div>
                                 <div className="description">설명: {selectedProduct.description}</div>
-                                <div className="price">가격: {selectedProduct.price} 원 </div>
+                                <div className="modal-price">가격: {selectedProduct.price} 원 </div>
                             </Col>
                         </Row>
                     </Container>

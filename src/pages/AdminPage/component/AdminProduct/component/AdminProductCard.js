@@ -49,7 +49,7 @@ const AdminProductCard = ({ product, setMode, setShowDialog }) => {
           redirectTo="/admin"
         />
       )}
-      <Container>
+      <Container className="product-card-content">
         <Row className="mb-4">
           <Col md={1} className="d-flex align-items-center">
             {product.id}

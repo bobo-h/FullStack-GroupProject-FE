@@ -1,38 +1,21 @@
 body {
   background-color: #FEFAE0;
 }
-
 .admin-page {
   display: flex;
-  height: 100vh; /* 전체 화면 높이를 사용 */
+  transition: margin-left 0.3s ease; /* 메뉴바가 토글될 때 부드러운 애니메이션 */
+}
+
+.admin-content {
+  transition: margin-left 0.3s ease; /* 메뉴바가 닫히고 열릴 때의 애니메이션 */
   width: 100%;
-
-
-  .admin-menu {
-    width: 18%; /* 메뉴의 너비를 20%로 설정 */
-  }
-
-  .admin-content {
-    padding-top: 5%; /* 콘텐츠에 패딩 추가 */
-    overflow-y: auto; /* 콘텐츠가 넘칠 경우 스크롤 표시 */
-    position: relative; /* 위치 조정을 위해 필요 */
-  }
-
-  .home-btn {
-    position: absolute;
-    top: 20px; /* 상단에서 20px */
-    z-index: 10; /* 다른 요소들보다 위로 표시되도록 설정 */
-  }
-
-  .content-component {
-    padding-top: 50px; 
-  }
-
-
+  padding: 20px;
+  box-sizing: border-box;
+}
     .open-menu-button {
-      background-color: #b99470;
-      color: white;
-      border: none;
+      background-color: var(--primary-color-ivory);
+      color: var(--primary-color-brown);
+      border: 3px solid var(--primary-color-brown);
       cursor: pointer;
       font-size: 16px;
       width: 50px; /* 버튼의 너비 */
@@ -42,19 +25,22 @@ body {
       justify-content: center; /* 텍스트를 중앙 정렬 */
       align-items: center; /* 텍스트를 중앙 정렬 */
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 살짝 그림자 추가 */
+      margin-bottom: 3%;
     }
     
     .open-menu-button:hover {
-      background-color: #fefae0;
-      color: #000;
+      background-color: #b99470;
+      color: #fff;
     }
+
+
+    .admin-menu-btns {
+      display: flex;           /* 수평 정렬을 위한 flex 사용 */
+
+      gap: 10px;               /* 버튼 사이의 간격 (선택 사항) */
+    }
+    
   
-
-  /* .sidebar-toggle-image{
-    width: 50px;
-  } */
-}
-
 @media (max-width: 700px) {
   .admin-page {
     flex-direction: column; /* 세로 방향으로 배치 */
