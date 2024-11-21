@@ -1,0 +1,11 @@
+.comment {
+  .comment__chatbot-image-area {
+    max-width: 120px;
+  }
+
+  .comment__area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}

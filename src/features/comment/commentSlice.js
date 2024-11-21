@@ -3,12 +3,10 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 //리스트를 들고와서 첫번째 챗봇 댓글 -> <Comment/> 나머지 댓글 -> <CommentReply/>
 export const getCommentList = createAsyncThunk(
-  "diary/getComment",
-
+  "comment/getCommentList",
   async (diaryId, { rejectWithValue }) => {
     try {
       const response = await api.get(`/comment/${diaryId}`);
-
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -51,9 +49,20 @@ export const addChatbotComment = createAsyncThunk(
 export const addUserComment = createAsyncThunk(
   "diary/createUserComment",
 
-  async (formData, diaryId, { rejectWithValue }) => {
+  async (
+    { diaryId, userId, chatbotId, personality, parentCommentId, content },
+    { rejectWithValue }
+  ) => {
     try {
-      const response = await api.post(`/comment/${diaryId}`, formData);
+      //const response = await api.post(`/diary/${diaryId}`, formData);
+      const response = await api.post("comment/create", {
+        diaryId,
+        userId,
+        chatbotId,
+        personality,
+        parentCommentId,
+        content,
+      });
       if (response.status !== 200) throw new Error(response.error);
 
       return response.data;
@@ -112,7 +121,12 @@ const commentSlice = createSlice({
 
     builder
       .addCase(getCommentList.pending, handlePending)
-      .addCase(getCommentList.fulfilled, handleFulfilled)
+      .addCase(getCommentList.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.registrationError = null;
+        state.comments = action.payload.data;
+      })
       .addCase(getCommentList.rejected, handleRejected)
       .addCase(addUserComment.pending, handlePending)
       .addCase(addUserComment.fulfilled, handleFulfilled)

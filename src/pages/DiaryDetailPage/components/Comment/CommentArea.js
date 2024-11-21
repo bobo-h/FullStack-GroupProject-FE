@@ -5,10 +5,13 @@ import Comment from "./components/Comment";
 import CommentReply from "./components/CommentReply";
 import CommentForm from "./components/CommentForm";
 
-const CommentArea = ({diaryId}) => {
+const CommentArea = ({ diaryId }) => {
   const dispatch = useDispatch();
-  const { comments, loading, error } = useSelector((state) => state.diary);
- 
+  const { comments, loading, error } = useSelector((state) => state.comment);
+
+  //댓글 들어오나 확인
+  console.log("댓글들", comments);
+
   useEffect(() => {
     dispatch(getCommentList(diaryId));
   }, [dispatch, diaryId]);
@@ -16,20 +19,11 @@ const CommentArea = ({diaryId}) => {
   if (loading) return <p>Loading comments...</p>;
   if (error) return <p>Error: {error}</p>;
 
- 
   return (
     <div>
       {comments && comments.length > 0 ? (
         <>
-          {/* 첫 번째 댓글 */}
-          <Comment comment={comments[0]} />
-
-          {/* 나머지 댓글 */}
-          {comments.slice(1).map((comment, index) => (
-            <CommentReply key={comment.id || index} comment={comment} />
-          ))}
-          {/* 댓글 입력 */}
-          <CommentForm diaryId = {diaryId}/>
+          <Comment comments={comments} />
         </>
       ) : (
         <p>No comments yet.</p>

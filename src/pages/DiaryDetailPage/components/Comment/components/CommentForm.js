@@ -1,28 +1,47 @@
-import React, { useState } from 'react';
-import { Container, Row, Col, Form } from 'react-bootstrap';
-import { useDispatch} from "react-redux";
-import Button from "../../../../../common/components/Button"
+import React, { useState } from "react";
+import { Container, Row, Col, Form } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import Button from "../../../../../common/components/Button";
 import { addUserComment } from "../../../../../features/comment/commentSlice";
+import userDefaultLogo from "../../../../../assets/userDefaultLogo.png";
 
-const CommentForm = ({diaryId}) => {
-    const [comment, setComment] = useState("");
-    const dispatch = useDispatch();
+const CommentForm = ({ comment, lastReplyId }) => {
+  const [reply, setReply] = useState("");
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+  console.log("user", user);
 
-        if (comment.trim()) {
-            dispatch(addUserComment({ diaryId, content: comment }));
-            setComment("");
-          }
-    };
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-    return (
+    if (reply.trim()) {
+      const parentCommentId = lastReplyId || comment._id; // lastReplyId가 null일 경우 comment._id 사용
+
+      dispatch(
+        addUserComment({
+          diaryId: comment.diaryId,
+          userId: comment.userId,
+          chatbotId: comment.chatbotId,
+          personality: comment.chatbotId.personality,
+          parentCommentId,
+          content: reply,
+        })
+      );
+      setReply("");
+    }
+  };
+
+  return (
     <Container>
       <Row>
         <Col lg={2}>
-            유저 이미지
-          {/* <img alt="User" src="" /> */}
+          {/* 유저이미지 */}
+          <img
+            alt="User"
+            src={user?.profileImage ? user.profileImage : userDefaultLogo}
+            width={50}
+          />
         </Col>
         <Col>
           <Form onSubmit={handleSubmit}>
@@ -30,8 +49,8 @@ const CommentForm = ({diaryId}) => {
               <Form.Control
                 type="text"
                 placeholder="댓글 추가..."
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
+                value={reply}
+                onChange={(e) => setReply(e.target.value)}
               />
             </Form.Group>
             <Button variant="primary" type="submit" className="mt-2">
@@ -43,6 +62,5 @@ const CommentForm = ({diaryId}) => {
     </Container>
   );
 };
-
 
 export default CommentForm;
