@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Container, Row, Col, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -14,28 +14,37 @@ const DiaryList = () => {
   const { diaryList, loading, currentPage, totalPages } = useSelector(
     (state) => state.diary
   );
+
   const observerRef = useRef();
 
+  // 초기 데이터 로드
   useEffect(() => {
-    // 초기 데이터 로드
-    dispatch(getDiaryList(1));
-
+    dispatch(getDiaryList({ page: 1 }));
     return () => {
-      // 컴포넌트 언마운트 시 상태 초기화
-      dispatch(clearDiaryList());
+      dispatch(clearDiaryList()); // 컴포넌트 언마운트 시 상태 초기화
     };
   }, [dispatch]);
 
-  // Intersection Observer를 활용해 추가 데이터를 요청
+  // Intersection Observer 콜백
+  const handleObserver = useCallback(
+    (entries) => {
+      const target = entries[0];
+      if (
+        target.isIntersecting && // 화면에 보이는 경우
+        currentPage < totalPages && // 현재 페이지가 전체 페이지보다 작은 경우
+        !loading // 로딩 중이 아닌 경우
+      ) {
+        dispatch(getDiaryList({ page: currentPage + 1 }));
+      }
+    },
+    [dispatch, currentPage, totalPages, loading]
+  );
+
+  // Observer 등록
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && currentPage < totalPages && !loading) {
-          dispatch(getDiaryList(currentPage + 1));
-        }
-      },
-      { threshold: 1.0 }
-    );
+    const observer = new IntersectionObserver(handleObserver, {
+      threshold: 1.0,
+    });
 
     if (observerRef.current) {
       observer.observe(observerRef.current);
@@ -46,7 +55,12 @@ const DiaryList = () => {
         observer.unobserve(observerRef.current);
       }
     };
-  }, [dispatch, currentPage, totalPages, loading]);
+  }, [handleObserver]);
+
+  // 빈 상태 처리
+  if (!diaryList || diaryList.length === 0) {
+    return <div>No diaries found for the selected filters.</div>;
+  }
 
   return (
     <Container className="diary-list">

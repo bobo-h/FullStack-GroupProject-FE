@@ -4,7 +4,7 @@ import "../style/adminMood.style.css";
 
 const MoodTable = () => {
   return (
-    <div className='mood-table-name'>
+    <div className='mood-table'>
       <Container>
         <Row className="mb-4">
           <Col md={1} className="d-flex align-items-center">

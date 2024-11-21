@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import "./style/adminMenu.style.css";
 import { Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 const AdminMenu = ({
   setSelectedComponent,
@@ -16,13 +14,20 @@ const AdminMenu = ({
 
   return (
     <div className={`admin-menubar ${isSidebarOpen ? "open" : "closed"}`}>
-      <div className="menu-header">
+      <div className="admin-menu-header">
+      <button
+              className="menu-toggle-button"
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            >
+              <i class="ri-menu-line"></i>
+            </button>
         <img
           className="menu-title"
           src="logo2.png"
           alt="menu-title"
           onClick={() => navigate(`/`)}
         />
+
       </div>
       <Row className="button-container">
         <button

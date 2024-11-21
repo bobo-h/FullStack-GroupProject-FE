@@ -1,33 +1,60 @@
-.diary-list-filter__select {
-  background: transparent; /* 투명한 배경 */
-  border: none; /* 테두리 제거 */
-  box-shadow: none; /* 기본 쉐도우 제거 */
-  color: inherit; /* 글씨 색상 상속 */
-  padding-right: 2rem; /* 아이콘 공간 확보 */
-  appearance: none; /* 기본 드롭다운 화살표 제거 */
-  cursor: pointer; /* 마우스 포인터 변경 */
+.diary-filter-container {
+  display: flex;
+  justify-content: flex-end; /* 오른쪽 정렬 */
+  margin-left: auto; /* 오른쪽 끝으로 이동 */
+  gap: 30px; /* 필터 간 간격 */
+  padding-right: 20px; /* 화면 오른쪽 여백 */
 }
 
-.diary-list-filter__select:focus {
-  outline: none; /* 포커스 시 외곽선 제거 */
-}
-
-.diary-list-filter__dropdown {
+.diary-filter {
   position: relative;
+  width: fit-content;
+}
+
+.diary-filter__label {
   display: flex;
   align-items: center;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+  color: #333;
+  background: transparent;
 }
 
-.diary-list-filter__icon {
+.diary-filter__label--disabled {
+  cursor: not-allowed;
+  color: #ccc;
+}
+
+.diary-filter__label span {
+  margin-right: 5px;
+}
+
+.diary-filter__icon {
+  width: 12px;
+  height: 12px;
+  fill: #333;
+}
+
+.diary-filter__list {
   position: absolute;
-  right: 0.75rem;
-  pointer-events: none; /* 클릭 방지 */
-  width: 1rem;
-  height: 1rem;
-  fill: #888; /* 기본 색상 */
-  transition: fill 0.2s ease;
+  top: 100%;
+  right: 0; /* 드롭다운 오른쪽 정렬 */
+  z-index: 1000;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.diary-list-filter__select:focus + .diary-list-filter__icon {
-  fill: #555; /* 포커스 시 색상 변경 */
+.diary-filter__item {
+  padding: 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.diary-filter__item:hover {
+  background-color: #f0f0f0;
 }

@@ -15,13 +15,18 @@ export const createDiary = createAsyncThunk(
 
 export const getDiaryList = createAsyncThunk(
   "diary/getDiaryList",
-  async (page, { rejectWithValue }) => {
+  async ({ page = 1, year = "", month = "" } = {}, { rejectWithValue }) => {
     try {
-      const response = await api.get(`/diary?page=${page}`);
-      console.log("API Response:", response.data);
+      const query = [`page=${encodeURIComponent(page)}`];
+      if (year) query.push(`year=${encodeURIComponent(year)}`);
+      if (month) query.push(`month=${encodeURIComponent(month)}`);
+      console.log("Generated URL:", `/diary?${query.join("&")}`);
+      const response = await api.get(`/diary?${query.join("&")}`);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(
+        error.response?.data || "Failed to fetch diaries."
+      );
     }
   }
 );
@@ -64,18 +69,34 @@ export const deleteDiary = createAsyncThunk(
   }
 );
 
+export const getFilterOptions = createAsyncThunk(
+  "diary/getFilterOptions",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get("/diary/filters");
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || "Failed to fetch filter options."
+      );
+    }
+  }
+);
+
 const diarySlice = createSlice({
   name: "diary",
   initialState: {
     loading: false,
     error: "",
     diaryList: [],
+    filter: { year: "", month: "" },
     deletedDiaryList: [],
     selectedDiary: null,
     currentPage: 1,
     totalPages: 1,
     deletedTotalPageNum: 1,
     success: false,
+    filterOptions: { years: [], months: [] },
   },
   reducers: {
     setSelectedDiary: (state, action) => {
@@ -112,13 +133,15 @@ const diarySlice = createSlice({
       .addCase(getDiaryList.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
-        state.diaryList = [...state.diaryList, ...action.payload.data];
-        state.currentPage = action.payload.currentPage;
-        state.totalPages = action.payload.totalPages;
+        const { data = [], currentPage = 1, totalPages = 1 } = action.payload;
+        state.diaryList = [...state.diaryList, ...data];
+        state.currentPage = currentPage;
+        state.totalPages = totalPages;
       })
       .addCase(getDiaryList.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to fetch diaries.";
+        state.diaryList = [];
       })
       .addCase(getDiaryDetail.pending, (state) => {
         state.loading = true;
@@ -166,6 +189,19 @@ const diarySlice = createSlice({
         state.loading = false;
         state.success = false;
         state.error = action.payload || "Failed to delete diary.";
+      })
+      .addCase(getFilterOptions.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getFilterOptions.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.filterOptions = action.payload;
+      })
+      .addCase(getFilterOptions.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to fetch filter options.";
+        state.filterOptions = { years: [], months: [] };
       });
   },
 });

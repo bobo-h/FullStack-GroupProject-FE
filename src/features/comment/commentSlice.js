@@ -31,7 +31,7 @@ export const addChatbotComment = createAsyncThunk(
   async (formData, diaryId, { catPersonality }, { rejectWithValue }) => {
     try {
       const response = await api.post(
-        `/diary/${diaryId}`,
+        `/comment/${diaryId}`,
         formData,
         catPersonality
       );
@@ -80,7 +80,7 @@ export const deleteUserComment = createAsyncThunk(
   "diary/deleteUserComment",
   async (diaryId, commentId, { rejectWithValue }) => {
     try {
-      const response = await api.delete(`/diary/${diaryId}/${commentId}`);
+      const response = await api.delete(`/comment/${diaryId}/${commentId}`);
       if (response.status !== 200) throw new Error(response.error);
     } catch (error) {
       return rejectWithValue(error.error);
