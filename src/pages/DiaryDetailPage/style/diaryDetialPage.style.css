@@ -1,0 +1,34 @@
+
+.diary-detail-row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .diary-detail {
+    flex: 2;
+    background-color: #FEFAE0;
+    height: 100vh;
+  }
+  
+  .comment-area-content {
+    flex: 1;
+    padding: 2%; 
+    background-color: #b99470;
+    height: 100vh;
+    border-radius: 1rem;
+    margin: 2%;
+  }
+
+  @media (max-width: 1600px) {
+    .diary-detail {
+      flex: 1 1 100%;
+      padding: 0; 
+      height: 100%;
+      
+    }
+    .comment-area-content{
+        padding: 3%; 
+        margin: 5%;
+    }
+  }
+  

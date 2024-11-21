@@ -20,7 +20,7 @@ const CommentArea = ({ diaryId }) => {
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div>
+    <div className="comment-area-list">
       {comments && comments.length > 0 ? (
         <>
           <Comment comments={comments} />
