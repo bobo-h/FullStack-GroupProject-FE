@@ -33,19 +33,38 @@ const CommentForm = ({ comment, lastReplyId }) => {
   };
 
   return (
+    // <Container>
+    //   <Row>
+    //     
+    //     <Col>
+    //       <Form onSubmit={handleSubmit}>
+    //         <Form.Group controlId="commentInput">
+    //           <Form.Control
+    //             type="text"
+    //             placeholder="댓글 추가..."
+    //             value={reply}
+    //             onChange={(e) => setReply(e.target.value)}
+    //           />
+    //         </Form.Group>
+    //         <button variant="primary" type="submit" className="mt-2 send-icon">
+    //           <i class="ri-send-plane-fill"></i>
+    //         </button>
+    //       </Form>
+    //     </Col>
+    //   </Row>
+    // </Container>
     <Container>
-      <Row>
-        <Col lg={2}>
-          {/* 유저이미지 */}
-          <img
-            alt="User"
-            src={user?.profileImage ? user.profileImage : userDefaultLogo}
-            width={50}
-          />
-        </Col>
-        <Col>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="commentInput">
+      <Form onSubmit={handleSubmit}>
+        <Row className="align-items-center">
+          <Col lg={2}>
+            <img
+              alt="User"
+              src={user?.profileImage ? user.profileImage : userDefaultLogo}
+              width={50}
+            />
+          </Col>
+          <Col lg={8}>
+            <Form.Group controlId="commentInput" className="mb-0">
               <Form.Control
                 type="text"
                 placeholder="댓글 추가..."
@@ -53,13 +72,20 @@ const CommentForm = ({ comment, lastReplyId }) => {
                 onChange={(e) => setReply(e.target.value)}
               />
             </Form.Group>
-            <Button variant="primary" type="submit" className="mt-2">
-              등록
-            </Button>
-          </Form>
-        </Col>
-      </Row>
+          </Col>
+          <Col lg={1} className="text-end">
+            <button
+              variant="primary"
+              type="submit"
+              className="send-icon d-flex align-items-center justify-content-center"
+            >
+              <i className="ri-send-plane-fill"></i>
+            </button>
+          </Col>
+        </Row>
+      </Form>
     </Container>
+
   );
 };
 

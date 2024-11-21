@@ -3,10 +3,12 @@ import { Container, Col, Row, Form } from "react-bootstrap";
 import "../style/comment.style.css";
 import { Link } from "react-router-dom";
 import CommentReply from "./CommentReply";
+import CommentForm from "./CommentForm";
 
 // 댓글
 const Comment = ({ comments }) => {
   const [expandedComments, setExpandedComments] = useState({});
+  const [lastReplyId, setLastReplyId] = useState(null);
 
   // "더보기" 또는 "숨기기" 클릭 핸들러
   const toggleReplies = (commentId) => {
@@ -31,18 +33,19 @@ const Comment = ({ comments }) => {
             </Col>
             <Col className="comment__area">
               <Row>
-                <div>{comment?.chatbotId?.name}</div>
+                <div className="chatbot-name">{comment?.chatbotId?.name}</div>
               </Row>
               <Row>
                 <div>{comment.content}</div>
               </Row>
-              <Row>
+              <Row >
                 <Link
                   to="#"
                   onClick={() => toggleReplies(comment._id)}
                   className="comment__toggle-link"
                 >
-                  {expandedComments[comment._id] ? "숨기기" : "더보기"}
+                  {expandedComments[comment._id] 
+                  ? "--- 숨기기 ------------" : "--- 댓글 n개 더보기 ----"}
                 </Link>
               </Row>
 
@@ -53,8 +56,13 @@ const Comment = ({ comments }) => {
                 </div>
               )}
             </Col>
+            {expandedComments[comment._id] 
+              ? <CommentForm  comment={comment} lastReplyId={lastReplyId}/> 
+              : "" 
+            }
           </Row>
         ))}
+              
       </Container>
     </div>
   );
