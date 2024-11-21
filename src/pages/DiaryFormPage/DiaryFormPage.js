@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, Row, Col } from "react-bootstrap";
 import Button from "./../../common/components/Button";
+import CustomModal from "../../common/components/CustomModal";
 import CloudinaryUploadWidget from "../../utils/CloudinaryUploadWidget";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -9,12 +10,10 @@ import {
   updateDiary,
 } from "../../features/diary/diarySlice";
 import { fetchAllMoods } from "../../features/mood/moodSlice";
-import { useParams, useNavigate } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { useParams } from "react-router-dom";
 
 const DiaryFormPage = () => {
   const { diaryId } = useParams();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [formValues, setFormValues] = useState({
@@ -24,6 +23,9 @@ const DiaryFormPage = () => {
     image: "",
     content: "",
   });
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState(null);
 
   const { moodList = [], loading: moodLoading } = useSelector(
     (state) => state.mood || {}
@@ -41,7 +43,9 @@ const DiaryFormPage = () => {
   useEffect(() => {
     if (diaryId && selectedDiary) {
       setFormValues({
-        selectedDate: selectedDiary.selectedDate || "",
+        selectedDate: selectedDiary.selectedDate
+          ? new Date(selectedDiary.selectedDate).toISOString().split("T")[0]
+          : "",
         mood: selectedDiary.mood || "",
         title: selectedDiary.title || "",
         image: selectedDiary.image || "",
@@ -61,37 +65,51 @@ const DiaryFormPage = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setModalMessage(
+      diaryId
+        ? "Are you sure you want to update this diary with these details?"
+        : "Are you sure you want to register this diary?"
+    );
+    setShowConfirmModal(true); // 첫 번째 모달 표시
+  };
 
+  const handleConfirmSubmit = (event) => {
     const payload = { ...formValues };
 
-    if (diaryId) {
-      dispatch(updateDiary({ diaryId, payload }))
-        .unwrap()
-        .then(() => {
-          alert("Diary updated successfully!");
-          navigate(`/diaries/${diaryId}`);
-        })
-        .catch((error) => {
-          console.error("Failed to update diary:", error);
-          alert(
-            `Failed to update diary: ${error.message || "An error occurred."}`
-          );
-        });
-    } else {
-      dispatch(createDiary(payload))
-        .unwrap()
-        .then(() => {
-          alert("Diary created successfully!");
-          navigate("/diaries");
-        })
-        .catch((error) => {
-          alert(`Failed to create diary: ${error}`);
-        });
-    }
+    const action = diaryId
+      ? updateDiary({ diaryId, payload })
+      : createDiary(payload);
+
+    dispatch(action)
+      .unwrap()
+      .then(() => {
+        setModalMessage(
+          diaryId
+            ? "The diary has been successfully updated."
+            : "The diary has been successfully registered."
+        );
+        setShowConfirmModal(false);
+        setShowSuccessModal(true);
+      })
+      .catch((error) => {
+        console.error("Failed to submit diary:", error);
+        setModalMessage(
+          `Failed to ${diaryId ? "update" : "create"} diary: ${
+            error.message || "An error occurred."
+          }`
+        );
+        setShowConfirmModal(false);
+      });
   };
 
   const handleImageUpload = (url) => {
     setFormValues((prev) => ({ ...prev, image: url }));
+  };
+
+  const handleClose = () => {
+    setModalMessage(null);
+    setShowConfirmModal(false);
+    setShowSuccessModal(false);
   };
 
   return (
@@ -184,6 +202,22 @@ const DiaryFormPage = () => {
 
           <Button type="submit">{diaryId ? "Update" : "Submit"}</Button>
         </Form>
+      )}
+      {showConfirmModal && (
+        <CustomModal
+          message={modalMessage}
+          onClose={handleClose} // 취소 버튼
+          onConfirm={handleConfirmSubmit} // Redux API 호출
+          showCancelButton={true}
+        />
+      )}
+      {showSuccessModal && (
+        <CustomModal
+          message={modalMessage}
+          onClose={handleClose} // 단순히 모달 닫기
+          redirectTo={diaryId ? `/diaries/${diaryId}` : "/diaries"}
+          showCancelButton={false}
+        />
       )}
     </div>
   );
