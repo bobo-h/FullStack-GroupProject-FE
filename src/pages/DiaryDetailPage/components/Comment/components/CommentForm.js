@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "../../../../../common/components/Button";
 import { addUserComment } from "../../../../../features/comment/commentSlice";
+import userDefaultLogo from "../../../../../assets/userDefaultLogo.png";
 
 const CommentForm = ({ comment, lastReplyId }) => {
   const [reply, setReply] = useState("");
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+
+  console.log("user", user);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,8 +36,12 @@ const CommentForm = ({ comment, lastReplyId }) => {
     <Container>
       <Row>
         <Col lg={2}>
-          유저 이미지
-          {/* <img alt="User" src="" /> */}
+          {/* 유저이미지 */}
+          <img
+            alt="User"
+            src={user?.profileImage ? user.profileImage : userDefaultLogo}
+            width={50}
+          />
         </Col>
         <Col>
           <Form onSubmit={handleSubmit}>

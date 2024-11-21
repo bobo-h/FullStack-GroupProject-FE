@@ -52,27 +52,34 @@ const CommentReply = ({ comment }) => {
   }
   const renderReplies = (replies) => {
     return replies && replies.length > 0 ? (
-      <div style={{ marginLeft: "20px" }}>
+      <>
         {replies.map((nestedReply) => (
           <Row key={nestedReply._id} className="comment__reply-style">
             <Col>
-              <div>{nestedReply.content}</div>
+              <div>
+                {nestedReply.userId?.name || nestedReply.chatbotId?.name}
+                {": "}
+                {nestedReply.content}
+              </div>
               {renderReplies(nestedReply.replies)} {/* 재귀적으로 호출 */}
             </Col>
           </Row>
         ))}
-      </div>
+      </>
     ) : null;
   };
 
   return (
     <div>
-      <Container>
+      <Container className="comment-container">
         {comment.replies && comment.replies.length > 0 ? (
           comment.replies.map((reply) => (
             <Row key={reply._id} className="comment__reply-style">
               <Col>
-                <div>{reply.content}</div>
+                <div>
+                  {reply.userId?.name || reply.chatbotId?.name} {": "}
+                  {reply.content}
+                </div>
                 {/* 재귀적으로 reply 안에 reply가 있다면 그 값을 가져오기 */}
                 {renderReplies(reply.replies)} {/* 재귀적으로 호출 */}
               </Col>
