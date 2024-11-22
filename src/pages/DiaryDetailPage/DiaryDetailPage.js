@@ -5,7 +5,7 @@ import { getDiaryDetail, clearError } from "../../features/diary/diarySlice";
 import DiaryDetail from "./components/DiaryDetail";
 import CommentArea from "./components/Comment/CommentArea";
 import { Spinner, Container, Col, Row } from "react-bootstrap";
-import "./style/diaryDetialPage.style.css"
+import "./style/diaryDetialPage.style.css";
 
 const DiaryDetailPage = () => {
   const { diaryId } = useParams();
@@ -25,10 +25,10 @@ const DiaryDetailPage = () => {
   return (
     <Container>
       <Row className="diary-detail-row">
-        <Col className="diary-detail" >
+        <Col className="diary-detail">
           <DiaryDetail />
         </Col>
-        <Col className="comment-area-content" >
+        <Col className="comment-area-content">
           <CommentArea diaryId={diaryId} />
         </Col>
       </Row>

@@ -11,17 +11,16 @@ import "../style/diaryList.style.css";
 const DiaryList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { diaryList, loading, currentPage, totalPages } = useSelector(
+  const { diaryList, loading, currentPage, totalPages, error } = useSelector(
     (state) => state.diary
   );
 
   const observerRef = useRef();
 
-  // 초기 데이터 로드
   useEffect(() => {
     dispatch(getDiaryList({ page: 1 }));
     return () => {
-      dispatch(clearDiaryList()); // 컴포넌트 언마운트 시 상태 초기화
+      dispatch(clearDiaryList());
     };
   }, [dispatch]);
 
@@ -57,13 +56,18 @@ const DiaryList = () => {
     };
   }, [handleObserver]);
 
-  // 빈 상태 처리
-  if (!diaryList || diaryList.length === 0) {
-    return <div>No diaries found for the selected filters.</div>;
-  }
-
   return (
     <Container className="diary-list">
+      {error && (
+        <div className="diary-list__status diary-list__status--error">
+          잠시 후 다시 시도해 주세요.
+        </div>
+      )}
+      {!loading && !error && (!diaryList || diaryList.length === 0) && (
+        <div className="diary-list__status diary-list__status--empty">
+          일기 속에서 나만의 고양이와 이야기를 나누어 보아요!
+        </div>
+      )}
       {diaryList.map((group) => (
         <div key={group.yearMonth}>
           <h5 className="text-muted">{group.yearMonth}</h5>
@@ -94,6 +98,11 @@ const DiaryList = () => {
                   </div>
                   <h5 className="diary-list__item-title mb-0 ms-2">
                     {diary.title}
+                    {diary.isEdited && (
+                      <span className="diary-list__item-edited ms-2">
+                        (수정됨)
+                      </span>
+                    )}
                   </h5>
                 </div>
                 <p className="diary-list__item-description text-muted mb-0">
