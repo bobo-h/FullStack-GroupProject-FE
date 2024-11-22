@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Alert from "../../../../../common/components/Alert";
+import CustomModal from "../../../../../common/components/CustomModal";
 import "../style/adminMood.style.css";
 import Button2 from '../../../../../common/components/Button2';
 import { useDispatch } from 'react-redux';
@@ -10,6 +11,8 @@ const AdminMoodCard = ({ mood, setMode, setShowDialog }) => {
   const dispatch = useDispatch();
   const [showAlert, setShowAlert] = useState(false);
   const [alertContent, setAlertContent] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState("");
 
   const handleClickEditItem = () => {
     // Edit 모드로 설정하고 다이얼로그 열기
@@ -27,17 +30,21 @@ const AdminMoodCard = ({ mood, setMode, setShowDialog }) => {
       .then(() => {
         setAlertContent("무드 삭제 완료하였습니다!");
         setShowAlert(true);
+        setModalContent("무드 삭제 완료하였습니다!");
+        setShowModal(true);
       })
       .catch((error) => {
         setAlertContent("무드 삭제 실패!");
         setShowAlert(true);
+        setModalContent("무드 삭제 실패!");
+        setShowModal(true);
       });
 
   };
 
   return (
     <div className='mood-table-content'>
-      {showAlert && (
+      {/* {showAlert && (
         <Alert
           message={alertContent}
           onClose={() => {
@@ -46,6 +53,18 @@ const AdminMoodCard = ({ mood, setMode, setShowDialog }) => {
             dispatch(getMoodList({ page: 1 }));
           }}
           redirectTo="/admin"
+        />
+      )} */}
+      {showModal && (
+        <CustomModal
+          message={modalContent}
+          redirectTo="/admin"
+          onClose={() => {
+            setShowModal(false);
+            setShowDialog(false);
+            dispatch(getMoodList({ page: 1 }));
+          }}
+          showCancelButton={false} // 취소 버튼 불필요
         />
       )}
       <Container className="mood-card-content">

@@ -57,6 +57,8 @@
     align-items: center; /* 가로 중앙 정렬 */
     padding: 20px; /* 콘텐츠 패딩 */
     gap: 20px; /* 요소 간 간격 */
+    /* 추가 */
+    margin-left: 300px;
   }
   .userInfo-area {
     width: 100%; /* 넓이를 부모 컨테이너에 맞춤 */
@@ -120,6 +122,7 @@
 
     .mypage-area {
       width: 100vw;
+      margin-left: 0;
     }
     .userInfo-area {
       margin-top: 50px;
@@ -146,7 +149,8 @@
     margin-top: 15px;
   }
 
-  .sidebar-item {
+  .sidebar-item__title,
+  .sidebar-item__menu {
     color: #5f6f52;
     font-weight: bold;
     padding: 10px 10px;

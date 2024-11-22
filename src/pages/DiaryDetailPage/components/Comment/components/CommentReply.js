@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import CommentForm from "./CommentForm";
+import "../style/comment.style.css"
 
 //대댓글
 const CommentReply = ({ comment }) => {
@@ -59,15 +60,15 @@ const CommentReply = ({ comment }) => {
   };
 
   return (
-    <div>
-      <Container className="comment-container">
+    <div  >
+      <Container >
         {comment.replies && comment.replies.length > 0 ? (
           comment.replies.map((reply) => (
             <Row key={reply._id} className="comment__reply-style">
               <Col>
                 <div>
                   {reply.userId?.name || reply.chatbotId?.name || "Anonymous"}{" "}
-                  {": "}
+                  {" : "}
                   {reply.content || "No content provided"}
                 </div>
                 {/* 재귀적으로 reply 안에 reply가 있다면 그 값을 가져오기 */}
@@ -76,11 +77,12 @@ const CommentReply = ({ comment }) => {
             </Row>
           ))
         ) : (
-          <div>대댓글이 없습니다.</div>
+          <div> 답글을 작성 해 주세요!</div>
         )}
+        </Container>
         {/* 댓글 작성 폼 */}
-        <CommentForm comment={comment} lastReplyId={lastReplyId} />
-      </Container>
+        {/* <CommentForm comment={comment} lastReplyId={lastReplyId} /> */}
+
     </div>
   );
 };

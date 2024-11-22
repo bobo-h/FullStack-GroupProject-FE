@@ -14,7 +14,7 @@ const MyPageLayout = ({ children }) => {
           </Col>
 
           {/* 메인 콘텐츠 영역 */}
-          <Col xs={12} md={9} className="mypage-area offset-md-3">
+          <Col xs={12} md={9} className="mypage-area">
             {children}
           </Col>
         </Row>

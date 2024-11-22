@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Form, Modal, Row, Col } from "react-bootstrap";
 import Alert from "../../../../../common/components/Alert";
+import CustomModal from "../../../../../common/components/CustomModal";
 import { useDispatch, useSelector } from "react-redux";
-import CloudinaryUploadWidget from "../../../../../utils/CloudinaryUploadWidget";
+import CloudinaryUploadWidget from "../../../..//../utils/CloudinaryUploadWidget";
 import {
   CATEGORY,
   DEFAULT_PRODUCT,
@@ -36,6 +37,8 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
   );
   const [showAlert, setShowAlert] = useState(false);
   const [alertContent, setAlertContent] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState("");
   const dispatch = useDispatch();
 
   // 성공 시 다이얼로그 닫기
@@ -71,10 +74,14 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
         .then(() => {
           setAlertContent("상품 생성 완료하였습니다!");
           setShowAlert(true);
+          setModalContent("상품 생성 완료하였습니다!");
+          setShowModal(true);
         })
         .catch((error) => {
           setAlertContent("상품 생성 실패!");
           setShowAlert(true);
+          setModalContent("상품 생성 실패!");
+          setShowModal(true);
         });
     } else {
       // 상품 수정하기
@@ -82,10 +89,14 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
         .then(() => {
           setAlertContent("상품 정보 변경되었습니다!");
           setShowAlert(true);
+          setModalContent("상품 정보 변경되었습니다!");
+          setShowModal(true);
         })
         .catch((error) => {
           setAlertContent("상품 정보 변경 실패!");
           setShowAlert(true);
+          setModalContent("상품 정보 변경 실패!");
+          setShowModal(true);
         });
     }
   };
@@ -122,7 +133,7 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
           <Alert variant="danger">{error}</Alert>
         </div>
       )}
-      {showAlert && (
+      {/* {showAlert && (
         <Alert
           message={alertContent}
           onClose={() => {
@@ -130,6 +141,17 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
             setShowDialog(false);
           }}
           redirectTo="/admin"
+        />
+      )} */}
+      {showModal && (
+        <CustomModal
+          message={modalContent}
+          redirectTo="/admin"
+          onClose={() => {
+            setShowModal(false);
+            setShowDialog(false);
+          }}
+          showCancelButton={false} // 취소 버튼 불필요
         />
       )}
       <Form className="form-container" onSubmit={handleSubmit}>
@@ -186,9 +208,8 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
           <img
             id="uploadedimage"
             src={formData.image || "#"} // 이미지가 없을 때 기본 이미지나 빈 값 사용
-            className={`upload-image mt-2 ${
-              formData.image ? "" : "blurred-image"
-            }`}
+            className={`upload-image mt-2 ${formData.image ? "" : "blurred-image"
+              }`}
             alt="uploadedimage"
           />
         </Form.Group>

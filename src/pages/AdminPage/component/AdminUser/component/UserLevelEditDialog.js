@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { editLevel } from "../../../../../features/admin/adminSlice";
 import {
@@ -7,6 +7,8 @@ import {
   clearStates,
 } from "../../../../../features/admin/adminSlice";
 import Alert from "../../../../../common/components/Alert";
+import Button from "../../../../../common/components/Button";
+import "../style/adminUser.style.css";
 
 const UserLevelEditDialog = ({ showDialog, setShowDialog, selectedUser }) => {
   const dispatch = useDispatch();
