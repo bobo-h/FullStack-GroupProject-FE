@@ -113,8 +113,10 @@ const DiaryFormPage = () => {
   };
 
   return (
-    <div className="container mt-4">
-      <h1 className="mb-4">{diaryId ? "Edit Diary" : "Write a Diary"}</h1>
+    <div className="container p-4">
+      <h1 className="mb-5 text-center">
+        {diaryId ? "Edit Diary" : "Write a Diary"}
+      </h1>
       {diaryLoading ? (
         <p>Loading...</p>
       ) : (
@@ -171,7 +173,7 @@ const DiaryFormPage = () => {
           </Form.Group>
 
           <Form.Group controlId="image" className="mb-3">
-            <Form.Label>Attach an Image</Form.Label>
+            <Form.Label className="pe-2">Attach an Image</Form.Label>
             <CloudinaryUploadWidget uploadImage={handleImageUpload} />
             {formValues.image && (
               <img
@@ -200,7 +202,11 @@ const DiaryFormPage = () => {
             />
           </Form.Group>
 
-          <Button type="submit">{diaryId ? "Update" : "Submit"}</Button>
+          <Form.Group as={Row} className="mt-4">
+            <Col className="d-flex justify-content-end">
+              <Button type="submit">{diaryId ? "Update" : "Submit"}</Button>
+            </Col>
+          </Form.Group>
         </Form>
       )}
       {showConfirmModal && (
