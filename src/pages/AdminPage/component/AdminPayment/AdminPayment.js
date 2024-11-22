@@ -8,7 +8,6 @@ import AdminPaymentCard from "./component/AdminPaymentCard";
 import { getOrderList } from "../../../../features/order/orderSlice";
 import "./style/adminPayment.style.css";
 import LoadingSpinner from "../../../../common/components/LoadingSpinner";
-import OrderCard from "./component/OrderCard";
 import ReactPaginate from "react-paginate";
 import AdminDashboard from "./component/AdminDashboard";
 
@@ -19,14 +18,15 @@ const AdminPaymentPage = () => {
   const { orderList, totalPageNum, loading } = useSelector(
     (state) => state.order
   );
-  const [mode, setMode] = useState("new");
+  // const [mode, setMode] = useState("new");
   const [showModal, setShowModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedSearchType, setSelectedSearchType] = useState("All");
-  const [filteredOrders, setFilteredOrders] = useState([]);
   const [searchQuery, setSearchQuery] = useState({
     page: query.get("page") || 1,
-    ordernum: query.get("ordernum") || "",
+    ordernum: "",
+    orderitem: "",
+    orderemail: "",
   });
   const [searchParam, setSearchParam] = useState("");
 
@@ -34,33 +34,37 @@ const AdminPaymentPage = () => {
     setShowModal(true);
   };
 
-  useEffect(() => {
-    dispatch(getOrderList({ ...searchQuery }));
-  }, [query]);
+  // URL 업데이트 및 query 초기화
+  const updateQueryParams = (newQuery) => {
 
-  //주문도 필터링..?
-  // 필터링 카테고리 옵션 선택 시 검색박스 등장
-  // 검색박스에 검색어 없이 검색버튼 클릭 시 해당 카테고리의 전 항목 출력
-  // 검색박스에 검색어 포함 검색버튼 클릭 시 해당 카테고리의 검색 결과 항목 출력
-  // ex. 카테고리 User 선택 후 검색어 없이 클릭 -> 구매내역이 있는 전 유저 출력
-  // ex. 카테고리 Product 선택 후 검색어 "스노우" -> "스노우" 상품이 구매된 리스트 출력
+    if (newQuery.ordernum === '') { delete newQuery.ordernum; }
+    if (newQuery.orderemail === '') { delete newQuery.orderemail; }
+    if (newQuery.orderitem === '') { delete newQuery.orderitem; }
+    
+    const params = new URLSearchParams(newQuery);
 
-  // useEffect(() => {
-  //   if (searchQuery.ordernum === "") {
-  //     delete searchQuery.ordernum;
-  //   }
-  //   const params = new URLSearchParams(searchQuery);
-  //   const queryString = params.toString();
-
-  //   navigate("?" + queryString);
-  // }, [searchQuery]);
-
-  const handlePageClick = ({ selected }) => {
-    setSearchQuery({ ...searchQuery, page: selected + 1 });
+    navigate("?" + params.toString());
   };
 
-  const handleClose = () => {
-    setShowModal(false);
+  // 페이지 진입 시 query 초기화
+  useEffect(() => {
+    setSearchQuery({
+      page: 1,
+      ordernum: "",
+      orderitem: "",
+      orderemail: "",
+    });
+    updateQueryParams({});
+  }, []);
+
+  useEffect(() => {
+    dispatch(getOrderList({ ...searchQuery }));
+  }, [searchQuery]);
+
+  const handlePageClick = ({ selected }) => {
+    const updatedQuery = { ...searchQuery, page: selected + 1 };
+    setSearchQuery(updatedQuery);
+    updateQueryParams(updatedQuery);
   };
 
   const filteredPayments = orderList.filter((payment) => {
@@ -75,6 +79,17 @@ const AdminPaymentPage = () => {
   const handleSearchTypeChange = (e) => {
     setSelectedSearchType(e.target.value);
     setSearchParam("");
+
+    if (e.target.value === "All") {
+      // 초기 상태로 설정
+      setSearchQuery({
+        page: 1,
+        ordernum: "",
+        orderitem: "",
+        orderemail: "",
+      });
+      updateQueryParams({});
+    }
   };
 
   const handleSearchInputChange = (e) => {
@@ -82,31 +97,41 @@ const AdminPaymentPage = () => {
   };
 
   const handleSearchClick = () => {
-    let filtered = filteredPayments;
-    if (selectedSearchType !== "All") {
-      filtered = filtered.filter((order) => {
-        if (selectedSearchType === "User Email") {
-          return order.email.toLowerCase().includes(searchParam.toLowerCase());
-        } else if (selectedSearchType === "Order Item") {
-          return order.productName
-            .toLowerCase()
-            .includes(searchParam.toLowerCase());
-        }
-        return false;
-      });
+
+    const updatedQuery = { ...searchQuery, page: 1 };
+
+    if (selectedSearchType === "User Email") {
+      updatedQuery.orderemail = searchParam;
+      updatedQuery.orderitem = "";
+      updatedQuery.ordernum = "";
+    } else if (selectedSearchType === "Order Item") {
+      updatedQuery.orderitem = searchParam;
+      updatedQuery.orderemail = "";
+      updatedQuery.ordernum = "";
+    } else if (selectedSearchType === "Order Num") {
+      updatedQuery.ordernum = searchParam;
+      updatedQuery.orderemail = "";
+      updatedQuery.orderitem = ""
+    } else {
+      updatedQuery.orderemail = "";
+      updatedQuery.orderitem = "";
+      updatedQuery.ordernum = "";
     }
-    setFilteredOrders(filtered);
+
+    setSearchQuery(updatedQuery);
+    updateQueryParams(updatedQuery);
+
   };
 
-  useEffect(() => {
-    if (loading === false) {
-      if ((selectedCategory === "All") & (selectedSearchType === "All")) {
-        setFilteredOrders(orderList);
-      } else {
-        setFilteredOrders(filteredPayments);
-      }
-    }
-  }, [loading, selectedSearchType, selectedCategory, searchParam]);
+  // useEffect(() => {
+  //   if (loading === false) {
+  //     if ((selectedCategory === "All") & (selectedSearchType === "All")) {
+  //       setFilteredOrders(orderList);
+  //     } else {
+  //       setFilteredOrders(filteredPayments);
+  //     }
+  //   }
+  // }, [loading, selectedSearchType, selectedCategory, searchParam]);
 
   return (
     <div className="admin-payment-page">
@@ -139,6 +164,7 @@ const AdminPaymentPage = () => {
                 <option>All</option>
                 <option>Order Item</option>
                 <option>User Email</option>
+                <option>Order Num</option>
               </Form.Select>
             </Form.Group>
           </Col>
@@ -171,8 +197,8 @@ const AdminPaymentPage = () => {
         ) : (
           <Row className="table-area">
             <AdminPaymentTable className="unser-line" />
-            {filteredOrders && filteredOrders.length > 0 ? (
-              filteredOrders.map((payment) => (
+            {filteredPayments && filteredPayments.length > 0 ? (
+              filteredPayments.map((payment) => (
                 <AdminPaymentCard
                   key={payment._id}
                   payment={payment} // 개별 `product` 객체를 `ProductCard`에 전달
@@ -214,7 +240,7 @@ const AdminPaymentPage = () => {
             <Modal.Title>Dashboard</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <AdminDashboard showModal={showModal}/>
+            <AdminDashboard showModal={showModal} />
           </Modal.Body>
           <Modal.Footer>
             <Button onClick={() => setShowModal(false)}>Close</Button>
