@@ -1,4 +1,8 @@
 .admin-user-page {
+  .admin-user-page__btn {
+    font-size: 15px;
+    padding: 5px 10px;
+  }
   .total-user-num {
     text-align: end;
     margin-top: 10px;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Form, Tab, Tabs, Button } from "react-bootstrap";
+import { Container, Row, Col, Form, Tab, Tabs } from "react-bootstrap";
 import UserTable from "./component/AdminUserTable";
 import UserCard from "./component/AdminUserCard";
 import UserLevelEditDialog from "./component/UserLevelEditDialog";
@@ -12,6 +12,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import Button2 from "../../../../common/components/Button2";
 import Alert from "../../../../common/components/Alert";
+import Button from "./../../../../common/components/Button";
 
 const AdminUser = () => {
   const [sortBy, setSortBy] = useState("");
@@ -82,7 +83,7 @@ const AdminUser = () => {
           <Col md={2}>
             <h2>User</h2>
           </Col>
-          <Col md={2}>
+          <Col xs={9} md={2}>
             <Form.Control
               type="text"
               placeholder="이메일 또는 이름으로 검색"
@@ -90,8 +91,11 @@ const AdminUser = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </Col>
-          <Col md={1}>
-            <Button variant="primary" onClick={handleSearchClick}>
+          <Col xs={3} md={1}>
+            <Button
+              className="admin-user-page__btn"
+              onClick={handleSearchClick}
+            >
               검색
             </Button>
           </Col>
@@ -132,9 +136,7 @@ const AdminUser = () => {
 
             {/* 탈퇴 회원 탭 */}
             <Tab eventKey="eligibleUsers" title="탈퇴회원 (90일이상)">
-              <Button2 onClick={handleDeleteAllEligibleUsers}>
-                전체 삭제
-              </Button2>
+              <Button onClick={handleDeleteAllEligibleUsers}>전체 삭제</Button>
               <UserTable />
               <UserCard
                 sortBy={sortBy}
