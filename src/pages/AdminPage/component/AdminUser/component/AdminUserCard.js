@@ -46,27 +46,32 @@ const UserCard = ({ sortBy, userType, onEditUser }) => {
         {data && data.length > 0 ? (
           data.map((user, index) => (
             <Row className="mb-4">
-              <Col md={1} className="d-flex align-items-center">
+              <Col xs={1} md={1} className="d-flex align-items-center">
                 {index + 1}
               </Col>
-              <Col md={3} className="d-flex align-items-center">
+              <Col xs={3} md={3} className="d-flex align-items-center">
                 {user.name}
               </Col>
-              <Col md={3} className="d-flex align-items-center">
+              <Col xs={4} md={4} className="d-flex align-items-center email">
                 {user.email}
               </Col>
-              <Col md={2} className="d-flex align-items-center">
+              <Col xs={3} md={2} className="d-flex align-items-center">
                 {user.level}
               </Col>
               <Col
-                md={3}
+                xs={1}
+                md={2}
                 className="d-flex align-items-center justify-content-center"
               >
                 {userType !== "ineligibleUser" &&
                   userType !== "eligibleUser" && (
-                    <Button2 onClick={() => onEditUser(user)}>수정</Button2>
+                    <Button2
+                      className="user-table-content__btn"
+                      onClick={() => onEditUser(user)}
+                    >
+                      수정
+                    </Button2>
                   )}
-                {/* <Button2>삭제</Button2> */}
               </Col>
             </Row>
           ))
