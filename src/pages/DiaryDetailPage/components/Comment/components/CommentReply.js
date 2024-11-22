@@ -45,9 +45,11 @@ const CommentReply = ({ comment }) => {
           <Row key={nestedReply._id} className="comment__reply-style">
             <Col>
               <div>
+                <span className="comment__reply-name">  
                 {nestedReply.userId?.name ||
                   nestedReply.chatbotId?.name ||
                   "Anonymous"}
+                </span>
                 {": "}
                 {nestedReply.content || "No content provided"}
               </div>
@@ -67,9 +69,11 @@ const CommentReply = ({ comment }) => {
             <Row key={reply._id} className="comment__reply-style">
               <Col>
                 <div>
-                  {reply.userId?.name || reply.chatbotId?.name || "Anonymous"}{" "}
+                  <span className="comment__reply-name">
+                    {reply.userId?.name || reply.chatbotId?.name || "Anonymous"}
+                  </span>
                   {" : "}
-                  {reply.content || "No content provided"}
+                  <span>{reply.content || "No content provided"}</span>
                 </div>
                 {/* 재귀적으로 reply 안에 reply가 있다면 그 값을 가져오기 */}
                 {renderReplies(reply.replies)} {/* 재귀적으로 호출 */}

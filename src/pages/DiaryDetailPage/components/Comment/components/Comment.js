@@ -45,7 +45,7 @@ const Comment = ({ comments }) => {
                   className="comment__toggle-link"
                 >
                   {expandedComments[comment._id] 
-                  ? "--- 숨기기 ------------" : "--- 댓글 n개 더보기 ----"}
+                  ? "--- 숨기기 ------------" : "--- 댓글 더보기 -------"}
                 </Link>
               </Row>
 

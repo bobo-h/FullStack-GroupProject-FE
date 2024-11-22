@@ -180,10 +180,9 @@ const AdminPaymentPage = () => {
           </Col>
           <Col md={2}>
             {selectedSearchType !== "All" && (
-              <Button onClick={handleSearchClick}>Search</Button>
+              <Button onClick={handleSearchClick}><i class="ri-search-line"></i></Button>
             )}
           </Col>
-
           <Col md={2} >
             <Button onClick={handleClickDashboard}>Dashboard</Button>
           </Col>

@@ -1,8 +1,12 @@
 .comment-area-list {
   display: flex;
   flex-direction: column;
-  /* Align all content to the right */
-   /* Ensure the text inside the element is aligned to the right */
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.comment-area-list::-webkit-scrollbar {
+  display : none;
 }
 .comment__general-style {
   background-color: var(--primary-color-ivory); 
@@ -46,6 +50,38 @@
   font-weight: bold;
 }
 
+.comment__reply-name {
+  font-weight: bold; 
+}
+
+.comment-form-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.comment-user-img {
+  border-radius: 50%;
+}
+
+.comment-user-input {
+  width: 100%;
+}
+
+.send-icon {
+  border: none;
+  background-color: var(--primary-color-ivory);
+  font-size: 1.3rem;
+  color: var(--text-color-deepBrown);
+}
+
+.comment__reply-style{
+  margin-bottom: 2%;
+}
+
+
+
+
 
 @media (max-width: 1600px) {
 
@@ -59,5 +95,21 @@
       justify-content: center;
       margin: 0
     }
+
+
+    .comment-user-input{
+      width: 70%;
+    }
+
+    .align-items-center{
+      flex-direction: row;
+    }
+
+}
+
+@media (max-width: 800px){
   
+  .comment-user-img{
+    display : none;
+  }
 }

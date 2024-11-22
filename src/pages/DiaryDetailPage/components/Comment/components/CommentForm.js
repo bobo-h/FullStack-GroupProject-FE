@@ -33,39 +33,21 @@ const CommentForm = ({ comment, lastReplyId }) => {
   };
 
   return (
-    // <Container>
-    //   <Row>
-    //     
-    //     <Col>
-    //       <Form onSubmit={handleSubmit}>
-    //         <Form.Group controlId="commentInput">
-    //           <Form.Control
-    //             type="text"
-    //             placeholder="댓글 추가..."
-    //             value={reply}
-    //             onChange={(e) => setReply(e.target.value)}
-    //           />
-    //         </Form.Group>
-    //         <button variant="primary" type="submit" className="mt-2 send-icon">
-    //           <i class="ri-send-plane-fill"></i>
-    //         </button>
-    //       </Form>
-    //     </Col>
-    //   </Row>
-    // </Container>
     <Container>
       <Form onSubmit={handleSubmit}>
         <Row className="align-items-center">
-          <Col lg={2}>
+          <Col xs="auto">
             <img
               alt="User"
               src={user?.profileImage ? user.profileImage : userDefaultLogo}
               width={50}
+              className="comment-user-img"
             />
           </Col>
-          <Col lg={8}>
-            <Form.Group controlId="commentInput" className="mb-0">
+          <Col xs>
+            <Form.Group controlId="commentInput" className="mb-0 comment-input">
               <Form.Control
+                className="comment-user-input"
                 type="text"
                 placeholder="댓글 추가..."
                 value={reply}
@@ -73,7 +55,7 @@ const CommentForm = ({ comment, lastReplyId }) => {
               />
             </Form.Group>
           </Col>
-          <Col lg={1} className="text-end">
+          <Col xs="auto" className="text-end">
             <button
               variant="primary"
               type="submit"
