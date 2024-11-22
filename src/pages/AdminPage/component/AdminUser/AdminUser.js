@@ -59,9 +59,10 @@ const AdminUser = () => {
   // 검색어 변경 시 검색 로직 실행
   const handleSearchClick = () => {
     dispatch(searchUsers({ searchTerm, userType: activeTab })).then((res) => {
+      const results = res.payload;
       setSearchResults((prev) => ({
         ...prev,
-        [activeTab]: res.payload, // 활성화된 탭의 검색 결과만 업데이트
+        [activeTab]: results && results.length > 0 ? results : null, // 활성화된 탭의 검색 결과만 업데이트
       }));
     });
   };
