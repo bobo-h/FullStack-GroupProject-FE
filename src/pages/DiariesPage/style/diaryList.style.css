@@ -2,6 +2,15 @@
   margin: 50px auto 40px;
 }
 
+.diary-list__status {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 1.2rem;
+  height: 70vh;
+}
+
 .diary-list__group-title {
   color: var(--text-color-deepBrown);
 }
