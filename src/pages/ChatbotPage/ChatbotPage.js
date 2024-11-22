@@ -4,10 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { createChatbot } from "../../features/chatbot/chatbotSlice";
 import "./style/chatbot.style.css";
 import Button from "../../common/components/Button";
+import Button2 from "../../common/components/Button2";
 import PersonalityMBTI from "./component/PersonalityMBTI/PersonalityMBTI";
 import Alert from "../../common/components/Alert";
 import { getProductList } from "../../features/product/productSlice";
 import { updateChatbotJins } from "../../features/chatbot/chatbotSlice";
+import { useNavigate } from "react-router-dom";
 
 // ChatbotCreation 컴포넌트
 
@@ -24,6 +26,7 @@ const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
   const [redirectTo, setRedirectTo] = useState("")
   const [alertContent, setAlertContent] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { loading} = useSelector(
     (state) => state.chatbot
@@ -91,6 +94,12 @@ const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
     ? product.find((product) => product.defaultProduct === "Yes")
     : null;
 
+
+  const handleCancel = () => {
+    navigate("/");
+  };
+
+    
   useEffect(() => {
     console.log("showAlert:", showAlert);
     console.log("alertType:", alertType);
@@ -212,7 +221,7 @@ const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
                       //<PersonalityBox onPersonalitySelect={handlePersonalityChange}/>
                     )}
                   </Row>
-                  <Col className="personality-area">
+                  <Col className="personality-area btn-gap">
                     <Button
                       variant="primary"
                       type="submit"
@@ -225,6 +234,11 @@ const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
                         ? "수정하기"
                         : "입양하기"}
                     </Button>
+                    <Button2
+                      onClick={handleCancel}
+                    >
+                      취소
+                    </Button2>
                   </Col>
                 </Row>
               </Form.Group>

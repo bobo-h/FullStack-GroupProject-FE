@@ -136,57 +136,60 @@ const AdminPaymentPage = () => {
   return (
     <div className="admin-payment-page">
       <Container>
-        <Row>
-          <Col md={2}>
-            <h2>Payment History</h2>
-          </Col>
-          <Col md={2}>
-            <Form.Group controlId="categorySelect">
-              <Form.Label> Category </Form.Label>
-              <Form.Select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-              >
-                <option>All</option>
-                <option>고양이</option>
-                <option>배경지</option>
-              </Form.Select>
-            </Form.Group>
-          </Col>
+      <Row>
+        <Col md={7} className="d-flex align-items-center payment-title">
+          <h2 className="me-3 ">Payment History</h2>
+          <Button onClick={handleClickDashboard}>Dashboard</Button>
+        </Col>
 
-          <Col md={2}>
-            <Form.Group controlId="searchType">
-              <Form.Label>Search</Form.Label>
-              <Form.Select
-                value={selectedSearchType}
-                onChange={handleSearchTypeChange}
-              >
-                <option>All</option>
-                <option>Order Item</option>
-                <option>User Email</option>
-                <option>Order Num</option>
-              </Form.Select>
-            </Form.Group>
-          </Col>
-          <Col md={2}>
-            {selectedSearchType !== "All" && (
-              <Form.Control
-                type="text"
-                placeholder={`Search ${selectedSearchType}`}
-                value={searchParam}
-                onChange={handleSearchInputChange}
-              />
-            )}
-          </Col>
-          <Col md={2}>
-            {selectedSearchType !== "All" && (
-              <Button onClick={handleSearchClick}><i class="ri-search-line"></i></Button>
-            )}
-          </Col>
-          <Col md={2} >
-            <Button onClick={handleClickDashboard}>Dashboard</Button>
-          </Col>
-        </Row>
+        <Col md={6} className="d-flex align-items-center mb-3">
+          <span className="me-2" style={{ flexBasis: '15%' }}>Category:</span>
+          <Form.Group controlId="categorySelect" className="mb-0" style={{ flexBasis: '55%' }}>
+            <Form.Select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+            >
+              <option>All</option>
+              <option>고양이</option>
+              <option>배경지</option>
+            </Form.Select>
+          </Form.Group>
+        </Col>
+
+        <Col md={12} className="d-flex align-items-center mb-3">
+          <span className="me-2" style={{ flexBasis: '3%' }}>Search:</span>
+          <Form.Group controlId="searchType" className="mb-0" style={{ flexBasis: '29%' }}>
+            <Form.Select
+              value={selectedSearchType}
+              onChange={(e) => handleSearchTypeChange(e.target.value)}
+              className="w-100"
+            >
+              <option>All</option>
+              <option>Order Item</option>
+              <option>User Email</option>
+              <option>Order Num</option>
+            </Form.Select>
+          </Form.Group>
+          {selectedSearchType  !== "All"&& (
+            <>
+              <Col md={4} className="ps-0">
+                <Form.Control
+                  type="text"
+                  placeholder={`Search ${selectedSearchType}`}
+                  value={searchParam}
+                  onChange={handleSearchInputChange}
+                />
+              </Col>
+              <Col md={2} className="ps-0">
+                <Button onClick={handleSearchClick}>Search</Button>
+              </Col>
+            </>
+          )}
+
+        </Col>
+
+      </Row>
+
         {loading ? (
           <div className="text-align-center">
             <LoadingSpinner animation="border" role="status">

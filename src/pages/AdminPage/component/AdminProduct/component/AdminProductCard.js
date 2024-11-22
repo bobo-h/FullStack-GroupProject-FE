@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import Alert from "../../../../../common/components/Alert";
 import CustomModal from "../../../../../common/components/CustomModal";
 import "../style/adminProduct.style.css";
+import Button from "../../../../../common/components/Button";
 import Button2 from "../../../../../common/components/Button2";
 import { useDispatch } from "react-redux";
 import {
@@ -92,7 +92,7 @@ const AdminProductCard = ({ product, setMode, setShowDialog }) => {
             md={3}
             className="d-flex align-items-center justify-content-center"
           >
-            <Button2 className="btn-gap" onClick={handleClickEditItem}>수정</Button2>
+            <Button className="btn-gap" onClick={handleClickEditItem}>수정</Button>
             <Button2 onClick={handleClickDeleteItem}>삭제</Button2>
           </Col>
         </Row>
