@@ -94,6 +94,11 @@ const DiaryList = () => {
                   </div>
                   <h5 className="diary-list__item-title mb-0 ms-2">
                     {diary.title}
+                    {diary.isEdited && (
+                      <span className="diary-list__item-edited ms-2">
+                        (수정됨)
+                      </span>
+                    )}
                   </h5>
                 </div>
                 <p className="diary-list__item-description text-muted mb-0">
