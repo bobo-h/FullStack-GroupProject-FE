@@ -149,7 +149,8 @@
     margin-top: 15px;
   }
 
-  .sidebar-item {
+  .sidebar-item__title,
+  .sidebar-item__menu {
     color: #5f6f52;
     font-weight: bold;
     padding: 10px 10px;
