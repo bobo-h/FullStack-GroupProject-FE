@@ -51,7 +51,7 @@ export const addUserComment = createAsyncThunk(
 
   async (
     { diaryId, userId, chatbotId, personality, parentCommentId, content },
-    { rejectWithValue }
+    { dispatch, rejectWithValue }
   ) => {
     try {
       //const response = await api.post(`/diary/${diaryId}`, formData);
@@ -63,6 +63,8 @@ export const addUserComment = createAsyncThunk(
         parentCommentId,
         content,
       });
+      // 대댓글 등록후, 바로 보이게 하기
+      dispatch(getCommentList(diaryId));
       if (response.status !== 200) throw new Error(response.error);
 
       return response.data;
