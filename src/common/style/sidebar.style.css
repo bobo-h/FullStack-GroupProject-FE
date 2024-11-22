@@ -78,15 +78,22 @@
   margin-bottom: 20px;
   object-fit: contain; /* 이미지가 잘리지 않고 컨테이너 안에 들어가게 함 */
   transform: rotate(-0.5deg);
+  pointer-events: none; /* 마우스 클릭 이벤트를 무효화 */
+  user-select: none; /* 텍스트나 이미지를 선택할 수 없도록 설정 [마우스로 긁을때 파래지는거 막음]*/
 }
 
 .user-image {
-  width: 350px;
-  height: 350px;
-  background-color: var(--primary-color-ivory);
+  width: 100%; /* 기본적으로 부모 요소의 너비를 기준으로 */
+  max-width: 350px; /* 최대 너비 제한 */
+  height: auto; /* 비율에 따라 높이 자동 조정 */
+  max-height: 350px; /* 최대 높이 제한 */
+  /* background-color: var(--primary-color-ivory); */
   border-radius: 8px;
   margin-bottom: 20px;
   flex-shrink: 0; /* 플렉스 레이아웃에서 사이즈가 줄어들지 않도록 설정 */
+  object-fit: contain; /* 원본 비율 유지 */
+  pointer-events: none; /* 마우스 클릭 이벤트를 무효화 */
+  user-select: none; /* 텍스트나 이미지를 선택할 수 없도록 설정 [마우스로 긁을때 파래지는거 막음]*/
 }
 
 .user-info {
@@ -97,12 +104,14 @@
   text-align: center;
   border-radius: 10px;
   position: relative;
+  user-select: none; /* 텍스트나 이미지를 선택할 수 없도록 설정 [마우스로 긁을때 파래지는거 막음]*/
 }
 .user-name {
   position: absolute;
   top: 10px;
   left: 20px;
   font-size: 22px;
+  user-select: none; /* 텍스트나 이미지를 선택할 수 없도록 설정 [마우스로 긁을때 파래지는거 막음]*/
 }
 .sidebar-logout-button {
   position: absolute;
@@ -111,6 +120,7 @@
   right: 10px;
   border-radius: 10px;
   background-color: var(--primary-color-ivory);
+  user-select: none; /* 텍스트나 이미지를 선택할 수 없도록 설정 [마우스로 긁을때 파래지는거 막음]*/
 }
 .user-info:hover {
   background-color: var(--primary-color-ivory);
@@ -126,6 +136,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  user-select: none; /* 텍스트나 이미지를 선택할 수 없도록 설정 [마우스로 긁을때 파래지는거 막음]*/
 }
 .my-cats-info {
   width: 100%;
@@ -133,6 +144,7 @@
   border-radius: 10px;
   margin-bottom: 15px;
   position: relative;
+  user-select: none; /* 텍스트나 이미지를 선택할 수 없도록 설정 [마우스로 긁을때 파래지는거 막음]*/
 }
 .my-cats-info:hover {
   background-color: var(--primary-color-deepGreen);
@@ -151,14 +163,18 @@
   left: 10px;
   top: 10px;
   border-radius: 50%;
+  user-select: none; /* 텍스트나 이미지를 선택할 수 없도록 설정 [마우스로 긁을때 파래지는거 막음]*/
 }
 .cat-list-image-back.view {
   background-color: var(--primary-color-ivory);
+  user-select: none; /* 텍스트나 이미지를 선택할 수 없도록 설정 [마우스로 긁을때 파래지는거 막음]*/
 }
 .cat-list-image-profile {
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  pointer-events: none; /* 마우스 클릭 이벤트를 무효화 */
+  user-select: none; /* 텍스트나 이미지를 선택할 수 없도록 설정 [마우스로 긁을때 파래지는거 막음]*/
 }
 
 .cat-list-title {
@@ -168,6 +184,7 @@
   font-size: 20px;
   font-weight: bold;
   color: black;
+  user-select: none; /* 텍스트나 이미지를 선택할 수 없도록 설정 [마우스로 긁을때 파래지는거 막음]*/
 }
 .cat-list-discript {
   position: absolute;
@@ -179,6 +196,70 @@
   text-overflow: ellipsis; /* 넘친 부분에 "..." 표시 */
   width: calc(100% - 90px); /* 적절한 너비 설정 */
   color: black;
+  user-select: none; /* 텍스트나 이미지를 선택할 수 없도록 설정 [마우스로 긁을때 파래지는거 막음]*/
+}
+
+/* 고양이 정보 토글 스타일 (아주 작은 사이즈) */
+.cat-info-toggle-wrapper {
+  display: inline-block;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.cat-info-toggle-checkbox {
+  appearance: none;
+  display: none; /* 체크박스 숨김 */
+}
+
+.cat-info-toggle-label {
+  display: block;
+  position: relative;
+  width: 45px; /* 너비 최소화 */
+  height: 20px; /* 높이 최소화 */
+  background: #d3d3d3;
+  border-radius: 30px; /* 반지름 크기 조정 */
+  transition: background 0.4s;
+}
+
+.cat-info-toggle-label::after {
+  content: "";
+  position: absolute;
+  left: 1.5px; /* 위치 조정 */
+  top: 50%;
+  width: 16px; /* 크기 최소화 */
+  height: 16px; /* 크기 최소화 */
+  border-radius: 50%;
+  background-color: #fff;
+  transform: translateY(-50%);
+  box-shadow: 0.5px 1px 1.5px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s;
+}
+
+.cat-info-toggle-label::before {
+  content: "OFF";
+  font-size: 10px; /* 폰트 크기 최소화 */
+  font-family: Arial, Helvetica, sans-serif;
+  position: absolute;
+  left: 20px; /* 텍스트 위치 조정 */
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.4s;
+}
+
+/* 스위치(체크박스)가 토글(체크)되었을 때 */
+.cat-info-toggle-checkbox:checked + .cat-info-toggle-label {
+  background: var(--primary-color-brown);
+}
+
+.cat-info-toggle-checkbox:checked + .cat-info-toggle-label::after {
+  left: calc(100% - 18px); /* 크기에 맞게 위치 조정 */
+}
+
+.cat-info-toggle-checkbox:checked + .cat-info-toggle-label::before {
+  content: "ON";
+  color: #fff;
+  left: 4px; /* 텍스트 위치 조정 */
 }
 
 /* ====================== 추가 UI 스타일 끝 ======================================= */
@@ -201,11 +282,13 @@
     z-index: 1000;
     font-size: 24px;
     animation: toggleFadeIn 0.5s ease forwards; /* 등장 시 애니메이션 추가 */
+    user-select: none; /* 텍스트나 이미지를 선택할 수 없도록 설정 [마우스로 긁을때 파래지는거 막음]*/
   }
 
   .sidebar-toggle-image {
     width: 100%;
     object-fit: contain; /* 이미지 비율 유지하며 부모에 맞춤 */
+    user-select: none; /* 텍스트나 이미지를 선택할 수 없도록 설정 [마우스로 긁을때 파래지는거 막음]*/
   }
   @keyframes toggleFadeIn {
     0% {

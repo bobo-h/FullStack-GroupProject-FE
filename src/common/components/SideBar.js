@@ -10,6 +10,8 @@ import {
 } from "../../features/chatbot/chatbotSlice";
 import "../style/sidebar.style.css";
 import debounce from "lodash.debounce";
+import { setSelectedProduct } from "../../features/product/productSlice";
+import api from "../../utils/api";
 
 // 하위 컴포넌트로 분리하여 코드 가독성 및 재사용성을 높이자.
 const SideBar = ({
@@ -114,16 +116,39 @@ const SidebarContainer = ({
   const navigate = useNavigate();
   const cats = useSelector((state) => state.chatbot.cats);
   const loading = useSelector((state) => state.chatbot.loading);
+  const newItem = useSelector((state) => state.chatbot.newItem);
+  const getFlag = useSelector((state) => state.chatbot.getFlag);
   const catsLength = useSelector((state) => state.chatbot.catsLength);
 
   useEffect(() => {
     const fetchData = async () => {
       await dispatch(getChatbotList());
-      dispatch(getListLenght());
+      await dispatch(getListLenght());
+
+      if (getFlag) {
+        try {
+          // DB에서 default_product가 true인 상품 가져오기
+          const response = await api.get(
+            "/product?defaultProduct=Yes&category=Cat"
+          ); // API 경로 수정 필요
+          const defaultProduct = response.data.data;
+          console.log("response???", response);
+
+          if (defaultProduct) {
+            // selectedProduct에 defaultProduct 설정
+            dispatch(setSelectedProduct(defaultProduct[0]));
+          }
+
+          navigate("/chatbot"); // "/chatbot" 페이지로 이동
+        } catch (error) {
+          console.error("Failed to fetch default product:", error);
+        }
+      }
     };
 
     fetchData();
-  }, [dispatch]);
+  }, [dispatch, newItem, getFlag]);
+
   // useEffect(async () => { // 이 방법이 WARNING 떠서 위 방법으로.
   //   await dispatch(getChatbotList());
   //   dispatch(getListLenght());
@@ -159,7 +184,12 @@ const SidebarContainer = ({
           alt="project-title"
           onClick={() => navigate(`/`)}
         />
-        <div className="user-image" />
+
+        {user.profileImage ? (
+          <img src={user.profileImage} className="user-image" />
+        ) : (
+          <img src="/catbutler.webp" className="user-image" />
+        )}
         <div className="user-info">
           <span className="user-name">집사 이름 : {user.name}</span>
           <LogoutButton />
@@ -214,6 +244,19 @@ const CatItem = React.memo(({ cat, handleRightClick }) => {
       </div>
       <span className="cat-list-title">{cat.name}</span>
       <span className="cat-list-discript">{cat.personality}</span>
+      <div className="cat-info-toggle-wrapper">
+        <input
+          type="checkbox"
+          id={`cat-info-toggle-switch-${cat._id}`} // 고유 id를 추가하여 중복 방지
+          className="cat-info-toggle-checkbox"
+          checked={cat.visualization} // cat.visualization에 따라 상태 설정
+          onChange={(e) => handleRightClick(e, cat._id)} // 상태 변경 시 handleRightClick 호출
+        />
+        <label
+          htmlFor={`cat-info-toggle-switch-${cat._id}`}
+          className="cat-info-toggle-label"
+        ></label>
+      </div>
     </div>
   );
 });

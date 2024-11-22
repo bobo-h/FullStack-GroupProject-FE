@@ -19,7 +19,7 @@ export const getChatbotList = createAsyncThunk(
 // getChatbotDetail action
 export const getChatbotDetail = createAsyncThunk(
   "chatbot/getChatbotDetail",
-  async (_,{ chatbotId }, { rejectWithValue }) => {
+  async (_, { chatbotId }, { rejectWithValue }) => {
     try {
       const response = await api.get(`/chatbot/me/${chatbotId}`);
       return response.data;
@@ -32,9 +32,14 @@ export const getChatbotDetail = createAsyncThunk(
 // createChatbot action
 export const createChatbot = createAsyncThunk(
   "chatbot/createChatbot",
-  async ({ product_id, name, personality }, { rejectWithValue }) => {
+  async ({ user_id, product_id, name, personality }, { rejectWithValue }) => {
     try {
-      const response = await api.post("/chatbot", { product_id, name, personality });
+      const response = await api.post("/chatbot", {
+        user_id,
+        product_id,
+        name,
+        personality,
+      });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
@@ -86,10 +91,12 @@ export const updateChatbot = createAsyncThunk(
 
 export const deleteChatbot = createAsyncThunk(
   "chatbot/deleteChatbot",
-  async (chatbotId, { rejectWithValue }) => {
+  async (chatbotId, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.delete(`/chatbot/${chatbotId}`);
       console.log("Chatbot deleted successfully");
+
+      // dispatch(getChatbotList({ page: 1 }));
 
       return response.data;
     } catch (error) {
@@ -172,6 +179,16 @@ export const printLineChatbot = createAsyncThunk(
         "고생한 나에게 아무 힘이 되는 말 해줘",
         "내가 행복해질 말을 해줘",
       ];
+      // const randomMessage =
+      //   messages[Math.floor(Math.random() * messages.length)];
+      // const finalMessage =
+      //   randomMessage === "야옹!" || randomMessage === "zzz"
+      //     ? randomMessage
+      //     : `${randomMessage} (Respond in 10 characters or less.)`;
+      // const response = await api.post("/chatbot/printLine", {
+      //   message: finalMessage,
+      //   catPersonality,
+      // });
       const randomMessage =
         messages[Math.floor(Math.random() * messages.length)];
       // console.log("랜덤 메시지:", randomMessage);
@@ -179,11 +196,10 @@ export const printLineChatbot = createAsyncThunk(
       // "야옹!" 또는 "zzz"일 경우 API 요청 생략
       if (randomMessage === "야옹!" || randomMessage === "Zzz") {
         const response = randomMessage; // 그대로 반환
-        // // 딜레이를 위한 함수 // 너무 빠르면 로딩 펄스 되는 문제 해결
-        // const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-        // // 딜레이 추가 (예: 1초)
-        // await delay(1000);
-        // addCase부분에서 할 것이 없기 때문에 addCase에 printLineChatbot부분 모두 삭제 및 딜레이 삭제
+        // 딜레이를 위한 함수 // 너무 빠르면 로딩 펄스 되는 문제 해결
+        const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+        // 딜레이 추가 (예: 1초)
+        await delay(1000);
         return response;
       }
 
@@ -220,13 +236,18 @@ const chatbotSlice = createSlice({
     success: false,
     cats: [], // 서버에서 가져온 쳇봇리스트를 저장
     catsLength: 0,
+    newItem: false,
+    getFlag: false,
   },
   reducers: {
     clearErrors: (state) => {
       state.registrationError = null;
     },
     getListLenght: (state) => {
-      state.catsLength = state.cats.length;
+      if (state.catsLength === 0) {
+        console.log("지금이야", state.catsLength);
+        state.getFlag = true;
+      }
     },
     logoutChatBot: (state) => {
       state.cats = [];
@@ -252,8 +273,18 @@ const chatbotSlice = createSlice({
     };
 
     builder // 와 ㅋㅋㅋㅋ아이디어 좋으신데요?!
-      .addCase(createChatbot.pending, handlePending)
-      .addCase(createChatbot.fulfilled, handleFulfilled)
+      .addCase(createChatbot.pending, (state, action) => {
+        state.newItem = true;
+        state.loading = true;
+        state.success = true;
+        state.registrationError = null;
+      })
+      .addCase(createChatbot.fulfilled, (state) => {
+        state.newItem = false;
+        state.loading = false;
+        state.success = true;
+        state.registrationError = null;
+      })
       .addCase(createChatbot.rejected, handleRejected)
       .addCase(getChatbotList.pending, handlePending)
       .addCase(getChatbotList.fulfilled, (state, action) => {
@@ -261,6 +292,7 @@ const chatbotSlice = createSlice({
         state.success = true;
         state.registrationError = null;
         state.cats = action.payload; // 서버 데이터로 상태 업데이트
+        state.catsLength = state.cats.length;
         // console.log("궁금하오1", state.cats);
       })
       .addCase(getChatbotList.rejected, handleRejected)
@@ -273,9 +305,8 @@ const chatbotSlice = createSlice({
       .addCase(deleteChatbot.pending, handlePending)
       .addCase(deleteChatbot.fulfilled, handleFulfilled)
       .addCase(deleteChatbot.rejected, handleRejected)
-      // .addCase(printLineChatbot.fulfilled, handlePending)
-      // .addCase(printLineChatbot.fulfilled, handleFulfilled)
-      // .addCase(printLineChatbot.rejected, handleRejected)
+      .addCase(printLineChatbot.fulfilled, handleFulfilled)
+      .addCase(printLineChatbot.rejected, handleRejected)
       .addCase(updateChatbotJins.pending, handlePending)
       .addCase(updateChatbotJins.fulfilled, (state, action) => {
         state.loading = false;
