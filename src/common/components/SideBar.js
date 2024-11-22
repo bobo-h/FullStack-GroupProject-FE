@@ -10,6 +10,8 @@ import {
 } from "../../features/chatbot/chatbotSlice";
 import "../style/sidebar.style.css";
 import debounce from "lodash.debounce";
+import { setSelectedProduct } from "../../features/product/productSlice";
+import api from "../../utils/api";
 
 // 하위 컴포넌트로 분리하여 코드 가독성 및 재사용성을 높이자.
 const SideBar = ({
@@ -57,8 +59,8 @@ const SideBar = ({
     currentPage === "home"
       ? "slide-in-right"
       : currentPage === "diaries"
-      ? "slide-in-left"
-      : "";
+        ? "slide-in-left"
+        : "";
 
   const isDesktop = windowWidth >= 700;
   const isMobileActive = windowWidth < 700 && isSidebarActive;
@@ -120,6 +122,25 @@ const SidebarContainer = ({
     const fetchData = async () => {
       await dispatch(getChatbotList());
       dispatch(getListLenght());
+      console.log("catsLengh???", catsLength)
+      if (catsLength === 0) {
+        try {
+          
+          // DB에서 default_product가 true인 상품 가져오기
+          const response = await api.get("/product?defaultProduct=Yes&category=Cat"); // API 경로 수정 필요
+          const defaultProduct = response.data.data;
+          console.log("response???", response)
+
+          if (defaultProduct) {
+            // selectedProduct에 defaultProduct 설정
+            dispatch(setSelectedProduct(defaultProduct[0]));
+          }
+
+          navigate("/chatbot"); // "/chatbot" 페이지로 이동
+        } catch (error) {
+          console.error("Failed to fetch default product:", error);
+        }
+      }
     };
 
     fetchData();
@@ -188,9 +209,9 @@ const SidebarContainer = ({
         )}
       </div>
       {windowWidth < 700 &&
-      !isSidebarActive &&
-      (currentPage === "home" || currentPage === "diaries") &&
-      (isScrollingUp || scrollTop === 0) ? (
+        !isSidebarActive &&
+        (currentPage === "home" || currentPage === "diaries") &&
+        (isScrollingUp || scrollTop === 0) ? (
         <ToggleButton toggleSidebar={toggleSidebar} />
       ) : null}
     </>
