@@ -4,6 +4,9 @@
   .chatbot-list__title {
     margin-bottom: 30px;
   }
+  .chatbot-list__userinfo {
+    margin-bottom: 60px;
+  }
   .chatbot-list__btn-list {
     display: flex;
     justify-content: flex-end; /* 버튼들을 오른쪽 끝으로 정렬 */
