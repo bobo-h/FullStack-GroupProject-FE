@@ -13,7 +13,7 @@
 }
 
 .diary-detail__date {
-  font-size: 1.2rem;
+  font-size: 28px;
   font-weight: bold;
   color: var(--primary-color-deepGreen);
   margin-bottom: 0;
@@ -82,4 +82,81 @@
   line-height: 1.6;
   white-space: pre-wrap;
   color: var(--text-color-deepBrown);
+}
+
+@media (max-width: 768px) {
+  .diary-detail__header {
+    padding: 15px;
+  }
+
+  .diary-detail__date {
+    font-size: 24px;
+  }
+
+  .diary-detail__mood-icon {
+    width: 25px;
+    height: 25px;
+  }
+
+  .diary-detail__actions {
+    justify-content: flex-start; /* 버튼을 왼쪽으로 정렬 */
+    gap: 8px;
+  }
+
+  .diary-detail__btn {
+    font-size: 12px;
+    padding: 2px 6px;
+  }
+
+  .diary-detail__title {
+    font-size: 1.3rem;
+  }
+
+  .diary-detail__text {
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+}
+
+/* 화면 너비 480px 이하 */
+@media (max-width: 480px) {
+  .diary-detail {
+    padding: 10px;
+  }
+
+  .diary-detail__header {
+    gap: 5px;
+  }
+
+  .diary-detail__date {
+    font-size: 20px;
+  }
+
+  .diary-detail__mood-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .diary-detail__actions {
+    justify-content: flex-end;
+    gap: 5px;
+  }
+
+  .diary-detail__btn {
+    font-size: 10px;
+    padding: 2px 4px;
+  }
+
+  .diary-detail__image-wrapper {
+    margin: 10px 0;
+  }
+
+  .diary-detail__title {
+    font-size: 1.2rem;
+  }
+
+  .diary-detail__text {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
 }

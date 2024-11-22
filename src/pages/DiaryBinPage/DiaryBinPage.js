@@ -82,7 +82,7 @@ const DiaryBinPage = () => {
   return (
     <MyPageLayout>
       <div className="diary-bin">
-        <Container>
+        <Container className="diary-bin__container px-0">
           <Row>
             <Col md={12}>
               <h2 className="diary-bin__title">휴지통</h2>
@@ -109,43 +109,61 @@ const DiaryBinPage = () => {
                   <Col md={2}>날짜</Col>
                   <Col md={1}>복구</Col>
                 </Row>
-                {deletedDiaryList.map((diary, index) => (
-                  <Row
-                    key={diary._id}
-                    className="diary-bin__row"
-                    ref={
-                      index === deletedDiaryList.length - 1
-                        ? lastDiaryRef
-                        : null
-                    }
-                  >
-                    <Col md={1}>{index + 1}</Col>
-                    <Col md={2}>
-                      {diary.image ? (
-                        <img
-                          src={diary.image}
-                          alt={diary.title}
-                          className="diary-bin__image"
-                        />
-                      ) : (
-                        <span>No Image</span>
-                      )}
-                    </Col>
-                    <Col md={2}>{diary.title}</Col>
-                    <Col md={4}>{diary.content}</Col>
-                    <Col md={2}>
-                      {new Date(diary.selectedDate).toISOString().split("T")[0]}
-                    </Col>
-                    <Col md={1}>
-                      <Button
-                        className="diary-bin__restore-button"
-                        onClick={() => openModal(diary._id)}
-                      >
-                        복구
-                      </Button>
+                {deletedDiaryList.length === 0 ? (
+                  <Row className="diary-bin__empty-row">
+                    <Col md={12} className="diary-bin__empty-message">
+                      삭제된 다이어리가 없습니다.
                     </Col>
                   </Row>
-                ))}
+                ) : (
+                  deletedDiaryList.map((diary, index) => (
+                    <Row
+                      key={diary._id}
+                      className="diary-bin__row"
+                      ref={
+                        index === deletedDiaryList.length - 1
+                          ? lastDiaryRef
+                          : null
+                      }
+                    >
+                      <Col md={1} className="diary-bin__cell">
+                        {index + 1}
+                      </Col>
+                      <Col md={2} className="diary-bin__cell">
+                        {diary.image ? (
+                          <img
+                            src={diary.image}
+                            alt={diary.title}
+                            className="diary-bin__image"
+                          />
+                        ) : (
+                          <span>No Image</span>
+                        )}
+                      </Col>
+                      <Col md={2} className="diary-bin__cell">
+                        {diary.title}
+                      </Col>
+                      <Col md={4} className="diary-bin__cell">
+                        {diary.content}
+                      </Col>
+                      <Col md={2} className="diary-bin__cell">
+                        {
+                          new Date(diary.selectedDate)
+                            .toISOString()
+                            .split("T")[0]
+                        }
+                      </Col>
+                      <Col md={1} className="diary-bin__cell">
+                        <Button
+                          className="diary-bin__restore-button"
+                          onClick={() => openModal(diary._id)}
+                        >
+                          복구
+                        </Button>
+                      </Col>
+                    </Row>
+                  ))
+                )}
               </Container>
               {loading && (
                 <div className="diary-bin__spinner">

@@ -23,9 +23,9 @@ const DiaryDetailPage = () => {
   }, [diaryId, dispatch]);
 
   return (
-    <Container>
+    <Container className="px-0">
       <Row className="diary-detail-row">
-        <Col className="diary-detail">
+        <Col className="diary-detail-page px-4">
           <DiaryDetail />
         </Col>
         <Col className="comment-area-content">
