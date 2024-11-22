@@ -71,8 +71,8 @@
 }
 
 .diary-bin__restore-button {
-  padding: 4px 8px; /* 버튼 내부 여백 줄이기 */
-  border-radius: 4px; /* 둥근 모서리 */
-  line-height: 1; /* 라인 높이 조정 */
+  padding: 4px 8px;
+  border-radius: 4px;
+  line-height: 1;
   width: 50px;
 }
