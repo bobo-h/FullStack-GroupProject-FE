@@ -10,6 +10,7 @@ import Button from "../../../../common/components/Button";
 import Button2 from "../../../../common/components/Button2";
 import ReactDOM from "react-dom";
 import Alert from "../../../../common/components/Alert";
+import CustomModal from "../../../../common/components/CustomModal";
 import LoadingSpinner from "../../../../common/components/LoadingSpinner";
 import { useMediaQuery } from "react-responsive";
 
@@ -19,7 +20,9 @@ const PaymentInfoModal = ({ onClose }) => {
   const { orderUserId, loading } = useSelector((state) => state.order);
   const user = useSelector((state) => state.user.user);
   const [showAlert, setShowAlert] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [alertContent, setAlertContent] = useState("");
+  const [modalContent, setModalContent] = useState("");
   const isMobile = useMediaQuery({ query: "(max-width: 700px)" });
 
   const [cardValue, setCardValue] = useState({
@@ -82,14 +85,14 @@ const PaymentInfoModal = ({ onClose }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (
-      !validatePhoneNumber(orderPersonInfo.phoneNumber) ||
-      !validateEmail(orderPersonInfo.email)
-    ) {
-      setAlertContent("전화번호 또는 이메일 주소를 확인해주세요.");
-      setShowAlert(true);
-      return;
-    }
+    // if (
+    //   !validatePhoneNumber(orderPersonInfo.phoneNumber) ||
+    //   !validateEmail(orderPersonInfo.email)
+    // ) {
+    //   setAlertContent("전화번호 또는 이메일 주소를 확인해주세요.");
+    //   setShowAlert(true);
+    //   return;
+    // }
 
     // const handleSubmit = (event) => {
     //   event.preventDefault();
@@ -109,10 +112,15 @@ const PaymentInfoModal = ({ onClose }) => {
     )
       .then(() => {
         // setAlertContent(`결제 성공하였습니다! <br /> 주문번호: ${orderNum}`);
+        setModalContent("결제 성공하였습니다!");
+        setShowModal(true);
         setAlertContent("결제 성공하였습니다!");
         setShowAlert(true);
+        // onClose();  // PaymentInfoModal 닫기 
       })
       .catch((error) => {
+        setModalContent("결제 실패!");
+        setShowModal(true);
         setAlertContent("결제 실패!");
         setShowAlert(true);
       });
@@ -152,7 +160,18 @@ const PaymentInfoModal = ({ onClose }) => {
 
   const PaymentInfoContent = (
     <div className="modal-backdrop payment-info-mobile" onClick={handleBackdropClick}>
-      {showAlert && (
+      {showModal && (
+          <CustomModal
+            message={modalContent}
+            redirectTo="/chatbot"
+            onClose={() => {
+              setShowModal(false);  // CustomeModal 닫기
+              onClose();            // PaymentInfoModal 닫기 
+            }}
+            showCancelButton={false} // 취소 버튼 불필요
+          />
+        )}
+      {/* {showAlert && (
         <Alert
           message={alertContent}
           onClose={() => {
@@ -161,7 +180,7 @@ const PaymentInfoModal = ({ onClose }) => {
           }}
           redirectTo="/chatbot"
         />
-      )}
+      )} */}
       {loading ? (
         <div className="text-align-center">
           <LoadingSpinner animation="border" role="status">
@@ -183,20 +202,20 @@ const PaymentInfoModal = ({ onClose }) => {
             {selectedProduct ? (
               <div className="payment-modal-product-card-area">
                 <div className="payment-modal-product-card">
-                <img
-                  src={selectedProduct.image}
-                  alt={selectedProduct.name}
-                  className="img-fluid product-image"
-                />
-                <Row className="mt-3 justify-content-center text-center ">
-                  {/* 결제 금액 표시 */}
-                  <Col>
-                    <h5>결제 금액: {selectedProduct.price}₩ </h5>
-                  </Col>
-                </Row>
+                  <img
+                    src={selectedProduct.image}
+                    alt={selectedProduct.name}
+                    className="img-fluid product-image"
+                  />
+                  <Row className="mt-3 justify-content-center text-center ">
+                    {/* 결제 금액 표시 */}
+                    <Col>
+                      <h5>결제 금액: {selectedProduct.price}₩ </h5>
+                    </Col>
+                  </Row>
+                </div>
               </div>
-              </div>
-              
+
             ) : (
               <p>상품 정보를 불러올 수 없습니다.</p>
             )}
@@ -277,7 +296,7 @@ const PaymentInfoModal = ({ onClose }) => {
                     <Col lg={2} xs="auto">
                       <Form.Label className="no-h">전화번호</Form.Label>
                       <Form.Label className="yes-h"><i class="ri-phone-line"></i></Form.Label>
-                      
+
                     </Col>
                     <Col>
                       <Form.Control

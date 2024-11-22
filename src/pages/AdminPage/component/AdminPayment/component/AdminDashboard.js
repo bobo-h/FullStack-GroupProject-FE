@@ -62,8 +62,8 @@ const AdminDashboard = ({ showModal }) => {
             {
                 label: "판매 금액",
                 data: salesData.map((item) => item.totalSales),
-                backgroundColor: "rgba(153, 102, 255, 0.6)",
-                borderColor: "rgba(153, 102, 255, 1)",
+                backgroundColor: "#B99470", // 판매 금액의 배경색 (Camel Brown)
+                borderColor: "#B99470",    
                 borderWidth: 1,
                 yAxisID: "y1",
             },
@@ -103,16 +103,16 @@ const AdminDashboard = ({ showModal }) => {
             {
                 label: "판매 갯수",
                 data: dailySalesData.map((item) => item.totalQuantity), // 날짜별 판매 갯수
-                backgroundColor: "rgba(75, 192, 192, 0.6)",
-                borderColor: "rgba(75, 192, 192, 1)",
+                backgroundColor: "#A9B388", // 판매 갯수의 배경색 (Sage Green)
+                borderColor: "#A9B388",    // 판매 갯수의 테두리색
                 borderWidth: 1,
                 yAxisID: "y1", // 왼쪽 Y축에 매핑
             },
             {
                 label: "판매 금액",
                 data: dailySalesData.map((item) => item.totalSales), // 날짜별 판매 금액
-                backgroundColor: "rgba(153, 102, 255, 0.6)",
-                borderColor: "rgba(153, 102, 255, 1)",
+                backgroundColor: "#B99470", // 판매 금액의 배경색 (Camel Brown)
+                borderColor: "#B99470", 
                 borderWidth: 1,
                 yAxisID: "y2", // 오른쪽 Y축에 매핑
             },
@@ -170,10 +170,10 @@ const AdminDashboard = ({ showModal }) => {
             <div>
                 {loading ? (
                     <div className="text-align-center">
-                    <LoadingSpinner animation="border" role="status">
-                      <span className="visually-hidden">Loading...</span>
-                    </LoadingSpinner>
-                  </div>
+                        <LoadingSpinner animation="border" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </LoadingSpinner>
+                    </div>
                 ) : (
                     <>
                         <div>

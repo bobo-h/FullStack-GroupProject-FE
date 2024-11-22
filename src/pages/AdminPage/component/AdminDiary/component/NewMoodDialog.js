@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, Modal, Row, Col } from "react-bootstrap";
 import Alert from "../../../../../common/components/Alert";
+import CustomModal from "../../../../../common/components/CustomModal";
 import { useDispatch, useSelector } from "react-redux";
 import CloudinaryUploadWidget from "../../../../../utils/CloudinaryUploadWidget";
 import "../style/adminMood.style.css";
@@ -26,6 +27,8 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
   );
   const [showAlert, setShowAlert] = useState(false);
   const [alertContent, setAlertContent] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState("");
   const dispatch = useDispatch();
 
   // 성공 시 다이얼로그 닫기
@@ -61,10 +64,14 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
         .then(() => {
           setAlertContent("무드 생성 완료하였습니다!");
           setShowAlert(true);
+          setModalContent("무드 생성 완료하였습니다!");
+          setShowModal(true);
         })
         .catch((error) => {
           setAlertContent("무드 생성 실패!");
           setShowAlert(true);
+          setModalContent("무드 생성 실패!");
+          setShowModal(true);
         });
     } else {
       // 무드 수정하기
@@ -72,10 +79,14 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
         .then(() => {
           setAlertContent("무드 수정 완료하였습니다!");
           setShowAlert(true);
+          setModalContent("무드 수정 완료하였습니다!");
+          setShowModal(true);
         })
         .catch((error) => {
           setAlertContent("무드 수정 실패!");
           setShowAlert(true);
+          setModalContent("무드 수정 실패!");
+          setShowModal(true);
         });
     }
   };
@@ -105,7 +116,7 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
           <Alert variant="danger">{error}</Alert>
         </div>
       )}
-      {showAlert && (
+      {/* {showAlert && (
         <Alert
           message={alertContent}
           onClose={() => {
@@ -113,6 +124,17 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
             setShowDialog(false);
           }}
           redirectTo="/admin"
+        />
+      )} */}
+      {showModal && (
+        <CustomModal
+          message={modalContent}
+          redirectTo="/admin"
+          onClose={() => {
+            setShowModal(false);
+            setShowDialog(false);
+          }}
+          showCancelButton={false} // 취소 버튼 불필요
         />
       )}
       <Form className="form-container" onSubmit={handleSubmit}>
