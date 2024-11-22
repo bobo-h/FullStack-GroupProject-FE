@@ -18,7 +18,7 @@ const SidebarForMyPage = () => {
         <Link to="/">
           <img
             width={150}
-            src="logo1.png"
+            src="/logo1.png"
             alt="logo.png"
             className="logo-image"
           />

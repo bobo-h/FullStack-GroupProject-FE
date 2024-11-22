@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -8,6 +8,7 @@ import {
 } from "../../features/diary/diarySlice";
 import LoadingSpinner from "../../common/components/LoadingSpinner";
 import Button from "../../common/components/Button";
+import CustomModal from "../../common/components/CustomModal";
 import MyPageLayout from "./../MyPage/MyPageLayout";
 import "./styles/diaryBinPage.style.css";
 
@@ -21,29 +22,62 @@ const DiaryBinPage = () => {
     error,
   } = useSelector((state) => state.diary);
 
+  const observerRef = useRef();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDiaryId, setSelectedDiaryId] = useState(null);
+
   useEffect(() => {
     dispatch(getDeletedDiaryList({ page: deletedCurrentPage }));
     return () => {
       dispatch(clearDeletedDiaryList());
     };
-  }, [dispatch, deletedCurrentPage]);
+  }, [dispatch]);
 
-  const handleRestore = (diaryId) => {
-    if (window.confirm("Are you sure you want to restore this diary?")) {
-      dispatch(restoreDiary(diaryId))
+  const openModal = (diaryId) => {
+    setSelectedDiaryId(diaryId);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedDiaryId(null);
+    setIsModalOpen(false);
+  };
+
+  const handleRestoreConfirm = () => {
+    if (selectedDiaryId) {
+      dispatch(restoreDiary(selectedDiaryId))
         .unwrap()
         .then(() => {
           alert("다이어리가 복구되었습니다!");
         })
         .catch((err) => {
           alert("복구에 실패했습니다: " + err);
+        })
+        .finally(() => {
+          closeModal();
         });
     }
   };
 
-  const handlePageChange = (page) => {
-    dispatch(getDeletedDiaryList({ page }));
-  };
+  const fetchMoreDiaries = useCallback(() => {
+    if (deletedCurrentPage < deletedTotalPages && !loading) {
+      dispatch(getDeletedDiaryList({ page: deletedCurrentPage + 1 }));
+    }
+  }, [deletedCurrentPage, deletedTotalPages, loading, dispatch]);
+
+  const lastDiaryRef = useCallback(
+    (node) => {
+      if (loading) return;
+      if (observerRef.current) observerRef.current.disconnect();
+      observerRef.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          fetchMoreDiaries();
+        }
+      });
+      if (node) observerRef.current.observe(node);
+    },
+    [loading, fetchMoreDiaries]
+  );
 
   return (
     <MyPageLayout>
@@ -54,7 +88,7 @@ const DiaryBinPage = () => {
               <h2 className="diary-bin__title">휴지통</h2>
             </Col>
           </Row>
-          {loading ? (
+          {loading && deletedCurrentPage === 1 ? (
             <div className="diary-bin__spinner">
               <LoadingSpinner animation="border" role="status">
                 <span className="visually-hidden">Loading...</span>
@@ -76,7 +110,15 @@ const DiaryBinPage = () => {
                   <Col md={1}>복구</Col>
                 </Row>
                 {deletedDiaryList.map((diary, index) => (
-                  <Row key={diary._id} className="diary-bin__row">
+                  <Row
+                    key={diary._id}
+                    className="diary-bin__row"
+                    ref={
+                      index === deletedDiaryList.length - 1
+                        ? lastDiaryRef
+                        : null
+                    }
+                  >
                     <Col md={1}>{index + 1}</Col>
                     <Col md={2}>
                       {diary.image ? (
@@ -91,34 +133,41 @@ const DiaryBinPage = () => {
                     </Col>
                     <Col md={2}>{diary.title}</Col>
                     <Col md={4}>{diary.content}</Col>
-                    <Col md={2}>{diary.selectedDate}</Col>
+                    <Col md={2}>
+                      {new Date(diary.selectedDate).toISOString().split("T")[0]}
+                    </Col>
                     <Col md={1}>
-                      <Button onClick={() => handleRestore(diary._id)}>
+                      <Button
+                        className="diary-bin__restore-button"
+                        onClick={() => openModal(diary._id)}
+                      >
                         복구
                       </Button>
                     </Col>
                   </Row>
                 ))}
               </Container>
-              <div className="diary-bin__pagination">
-                {deletedCurrentPage > 1 && (
-                  <Button
-                    onClick={() => handlePageChange(deletedCurrentPage - 1)}
-                  >
-                    Previous
-                  </Button>
-                )}
-                {deletedCurrentPage < deletedTotalPages && (
-                  <Button
-                    onClick={() => handlePageChange(deletedCurrentPage + 1)}
-                  >
-                    Next
-                  </Button>
-                )}
-              </div>
+              {loading && (
+                <div className="diary-bin__spinner">
+                  <LoadingSpinner animation="border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </LoadingSpinner>
+                </div>
+              )}
             </div>
           )}
         </Container>
+
+        {isModalOpen && (
+          <CustomModal
+            message="해당 다이어리를 복구하시겠습니까?"
+            onClose={closeModal}
+            onConfirm={handleRestoreConfirm}
+            confirmButtonText="복구"
+            cancelButtonText="취소"
+            showCancelButton={true}
+          />
+        )}
       </div>
     </MyPageLayout>
   );

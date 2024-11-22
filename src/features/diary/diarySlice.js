@@ -249,7 +249,7 @@ const diarySlice = createSlice({
         state.loading = false;
         state.error = null;
         const { data = [], currentPage = 1, totalPages = 1 } = action.payload;
-        state.deletedDiaryList = data;
+        state.deletedDiaryList = [...state.deletedDiaryList, ...data];
         state.deletedCurrentPage = currentPage;
         state.deletedTotalPages = totalPages;
       })
