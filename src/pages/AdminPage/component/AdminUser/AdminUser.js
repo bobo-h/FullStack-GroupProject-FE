@@ -7,6 +7,7 @@ import {
   setSelectedUser,
   deleteAllEligibleUsers,
   clearStates,
+  searchUsers,
 } from "../../../../features/admin/adminSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Button2 from "../../../../common/components/Button2";
@@ -15,9 +16,16 @@ import Alert from "../../../../common/components/Alert";
 const AdminUser = () => {
   const [sortBy, setSortBy] = useState("");
   const [activeTab, setActiveTab] = useState("allUser");
-  const [showDialog, setShowDialog] = useState(false); // 다이얼로그 열림 상태 관리
+  const [showDialog, setShowDialog] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertContent, setAlertContent] = useState("");
+  const [searchTerm, setSearchTerm] = useState(""); // 검색
+  const [searchResults, setSearchResults] = useState({
+    allUser: [],
+    ineligibleUser: [],
+    eligibleUser: [],
+    allAdmin: [],
+  });
 
   const selectedUser = useSelector((state) => state.admin.selectedUser);
   const { error, success, message, totalUserNum } = useSelector(
@@ -39,12 +47,22 @@ const AdminUser = () => {
 
   // 수정 버튼 클릭 시 호출
   const handleEditUser = (user) => {
-    dispatch(setSelectedUser(user)); // 선택된 유저 정보를 Redux 상태에 저장
-    setShowDialog(true); // 다이얼로그 열기
+    dispatch(setSelectedUser(user));
+    setShowDialog(true);
   };
 
   const handleDeleteAllEligibleUsers = () => {
     dispatch(deleteAllEligibleUsers());
+  };
+
+  // 검색어 변경 시 검색 로직 실행
+  const handleSearchClick = () => {
+    dispatch(searchUsers({ searchTerm, userType: activeTab })).then((res) => {
+      setSearchResults((prev) => ({
+        ...prev,
+        [activeTab]: res.payload, // 활성화된 탭의 검색 결과만 업데이트
+      }));
+    });
   };
 
   return (
@@ -64,14 +82,18 @@ const AdminUser = () => {
           <Col md={2}>
             <h2>User</h2>
           </Col>
-          <Col md={3}>
-            <Form.Select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-            >
-              <option>최신순</option>
-              <option>등록순</option>
-            </Form.Select>
+          <Col md={2}>
+            <Form.Control
+              type="text"
+              placeholder="이메일 또는 이름으로 검색"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </Col>
+          <Col md={1}>
+            <Button variant="primary" onClick={handleSearchClick}>
+              검색
+            </Button>
           </Col>
           {activeTab === "allUser" && (
             <Col md={7} className="total-user-num">
@@ -93,6 +115,7 @@ const AdminUser = () => {
                 sortBy={sortBy}
                 userType="allUser"
                 onEditUser={handleEditUser}
+                searchResults={searchResults["allUser"]}
               />
             </Tab>
 
@@ -103,6 +126,7 @@ const AdminUser = () => {
                 sortBy={sortBy}
                 userType="ineligibleUser"
                 onEditUser={handleEditUser}
+                searchResults={searchResults["ineligibleUser"]}
               />
             </Tab>
 
@@ -116,6 +140,7 @@ const AdminUser = () => {
                 sortBy={sortBy}
                 userType="eligibleUser"
                 onEditUser={handleEditUser}
+                searchResults={searchResults["eligibleUser"]}
               />
             </Tab>
             {/* 관리자 */}
@@ -125,6 +150,7 @@ const AdminUser = () => {
                 sortBy={sortBy}
                 userType="allAdmin"
                 onEditUser={handleEditUser}
+                searchResults={searchResults["allAdmin"]}
               />
             </Tab>
           </Tabs>

@@ -83,6 +83,21 @@ export const deleteAllEligibleUsers = createAsyncThunk(
   }
 );
 
+// 유저 검색
+export const searchUsers = createAsyncThunk(
+  "admin/searchUsers",
+  async ({ searchTerm, userType }, { rejectWithValue }) => {
+    try {
+      const response = await api.get(
+        `/admin/users?search=${searchTerm}&type=${userType}`
+      );
+      return response.data.data; // 검색 결과 반환
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const adminSlice = createSlice({
   name: "admin",
   initialState: {
@@ -90,6 +105,7 @@ const adminSlice = createSlice({
     ineligibleUser: [], //탈퇴로부터 90일이내의 회원리스트
     eligibleUser: [], //탈퇴로부터 90일이상의 회원리스트
     allAdmin: [],
+    searchResults: [],
     selectedUser: null,
     totalUserNum: null,
     loading: false,
@@ -181,6 +197,17 @@ const adminSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
         state.success = false;
+      })
+      .addCase(searchUsers.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(searchUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.searchResults = action.payload;
+      })
+      .addCase(searchUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });

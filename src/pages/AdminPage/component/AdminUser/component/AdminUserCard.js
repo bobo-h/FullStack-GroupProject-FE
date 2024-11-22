@@ -10,7 +10,7 @@ import {
   getAllAdminList,
 } from "../../../../../features/admin/adminSlice";
 
-const UserCard = ({ sortBy, userType, onEditUser }) => {
+const UserCard = ({ sortBy, userType, onEditUser, searchResults = [] }) => {
   const dispatch = useDispatch();
   const { allUser = [] } = useSelector((state) => state.admin);
   const { ineligibleUser = [] } = useSelector((state) => state.admin);
@@ -18,7 +18,9 @@ const UserCard = ({ sortBy, userType, onEditUser }) => {
   const { allAdmin = [] } = useSelector((state) => state.admin);
 
   const data =
-    userType === "allUser"
+    searchResults.length > 0
+      ? searchResults
+      : userType === "allUser"
       ? allUser
       : userType === "ineligibleUser"
       ? ineligibleUser
@@ -28,15 +30,17 @@ const UserCard = ({ sortBy, userType, onEditUser }) => {
 
   useEffect(() => {
     //API 호출
-    if (userType === "allUser") {
-      console.log("allUser", allUser);
-      dispatch(getAllUserList());
-    } else if (userType === "ineligibleUser") {
-      dispatch(getIneligibleUserList());
-    } else if (userType === "eligibleUser") {
-      dispatch(getEligibleUserList());
-    } else if (userType === "allAdmin") {
-      dispatch(getAllAdminList());
+    if (searchResults.length === 0) {
+      if (userType === "allUser") {
+        console.log("allUser", allUser);
+        dispatch(getAllUserList());
+      } else if (userType === "ineligibleUser") {
+        dispatch(getIneligibleUserList());
+      } else if (userType === "eligibleUser") {
+        dispatch(getEligibleUserList());
+      } else if (userType === "allAdmin") {
+        dispatch(getAllAdminList());
+      }
     }
   }, [userType, sortBy]);
 
