@@ -1,4 +1,8 @@
 .admin-user-page {
+  .admin-user-page__btn {
+    font-size: 15px;
+    padding: 5px 10px;
+  }
   .total-user-num {
     text-align: end;
     margin-top: 10px;
@@ -50,4 +54,25 @@
   .nav-tabs .nav-link:hover {
     color: darkgray; /* 마우스 오버 시 색상 */
   }
+
+  @media (max-width: 770px) {
+    .user-table-content__btn {
+      font-size: 12px;
+      padding: 5px 10px;
+    }
+    .email {
+      max-width: 100px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+.modal-content {
+  font-family: "HakgyoansimBunpilR";
+}
+
+.form-check-input:checked {
+  background-color: var(--primary-color-deepGreen);
+  border-color: var(--primary-color-deepGreen);
 }

@@ -1,15 +1,11 @@
-import { set } from "@cloudinary/url-gen/actions/variable";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Offcanvas, Navbar, Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import "../style/sidebarForMyPage.style.css";
 
 const SidebarForMyPage = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
-  const { user } = useSelector((state) => state.user);
 
   const handleSelectMenu = (url) => {
     setShow(false);
@@ -22,19 +18,25 @@ const SidebarForMyPage = () => {
         <Link to="/">
           <img
             width={150}
-            src="logo1.png"
+            src="/logo1.png"
             alt="logo.png"
             className="logo-image"
           />
         </Link>
         <div className="sidebar-general-style">
-          <div className="sidebar-item">My Page</div>
+          <div className="sidebar-item__title">My Page</div>
           <ul className="sidebar-area">
             <li
-              className="sidebar-item"
+              className="sidebar-item__menu"
               onClick={() => handleSelectMenu("/my-page")}
             >
-              나의 챗봇리스트
+              나의 정보 & 챗봇
+            </li>
+            <li
+              className="sidebar-item__menu"
+              onClick={() => handleSelectMenu("/my-page/diary-bin")}
+            >
+              휴지통
             </li>
           </ul>
         </div>

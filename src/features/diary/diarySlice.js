@@ -83,6 +83,38 @@ export const getFilterOptions = createAsyncThunk(
   }
 );
 
+export const getDeletedDiaryList = createAsyncThunk(
+  "diary/getDeletedDiaryList",
+  async ({ page = 1, limit = 10 } = {}, { rejectWithValue }) => {
+    try {
+      const query = [
+        `page=${encodeURIComponent(page)}`,
+        `limit=${encodeURIComponent(limit)}`,
+      ];
+      const response = await api.get(`/diary/deleted?${query.join("&")}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || "Failed to fetch deleted diaries."
+      );
+    }
+  }
+);
+
+export const restoreDiary = createAsyncThunk(
+  "diary/restoreDiary",
+  async (diaryId, { rejectWithValue }) => {
+    try {
+      const response = await api.patch(`/diary/restore/${diaryId}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || "Failed to restore the diary."
+      );
+    }
+  }
+);
+
 const diarySlice = createSlice({
   name: "diary",
   initialState: {
@@ -90,11 +122,12 @@ const diarySlice = createSlice({
     error: "",
     diaryList: [],
     filter: { year: "", month: "" },
-    deletedDiaryList: [],
     selectedDiary: null,
     currentPage: 1,
     totalPages: 1,
-    deletedTotalPageNum: 1,
+    deletedDiaryList: [],
+    deletedCurrentPage: 1,
+    deletedTotalPages: 1,
     success: false,
     filterOptions: { years: [], months: [] },
   },
@@ -110,6 +143,11 @@ const diarySlice = createSlice({
       state.diaryList = [];
       state.currentPage = 1;
       state.totalPages = 1;
+    },
+    clearDeletedDiaryList: (state) => {
+      state.deletedDiaryList = [];
+      state.deletedCurrentPage = 1;
+      state.deletedTotalPages = 1;
     },
   },
   extraReducers: (builder) => {
@@ -202,10 +240,46 @@ const diarySlice = createSlice({
         state.loading = false;
         state.error = action.payload || "Failed to fetch filter options.";
         state.filterOptions = { years: [], months: [] };
+      })
+      .addCase(getDeletedDiaryList.pending, (state) => {
+        state.loading = true;
+        state.error = "";
+      })
+      .addCase(getDeletedDiaryList.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        const { data = [], currentPage = 1, totalPages = 1 } = action.payload;
+        state.deletedDiaryList = [...state.deletedDiaryList, ...data];
+        state.deletedCurrentPage = currentPage;
+        state.deletedTotalPages = totalPages;
+      })
+      .addCase(getDeletedDiaryList.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to fetch deleted diaries.";
+        state.deletedDiaryList = [];
+      })
+      .addCase(restoreDiary.pending, (state) => {
+        state.loading = true;
+        state.error = "";
+      })
+      .addCase(restoreDiary.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.deletedDiaryList = state.deletedDiaryList.filter(
+          (diary) => diary._id !== action.payload.diary._id
+        );
+      })
+      .addCase(restoreDiary.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to restore the diary.";
       });
   },
 });
 
-export const { setSelectedDiary, clearError, clearDiaryList } =
-  diarySlice.actions;
+export const {
+  setSelectedDiary,
+  clearError,
+  clearDiaryList,
+  clearDeletedDiaryList,
+} = diarySlice.actions;
 export default diarySlice.reducer;
