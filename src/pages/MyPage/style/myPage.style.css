@@ -9,7 +9,7 @@
   }
   .chatbot-list__btn-list {
     display: flex;
-    justify-content: flex-end; /* 버튼들을 오른쪽 끝으로 정렬 */
+    justify-content: flex-end;
     margin-right: px;
   }
   .btn__selected-delete {

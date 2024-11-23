@@ -12,9 +12,9 @@ const ChatbotList = ({ chatbotItem, index }) => {
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const [isEditing, setIsEditing] = useState(false);
-  // 수정 버튼 클릭 핸들러
+
   const handleModifyClick = () => {
-    setIsEditing(true); // 수정 모드 활성화
+    setIsEditing(true);
   };
 
   const handleModalClose = () => {
@@ -22,7 +22,6 @@ const ChatbotList = ({ chatbotItem, index }) => {
     setIsEditing(false);
   };
 
-  // 비활성화 클릭 핸들러
   const handleToggleVisualization = () => {
     const newVisualizationValue = !chatbotItem.visualization;
     dispatch(
@@ -59,7 +58,7 @@ const ChatbotList = ({ chatbotItem, index }) => {
             setModalContent("수정이 완료되었습니다.");
             setShowModal(true);
           }}
-        /> // 수정 화면 컴포넌트
+        />
       ) : (
         <div
           className={`chatbot-list-card ${

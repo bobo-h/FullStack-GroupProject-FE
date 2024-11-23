@@ -29,7 +29,6 @@ const UserCard = ({ sortBy, userType, onEditUser, searchResults = [] }) => {
       : allAdmin;
 
   useEffect(() => {
-    //API 호출
     if (searchResults && searchResults.length === 0) {
       if (userType === "allUser") {
         console.log("allUser", allUser);
@@ -47,9 +46,9 @@ const UserCard = ({ sortBy, userType, onEditUser, searchResults = [] }) => {
   return (
     <div className="user-table-content">
       <Container>
-        {searchResults === null ? ( // 검색 결과가 없을 때
+        {searchResults === null ? (
           <p>검색된 데이터가 없습니다.</p>
-        ) : data && data.length > 0 ? ( // 검색 또는 기본 데이터가 있을 때
+        ) : data && data.length > 0 ? (
           data.map((user, index) => (
             <Row key={user.id || index} className="mb-4">
               <Col xs={1} md={1} className="d-flex align-items-center">
@@ -82,7 +81,7 @@ const UserCard = ({ sortBy, userType, onEditUser, searchResults = [] }) => {
             </Row>
           ))
         ) : (
-          <p>데이터가 존재하지 않습니다.</p> // 기본 데이터가 없을 때
+          <p>데이터가 존재하지 않습니다.</p>
         )}
       </Container>
     </div>

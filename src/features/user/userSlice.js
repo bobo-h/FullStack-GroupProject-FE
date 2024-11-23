@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../utils/api";
-// 회원가입
+
 export const registerUser = createAsyncThunk(
   "user/registerUser",
   async (
@@ -18,13 +18,11 @@ export const registerUser = createAsyncThunk(
 
       return response.data.data;
     } catch (error) {
-      // 실패
       return rejectWithValue(error.message);
     }
   }
 );
 
-// 이메일로 로그인
 export const loginWithEmail = createAsyncThunk(
   "user/loginWithEmail",
   async ({ email, password }, { rejectWithValue }) => {
@@ -38,7 +36,6 @@ export const loginWithEmail = createAsyncThunk(
   }
 );
 
-//구글로 로그인
 export const loginWithGoogle = createAsyncThunk(
   "user/loginWithGoogle",
   async (token, { rejectWithValue }) => {
@@ -52,20 +49,18 @@ export const loginWithGoogle = createAsyncThunk(
   }
 );
 
-// 토큰으로 로그인
 export const loginWithToken = createAsyncThunk(
   "user/loginWithToken",
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get("/user/me");
-      return response.data; //response 뒤에 .data 수정됨
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-// 마이페이지 회원정보 수정
 export const editUserInfo = createAsyncThunk(
   "user/editUserInfo",
   async ({ id, formData }, { dispatch, rejectWithValue }) => {
@@ -78,7 +73,6 @@ export const editUserInfo = createAsyncThunk(
   }
 );
 
-//회원탈퇴
 export const deleteUserInfo = createAsyncThunk(
   "user/deleteUserInfo",
   async ({ id, navigate }, { rejectWithValue }) => {
@@ -92,12 +86,11 @@ export const deleteUserInfo = createAsyncThunk(
   }
 );
 
-// 로그아웃
 export const logout = createAsyncThunk(
   "user/logout",
   async (_, { dispatch }) => {
     sessionStorage.removeItem("token");
-    dispatch(userSlice.actions.logout()); // 유저 정보 초기화
+    dispatch(userSlice.actions.logout());
   }
 );
 
@@ -172,12 +165,11 @@ const userSlice = createSlice({
       })
       .addCase(loginWithToken.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.user; // action.payload.data.user 에서 수정
+        state.user = action.payload.user;
       })
       .addCase(loginWithToken.rejected, (state, action) => {
         state.user = null;
         state.loading = false;
-        // state.error = action.payload || "로그인 실패"; //쓸데 없는 알림 노출되는 것 같아 지웠습니다.
       })
       .addCase(editUserInfo.pending, (state) => {
         state.loading = true;
