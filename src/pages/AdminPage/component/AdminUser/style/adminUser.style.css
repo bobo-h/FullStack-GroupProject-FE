@@ -16,7 +16,7 @@
   }
 
   .user-table-name .user-table-content.container {
-    border-radius: 10px;
+    border-radius: 10px; 
   }
 
   .user-table-name .user-table-content .row {
@@ -26,6 +26,7 @@
 
   .user-table-name .user-table-content .col {
     display: flex;
+    align-items: center;
     align-items: center;
   }
 
@@ -39,17 +40,20 @@
     border-bottom: 2px solid #000;
   }
 
+  
   .nav-tabs .nav-link {
-    color: gray;
+    color: gray; 
   }
 
+ 
   .nav-tabs .nav-link.active {
-    color: black;
-    font-weight: bold;
+    color: black; 
+    font-weight: bold; 
   }
 
+  
   .nav-tabs .nav-link:hover {
-    color: darkgray;
+    color: darkgray; 
   }
 
   @media (max-width: 770px) {

@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   toastMessage: { message: "", status: "" },
-  // 'success', 'error', 'warning'
 };
 
 const uiSlice = createSlice({
@@ -16,7 +15,7 @@ const uiSlice = createSlice({
       };
     },
     hideToastMessage(state) {
-      state.toastMessage = { message: "", status: "" }; // 메시지 초기화
+      state.toastMessage = { message: "", status: "" }; 
     },
   },
 });

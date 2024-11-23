@@ -32,6 +32,7 @@ export const addChatbotComment = createAsyncThunk(
   }
 );
 
+
 export const addUserComment = createAsyncThunk(
   "diary/createUserComment",
 
@@ -76,7 +77,7 @@ const commentSlice = createSlice({
     loading: false,
     registrationError: null,
     success: false,
-    comments: [],
+    comments: [], 
   },
   reducers: {
     clearErrors: (state) => {

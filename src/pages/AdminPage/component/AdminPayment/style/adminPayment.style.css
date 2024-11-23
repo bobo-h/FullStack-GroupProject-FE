@@ -43,9 +43,6 @@
         padding: 1%;
   }
 
-
-
-/* 페이지네이션 스타일 */
 .pagination {
   display: flex;
   justify-content: center;
@@ -55,26 +52,26 @@
 }
 
 .pagination .page-item {
-  border: 1px solid #A9B388; /* 경계선 */
-  border-radius: 5px; /* 모서리 둥글게 */
+  border: 1px solid #A9B388;
+  border-radius: 5px; 
 }
 
 .pagination .page-item.active .page-link {
-  background-color: #A9B388; /* 활성화된 페이지 배경색 */
-  color: white; /* 활성화된 페이지 글자색 */
-  outline: none; /* 파란색 테두리 제거 */
+  background-color: #A9B388; 
+  color: white;
+  outline: none; 
   box-shadow: none;
-  border: 1px solid #A9B388; /* 테두리 색을 동일하게 변경 */
+  border: 1px solid #A9B388; 
 }
 
 .pagination .page-link {
-  padding: 0.5rem 0.75rem; /* 링크 안 여백 */
-  color: #A9B388; /* 기본 색상 */
-  text-decoration: none; /* 밑줄 제거 */
+  padding: 0.5rem 0.75rem;
+  color: #A9B388; 
+  text-decoration: none; 
 }
 
 .pagination .page-link:hover {
-  background-color: #f1f1f1; /* 호버 효과 */
+  background-color: #f1f1f1; 
 }
 
 }

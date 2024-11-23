@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Form } from "react-bootstrap";
+import React, { useEffect} from "react";
+import { Container, Row, Col} from "react-bootstrap";
 import ReactDOM from "react-dom";
 import "./style/paymentModal.style.css";
 import Button from "../../../../common/components/Button";
@@ -32,7 +32,6 @@ const PaymentModal = ({ selectedProduct, onClose, onProceedToPayment }) => {
                 <div className="payment-card-area">
                     <Container className="product-card">
                         <Row className="align-items-center payment-modal-area">
-                            {/* <div className="cat-id"> {selectedProduct.id} </div> */}
                             <Col className="image-container">
                                 <div className="image">
                                     <img src={selectedProduct.image} className="image" />

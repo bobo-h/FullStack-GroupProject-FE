@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Form, Modal, Row, Col } from "react-bootstrap";
-import Alert from "../../../../../common/components/Alert";
 import CustomModal from "../../../../../common/components/CustomModal";
 import { useDispatch, useSelector } from "react-redux";
 import CloudinaryUploadWidget from "../../../../../utils/CloudinaryUploadWidget";
@@ -113,7 +112,7 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
       </Modal.Header>
       {error && (
         <div className="error-message">
-          <Alert variant="danger">{error}</Alert>
+          <CustomModal variant="danger">{error}</CustomModal>
         </div>
       )}
       {/* {showAlert && (
@@ -137,7 +136,7 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
           showCancelButton={false} // 취소 버튼 불필요
         />
       )}
-      <Form className="form-container" onSubmit={handleSubmit}>
+      <Form className="form-container admin-modal" onSubmit={handleSubmit}>
         <Row className="mb-3">
           <Form.Group as={Col} controlId="id">
             <Form.Label>Mood ID</Form.Label>

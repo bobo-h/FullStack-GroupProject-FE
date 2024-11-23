@@ -2,16 +2,12 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCommentList } from "../../../../features/comment/commentSlice";
 import Comment from "./components/Comment";
-import CommentForm from "./components/CommentForm";
 import "./style/comment.style.css"
 
 
 const CommentArea = ({ diaryId }) => {
   const dispatch = useDispatch();
   const { comments, loading, error } = useSelector((state) => state.comment);
-
-  //댓글 들어오나 확인
-  console.log("댓글들", comments);
 
   useEffect(() => {
     dispatch(getCommentList(diaryId));

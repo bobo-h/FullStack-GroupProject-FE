@@ -4,19 +4,19 @@ body {
 
 .admin-page {
   display: flex;
-  justify-content: center; /* Horizontally center the content */
-  align-items: center; /* Vertically center the content */
-  min-height: 100vh; /* Ensure the page takes at least the full height of the viewport */
-  transition: margin-left 0.3s ease; /* Menu toggle animation */
-  padding: 20px; /* Optional: Adds padding around the page */
+  justify-content: center; 
+  align-items: center; 
+  min-height: 100vh;
+  transition: margin-left 0.3s ease;
+  padding: 20px;
 }
 
 .admin-content {
   display: flex;
-  justify-content: center; /* Horizontally center the content inside */
-  align-items: center; /* Vertically center the content inside */
+  justify-content: center; 
+  align-items: center; 
   width: 100%;
-  max-width: 1200px; /* Optional: Max width for larger screens */
+  max-width: 1200px;
   padding: 20px;
   box-sizing: border-box;
   transition: margin-left 0.3s ease;
@@ -28,13 +28,13 @@ body {
   border: 3px solid var(--primary-color-brown);
   cursor: pointer;
   font-size: 16px;
-  width: 50px; /* Button width */
-  height: 50px; /* Button height */
-  border-radius: 50%; /* Circle button */
+  width: 50px; 
+  height: 50px; 
+  border-radius: 50%; 
   display: flex;
-  justify-content: center; /* Center the icon */
-  align-items: center; /* Center the icon */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Shadow */
+  justify-content: center; 
+  align-items: center; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 3%;
 }
 
@@ -44,15 +44,15 @@ body {
 }
 
 .admin-menu-btns {
-  display: flex; /* Flex for horizontal alignment */
-  gap: 10px; /* Optional: Gap between buttons */
+  display: flex; 
+  gap: 10px; 
 }
 
 @media (max-width: 700px) {
   .admin-page {
-    flex-direction: column; /* Stack vertically on mobile */
+    flex-direction: column; 
     height: auto;
-    padding: 0; /* Optional: Remove padding on mobile */
+    padding: 0; 
   }
 
   .admin-menu {
@@ -63,7 +63,7 @@ body {
   .admin-content {
     width: 100%;
     height: auto;
-    padding-top: 10px; /* Optional: Adjust padding on mobile */
+    padding-top: 10px;
   }
 
   .home-btn {

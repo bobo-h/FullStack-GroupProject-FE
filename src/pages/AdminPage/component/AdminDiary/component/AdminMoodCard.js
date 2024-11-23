@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import Alert from "../../../../../common/components/Alert";
 import CustomModal from "../../../../../common/components/CustomModal";
 import "../style/adminMood.style.css";
 import Button2 from '../../../../../common/components/Button2';
@@ -44,17 +43,6 @@ const AdminMoodCard = ({ mood, setMode, setShowDialog }) => {
 
   return (
     <div className='mood-table-content'>
-      {/* {showAlert && (
-        <Alert
-          message={alertContent}
-          onClose={() => {
-            setShowAlert(false);
-            setShowDialog(false);
-            dispatch(getMoodList({ page: 1 }));
-          }}
-          redirectTo="/admin"
-        />
-      )} */}
       {showModal && (
         <CustomModal
           message={modalContent}

@@ -10,9 +10,9 @@
     }
 
     .payment-modal-title {
-        font-size: 3vh; /* 전체 크기의 10% */
-        margin-bottom: 3%; /* 아래쪽 마진 3% */
-        text-align: center; /* 제목 중앙 정렬 */
+        font-size: 3vh;
+        margin-bottom: 3%; 
+        text-align: center; 
     }
 
     .payment-modal-area{

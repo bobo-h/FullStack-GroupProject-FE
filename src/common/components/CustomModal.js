@@ -10,7 +10,7 @@ const CustomModal = ({
   title = "MeowMemo",
   message,
   onClose,
-  onConfirm,
+  onConfirm, 
   redirectTo,
   confirmButtonText = "확인",
   cancelButtonText = "취소",
