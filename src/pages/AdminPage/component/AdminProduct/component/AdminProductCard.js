@@ -73,24 +73,24 @@ const AdminProductCard = ({ product, setMode, setShowDialog }) => {
           <Col md={1} className="d-flex align-items-center">
             {product.id}
           </Col>
-          <Col md={2} className="d-flex align-items-center">
+          <Col md={2} className="d-flex align-items-center img-center-mobile">
             <img src={product.image} alt={product.name} className="img-fluid" />
           </Col>
-          <Col md={1} className="d-flex align-items-center">
+          <Col md={1} className="d-flex align-items-center order-name">
             {product.name}
           </Col>
-          <Col md={3} className="d-flex align-items-center">
+          <Col md={3} className="d-flex align-items-center order-description">
             {product.description}
           </Col>
-          <Col md={1} className="d-flex align-items-center">
+          <Col md={1} className="d-flex align-items-center order-price">
             {product.price ? `${product.price.toLocaleString()}원` : "0"}
           </Col>
-          <Col md={1} className="d-flex align-items-center">
+          <Col md={1} className="d-flex align-items-center mobile-none">
             {product.defaultProduct}
           </Col>
           <Col
             md={3}
-            className="d-flex align-items-center justify-content-center"
+            className="d-flex align-items-center justify-content-center order-btn"
           >
             <Button className="btn-gap" onClick={handleClickEditItem}>수정</Button>
             <Button2 onClick={handleClickDeleteItem}>삭제</Button2>

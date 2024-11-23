@@ -68,8 +68,14 @@ const AdminProduct = () => {
     <div className="admin-product-page">
       <Container>
         <Row>
-          <Col md={2}>
+          <Col md={2} className="product-header">
             <h2>Product</h2>
+            <button
+              className="open-admin-button web-none"
+              onClick={handleClickNewItem}
+            >
+              <i className="ri-add-line"></i>
+            </button>
           </Col>
           <Col md={3}>
             <Form.Select
@@ -81,7 +87,7 @@ const AdminProduct = () => {
               <option>배경지</option>
             </Form.Select>
           </Col>
-          <Col md={7} className='text-end'>
+          <Col md={7} className='text-end mobile-none'>
             <Button onClick={handleClickNewItem}>add Item</Button>
           </Col>
         </Row>
