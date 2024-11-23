@@ -192,14 +192,18 @@ function DraggableCat({
     try {
       await onDragStop(id, newXY);
 
+      // 3초 대기 후에도 현재 요청이 최신인지 확인
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       if (lastRequestRef.current === currentRequest) {
-        console.log("이 요청은 마지막 요청입니다.");
+        console.log("이 요청은 2초 후에도 마지막 요청입니다.");
       } else {
-        console.log("이 요청은 무시됩니다.");
+        console.log("이 요청은 2초 후 무시되었습니다.");
       }
     } catch (error) {
       console.error("onDragStop 에러 발생:", error);
     } finally {
+      // 3초가 지난 후에도 요청이 최신이라면 로딩 해제
       if (lastRequestRef.current === currentRequest) {
         setLocalLoading(false);
       }
