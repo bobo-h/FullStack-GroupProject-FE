@@ -28,8 +28,13 @@
   .diary-detail-row {
     flex-direction: column; /* 상하 배치 */
   }
+  
+}
+
+@media (max-width: 768px) {
   .comment-area-content {
     padding: 3%;
     margin: 5%;
+    width: 90%;
   }
 }
