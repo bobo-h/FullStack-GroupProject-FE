@@ -79,7 +79,7 @@ const DiaryList = () => {
               className="diary-list__item mx-0"
               onClick={() => navigate(`/diaries/${diary.id}`)}
             >
-              <Col xs={2} className="diary-list__item-date rounded-4">
+              <Col xs={2} className="diary-list__item-date">
                 <p className="diary-list__item-date-day text-muted mb-0">
                   {new Date(diary.selectedDate).toLocaleDateString("en-US", {
                     weekday: "short",
@@ -89,30 +89,32 @@ const DiaryList = () => {
                   {new Date(diary.selectedDate).getDate()}
                 </h3>
               </Col>
-              <Col xs={7} className="diary-list__item-content ms-2">
+              <Col xs={7} className="diary-list__item-content mt-0">
                 <div className="diary-list__item-content-header d-flex align-items-center">
                   <div className="diary-list__item-mood">
                     <img
                       src={diary.mood.image}
                       alt={diary.mood.name}
-                      className="diary-list__item-mood-icon me-2"
+                      className="diary-list__item-mood-icon"
                     />
                   </div>
-                  <h5 className="diary-list__item-title mb-0 ms-2">
-                    {diary.title}
+                  <div className="diary-list__item-title-box">
+                    <h5 className="diary-list__item-title mb-0 ms-2">
+                      {diary.title}
+                    </h5>
                     {diary.isEdited && (
                       <span className="diary-list__item-edited ms-2">
                         (수정됨)
                       </span>
                     )}
-                  </h5>
+                  </div>
                 </div>
                 <p className="diary-list__item-description text-muted mb-0">
                   {diary.content}
                 </p>
               </Col>
               {diary.image && (
-                <Col xs={3} className="diary-list__item-photo px-0">
+                <Col xs={3} className="diary-list__item-photo px-0 m-0">
                   <img
                     src={diary.image}
                     alt={diary.title}

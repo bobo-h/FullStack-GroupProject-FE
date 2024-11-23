@@ -36,6 +36,7 @@ export const getDiaryDetail = createAsyncThunk(
   async (diaryId, { rejectWithValue }) => {
     try {
       const response = await api.get(`/diary/${diaryId}`);
+      console.log("Diary Detail Response:", response.data);
       return response.data.diary;
     } catch (error) {
       return rejectWithValue(error.response.data);
