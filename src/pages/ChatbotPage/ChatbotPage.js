@@ -6,6 +6,7 @@ import "./style/chatbot.style.css";
 import Button from "../../common/components/Button";
 import PersonalityMBTI from "./component/PersonalityMBTI/PersonalityMBTI";
 import Alert from "../../common/components/Alert";
+import CustomModal from "../../common/components/CustomModal";
 import { getProductList } from "../../features/product/productSlice";
 import { updateChatbotJins } from "../../features/chatbot/chatbotSlice";
 
@@ -15,7 +16,7 @@ const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
   const [name, setName] = useState(chatbotItem?.name || "");
   const selectedProduct = useSelector((state) => state.product.selectedProduct);
   const [personality, setPersonality] = useState(
-  chatbotItem?.personality || ""
+    chatbotItem?.personality || ""
   );
 
   const [isDirectInput, setIsDirectInput] = useState(true);
@@ -23,23 +24,48 @@ const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
   const [alertType, setAlertType] = useState(null);
   const [redirectTo, setRedirectTo] = useState("")
   const [alertContent, setAlertContent] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState("");
+  const [modalType, setModalType] = useState(null)
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [submitEvent, setSubmitEvent] = useState(null); // 이벤트 객체를 저장
+
   const dispatch = useDispatch();
 
-  const { loading} = useSelector(
+  const { loading } = useSelector(
     (state) => state.chatbot
   );
 
   const product = useSelector((state) => state.product?.productList || []);
 
-
   useEffect(() => {
     dispatch(getProductList());
   }, [dispatch]);
 
+  const handleOpenConfirmModal = (e) => {
+    e.preventDefault(); // `Form`의 기본 동작을 막음
+
+    // chatbotItem이 없으면 ConfirmModal 표시
+    if (!chatbotItem) {
+      setSubmitEvent(e);
+      setShowConfirmModal(true); // 모달 열기
+    } else {
+      handleSubmit(e); // 바로 수정 진행
+    }
+  };
+
+  const handleConfirm = () => {
+    setShowConfirmModal(false); // 모달 닫기
+    if (submitEvent) {
+      handleSubmit(submitEvent); // 저장된 이벤트 객체를 handleSubmit에 전달
+      setSubmitEvent(null); // 이벤트 객체 초기화
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-  
+
     if (chatbotItem) {
       // 수정 로직
       dispatch(
@@ -58,8 +84,9 @@ const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
       // 일반 생성 로직
       dispatch(
         createChatbot(
-          { product_id: selectedProduct._id, 
-            name, 
+          {
+            product_id: selectedProduct._id,
+            name,
             personality,
           }))
         .then(() => {
@@ -67,16 +94,22 @@ const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
           setAlertType("success");
           setRedirectTo("/");
           setShowAlert(true);
+          setModalContent("입양에 성공했습니다!");
+          setModalType("success");
+          setRedirectTo("/");
+          setShowModal(true);
         })
         .catch((error) => {
           console.error("입양 실패", error);
           setAlertContent("입양에 실패했습니다!");
           setAlertType("danger");
           setShowAlert(true);
+          setModalContent("입양에 실패했습니다!");
+          setModalType("danger");
+          setShowModal(true);
         });
     }
   };
-  
 
   const handlePersonalityChange = (selectedPersonality) => {
     setPersonality(selectedPersonality);
@@ -96,16 +129,23 @@ const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
     console.log("alertType:", alertType);
   }, [showAlert, alertType]);
 
-
   return (
     <div className="chatbot-create-modal">
-      {showAlert && (
+      {/* {showAlert && (
         <Alert
           message={alertContent}
           onClose={() => setShowAlert(false)}
           redirectTo={redirectTo}
         />
-        )}
+      )} */}
+      {showModal && (
+        <CustomModal
+          message={modalContent}
+          redirectTo={redirectTo}
+          onClose={() => setShowModal(false)}  // CustomeModal 닫기
+          showCancelButton={false} // 취소 버튼 불필요
+        />
+      )}
       <Container
         className=" d-flex justify-content-center align-items-center"
         style={{ height: "100vh" }}
@@ -215,15 +255,15 @@ const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
                   <Col className="personality-area">
                     <Button
                       variant="primary"
-                      type="submit"
+                      onClick={handleOpenConfirmModal} // onClick으로 수정
                       disabled={loading}
                       className="w-auto"
                     >
                       {loading
                         ? "생성 중..."
                         : chatbotItem
-                        ? "수정하기"
-                        : "입양하기"}
+                          ? "수정하기"
+                          : "입양하기"}
                     </Button>
                   </Col>
                 </Row>
@@ -232,6 +272,14 @@ const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
           </Col>
         </Row>
       </Container>
+      {showConfirmModal && (
+        <CustomModal
+          message="입양 후 고양이의 성격은 바꿀 수 없습니다. 입양 하시겠습니까?"
+          onClose={() => setShowConfirmModal(false)}
+          onConfirm={handleConfirm}
+          showCancelButton={true}
+        />
+      )}
     </div>
   );
 };
