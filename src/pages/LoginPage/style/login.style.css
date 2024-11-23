@@ -4,9 +4,37 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* 화면 높이 전체를 차지 */
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+
+  .image-grid {
+    display: flex;
+    justify-content: center; /* 고양이 이미지가 가운데 정렬 */
+    align-items: center;
+    gap: 10px; /* 이미지 간격 */
+  }
+
+  .cat-image {
+    width: 50px; /* 고양이 이미지 크기 */
+    height: 50px;
+    object-fit: cover; /* 이미지 비율 유지 */
+    border-radius: 50%; /* 둥근 이미지 */
+    transition: transform 0.3s ease; /* 마우스 hover 시 애니메이션 효과 */
+  }
+
+  .cat-image:hover {
+    transform: scale(1.2); /* 고양이 이미지 확대 효과 */
+  }
+
+  .login-area__logo-image {
+    width: 300px;
+    position: relative;
+    z-index: 1;
+  }
 
   .login-area__title {
+    margin-top: 10px;
     margin-bottom: 50px;
   }
   .login-button-area {
@@ -46,11 +74,34 @@
     text-align: center;
     font-weight: bolder;
     margin: 10px;
-
-    color: #5f6f52;
   }
-
+  .other-account__link {
+    text-decoration: none;
+    color: var(--primary-color-deepGreen);
+    margin-bottom: 10px;
+  }
   .google-login__btn {
     margin: 0 auto; /* 버튼을 가운데 자동 정렬 */
+  }
+
+  /* 반응형 디자인 */
+  @media screen and (max-width: 768px) {
+    .cat-image {
+      width: 40px;
+      height: 40px;
+    }
+    .login-area__logo-image {
+      width: 250px;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .cat-image {
+      width: 35px;
+      height: 35px;
+    }
+    .login-area__logo-image {
+      width: 200px;
+    }
   }
 }
