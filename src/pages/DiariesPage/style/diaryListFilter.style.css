@@ -1,9 +1,23 @@
 .diary-filter-container {
   display: flex;
-  justify-content: flex-end; /* 오른쪽 정렬 */
-  margin-left: auto; /* 오른쪽 끝으로 이동 */
-  gap: 30px; /* 필터 간 간격 */
-  padding-right: 20px; /* 화면 오른쪽 여백 */
+  justify-content: flex-end;
+  align-items: center;
+  margin-left: auto;
+  gap: 30px;
+  padding-right: 20px;
+}
+
+.diary-filter__new-entry {
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.diary-filter__new-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  cursor: pointer;
 }
 
 .diary-filter {
@@ -14,7 +28,7 @@
 .diary-filter__label {
   display: flex;
   align-items: center;
-  font-size: 14px;
+  font-size: 16px;
   cursor: pointer;
   user-select: none;
   color: #333;
@@ -39,7 +53,7 @@
 .diary-filter__list {
   position: absolute;
   top: 100%;
-  right: 0; /* 드롭다운 오른쪽 정렬 */
+  right: 0;
   z-index: 1000;
   background-color: white;
   border: 1px solid #ccc;
@@ -57,4 +71,59 @@
 
 .diary-filter__item:hover {
   background-color: #f0f0f0;
+}
+
+@media (max-width: 768px) {
+  .diary-filter-container {
+    gap: 20px; /* 요소 간 간격 축소 */
+    padding-right: 10px;
+  }
+
+  .diary-filter__label {
+    font-size: 14px; /* 폰트 크기 축소 */
+  }
+
+  .diary-filter__item {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .diary-filter__icon {
+    width: 10px;
+    height: 10px;
+  }
+
+  .diary-filter__new-icon {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* 화면 너비 480px 이하 */
+@media (max-width: 480px) {
+  .diary-filter-container {
+    flex-wrap: wrap; /* 요소들이 화면에 맞게 줄 바꿈 가능 */
+    justify-content: center; /* 가운데 정렬 */
+    gap: 15px;
+    padding-right: 10px;
+  }
+
+  .diary-filter__label {
+    font-size: 12px; /* 폰트 크기 축소 */
+  }
+
+  .diary-filter__item {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .diary-filter__icon {
+    width: 8px;
+    height: 8px;
+  }
+
+  .diary-filter__new-icon {
+    width: 12px;
+    height: 12px;
+  }
 }

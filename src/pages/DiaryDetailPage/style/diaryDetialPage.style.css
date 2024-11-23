@@ -1,34 +1,35 @@
-
 .diary-detail-row {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  
-  .diary-detail {
-    flex: 2;
-    background-color: #FEFAE0;
-    height: 100vh;
-  }
-  
-  .comment-area-content {
-    flex: 1;
-    padding: 2%; 
-    background-color: #b99470;
-    height: 100vh;
-    border-radius: 1rem;
-    margin: 2%;
-  }
+  display: flex;
+  flex-wrap: wrap;
+}
 
-  @media (max-width: 1600px) {
-    .diary-detail {
-      flex: 1 1 100%;
-      padding: 0; 
-      height: 100%;
-      
-    }
-    .comment-area-content{
-        padding: 3%; 
-        margin: 5%;
-    }
+.diary-detail-page {
+  flex: 2;
+  background-color: #fefae0;
+  height: 100vh;
+}
+
+.comment-area-content {
+  flex: 1;
+  padding: 2%;
+  background-color: #b99470;
+  height: 100vh;
+  border-radius: 1rem;
+  margin: 2%;
+}
+
+@media (max-width: 1600px) {
+  .diary-detail-page {
+    width: 100%; /* 댓글 너비에 맞춰 조정 */
+    margin: 0;
+    height: auto; /* 내용에 맞게 높이 조정 */
+    border-radius: 1rem; /* 댓글과 일관된 디자인 */
   }
-  
+  .diary-detail-row {
+    flex-direction: column; /* 상하 배치 */
+  }
+  .comment-area-content {
+    padding: 3%;
+    margin: 5%;
+  }
+}
