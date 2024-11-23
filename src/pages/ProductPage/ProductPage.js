@@ -2,16 +2,11 @@ import React, { useEffect, useState } from "react";
 import "./style/productPage.style.css";
 import { Row, Col, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getProductList,
-  setSelectedProduct,
-} from "../../features/product/productSlice.js";
-import { useNavigate } from "react-router-dom";
-
+import { getProductList, setSelectedProduct } from "../../features/product/productSlice.js";
 import LoadingSpinner from "../../common/components/LoadingSpinner";
 import PaymentModal from "./component/PaymentModal/PaymentModal.js";
-import PaymentInfoModal from "./component/PaymentInfoModal/PaymentInfoModal.js"; // Import PaymentInfoModal
-import ProductCard from "./component/ProductCard/ProductCard.js"; // Import PaymentInfoModal
+import PaymentInfoModal from "./component/PaymentInfoModal/PaymentInfoModal.js"; 
+import ProductCard from "./component/ProductCard/ProductCard.js"; 
 import Button2 from "../../common/components/Button2.js";
 
 const ProductPage = () => {
@@ -20,12 +15,9 @@ const ProductPage = () => {
   const selectedProduct = useSelector((state) => state.product.selectedProduct);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("Cat");
-  const [showPaymentModal, setShowPaymentModal] = useState(false); // Payment modal state
-  const [showPaymentInfoModal, setShowPaymentInfoModal] = useState(false); // Payment info modal state
+  const [showPaymentModal, setShowPaymentModal] = useState(false); 
+  const [showPaymentInfoModal, setShowPaymentInfoModal] = useState(false);
 
-  const navigate = useNavigate();
-
-  // Fetch product list
   useEffect(() => {
     setLoading(true);
     dispatch(getProductList()).then(() => {
@@ -38,24 +30,20 @@ const ProductPage = () => {
     else if (filter === "BG_IMG") return product.category[0] === "BG_IMG";
   });
 
-  // Open the PaymentModal
   const handleOpenPaymentModal = (product) => {
-    dispatch(setSelectedProduct(product)); // Set the selected product in Redux
+    dispatch(setSelectedProduct(product)); 
     setShowPaymentModal(true);
   };
 
-  // Close the PaymentModal
   const handleClosePaymentModal = () => {
     setShowPaymentModal(false);
   };
 
-  // Open the PaymentInfoModal
   const handleProceedToPayment = () => {
-    setShowPaymentModal(false); // Close PaymentModal
-    setShowPaymentInfoModal(true); // Show PaymentInfoModal
+    setShowPaymentModal(false); 
+    setShowPaymentInfoModal(true); 
   };
 
-  // Close the PaymentInfoModal
   const handleClosePaymentInfoModal = () => {
     setShowPaymentInfoModal(false);
   };
@@ -107,7 +95,7 @@ const ProductPage = () => {
         <PaymentModal
           selectedProduct={selectedProduct}
           onClose={handleClosePaymentModal}
-          onProceedToPayment={handleProceedToPayment} // Pass handleProceedToPayment as prop
+          onProceedToPayment={handleProceedToPayment} 
         />
       )}
 

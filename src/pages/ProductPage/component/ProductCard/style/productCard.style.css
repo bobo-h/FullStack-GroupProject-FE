@@ -16,20 +16,12 @@
   }
 
   .image-container {
-    /* display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%; */
     width: 100%;
     text-align: center;
     margin-bottom: 15px;
   }
 
   .product-image {
-    /* width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center; */
     max-width: 100%;
     height: auto;
     border-radius: 8px;
@@ -43,30 +35,12 @@
     font-weight: bold;
     margin-bottom: 8px;
   }
-  /*   
-  .name {
-    font-weight: bold;
-    margin-bottom: 3%;
-  }
-
-  .description {
-    margin-bottom: 3%;
-  }
-
-  .price {
-    font-size: 16px;
-  } */
 
 }
-
-/* 미디어 쿼리: 화면 너비 1500px 이하일 때 */
-
 
 @media (max-width: 700px) {
   .product-card-area {
     width: 80%;
-    /* 더 작은 화면에서는 너비를 90%로 설정 */
     margin: 1% auto;
-    /* 여전히 가운데 정렬 유지 */
   }
 }

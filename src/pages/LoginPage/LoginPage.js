@@ -48,16 +48,12 @@ const LoginPage = () => {
     dispatch(loginWithGoogle(googleData.credential));
   };
 
-  // if (user) {
-  //   navigate("/");
-  // }
-  // user 상태에 따라 리다이렉션 -> 기존에는 토근 로그인 일때만 리다이렉션 해줌.
   useEffect(() => {
     if (user) {
       navigate("/");
     }
   }, [user, navigate]);
-  // 에러 초기화
+
   const onClose = () => {
     dispatch(clearErrors());
   };
@@ -72,7 +68,6 @@ const LoginPage = () => {
         />
       )}
 
-      {/* 고양이 이미지들 */}
       <div className="image-grid">
         {images.map((image, index) => (
           <img
@@ -144,7 +139,6 @@ const LoginPage = () => {
           </div>
         </Form>
       </div>
-      {/* 고양이 이미지들 */}
       <div className="image-grid">
         {images.map((image, index) => (
           <img

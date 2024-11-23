@@ -4,38 +4,29 @@ import { printLineChatbot } from "../../../features/chatbot/chatbotSlice";
 
 const ToastChatbotComponent = ({ catPersonality }) => {
   const dispatch = useDispatch();
-  const [chatResponse, setChatResponse] = useState(null); // 상태 추가
-  // const { loading } = useSelector((state) => state.chatbot); 이거 사용하면 전체적으로 로딩되어버림
-  const [loading, setLoading] = useState(true); // 로딩 상태 추가
+  const [chatResponse, setChatResponse] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchChatResponse = async () => {
-      setLoading(true); // 로딩 시작
+      setLoading(true);
       try {
         const response = await dispatch(
           printLineChatbot({ catPersonality })
-        ).unwrap(); // Redux Toolkit의 unwrap 사용
+        ).unwrap();
         setChatResponse(response);
       } catch (error) {
         console.error("Error:", error);
-        setChatResponse("오류가 발생했어요."); // 에러 처리
+        setChatResponse("오류가 발생했어요.");
       } finally {
-        setLoading(false); // 로딩 종료
+        setLoading(false);
       }
     };
 
     fetchChatResponse();
   }, [dispatch, catPersonality]);
 
-  return (
-    <>
-      {loading ? (
-        <>Loading...</> // 로딩 중 표시
-      ) : (
-        <>{chatResponse}</> // 리턴 받은 값 표시
-      )}
-    </>
-  );
+  return <>{loading ? <>Loading...</> : <>{chatResponse}</>}</>;
 };
 
 export default ToastChatbotComponent;

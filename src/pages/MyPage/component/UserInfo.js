@@ -18,7 +18,6 @@ const UserInfo = () => {
   const dispatch = useDispatch();
   const { user, editError } = useSelector((state) => state.user);
 
-  // formData 상태 초기화
   const [formData, setFormData] = useState({
     name: "",
     birthday: "",
@@ -30,23 +29,21 @@ const UserInfo = () => {
   const [modalMessage, setModalMessage] = useState("");
   const [deleteShowModal, setDeleteShowModal] = useState(false);
 
-  // user 정보가 변경되면 formData 갱신
   useEffect(() => {
     if (user) {
       setFormData({
         name: user.name || "",
-        birthday: user.birthday?.slice(0, 10) || "", // YYYY-MM-DD 형식으로 설정
+        birthday: user.birthday?.slice(0, 10) || "",
         profileImage: user.profileImage || "",
       });
     }
   }, [user]);
 
-  //form에 데이터 넣어주기
   const handleInputChange = (event) => {
     const { id, value } = event.target;
     setFormData({ ...formData, [id]: value });
   };
-  // 프로필 사진 변경 핸들러
+
   const uploadImage = (url) => {
     setFormData({ ...formData, profileImage: url });
   };

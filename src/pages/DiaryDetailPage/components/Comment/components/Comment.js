@@ -5,16 +5,14 @@ import { Link } from "react-router-dom";
 import CommentReply from "./CommentReply";
 import CommentForm from "./CommentForm";
 
-// 댓글
 const Comment = ({ comments }) => {
   const [expandedComments, setExpandedComments] = useState({});
   const [lastReplyId, setLastReplyId] = useState(null);
 
-  // "더보기" 또는 "숨기기" 클릭 핸들러
   const toggleReplies = (commentId) => {
     setExpandedComments((prev) => ({
       ...prev,
-      [commentId]: !prev[commentId], // 현재 상태의 반대값으로 변경
+      [commentId]: !prev[commentId], 
     }));
   };
 
@@ -49,7 +47,6 @@ const Comment = ({ comments }) => {
                 </Link>
               </Row>
 
-              {/* 대댓글 표시 영역 */}
               {expandedComments[comment._id] && (
                 <div className="comment__replies-area">
                   <CommentReply comment={comment} />

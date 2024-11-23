@@ -1,8 +1,9 @@
-.chatbot-create-modal{
-     display: flex; /* Enable flexbox */
-    justify-content: center; /* Center horizontally */
-     align-items: center; /* Center vertically */
-     background-color: rgba(0, 0, 0, 0.5);
+    .chatbot-create-modal{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
 
 
      .chatbot-create-content {
@@ -14,19 +15,19 @@
     }
     
      .create-modal-flex {
-        display: flex; /* Flexbox container */
-        flex-direction: column; /* Stack items vertically */
-        width: 100%; /* Ensure it fills the available width */
-        max-width: 900px; /* Optional: limit the width */
-        padding: 20px; /* Add some padding */
-        background-color: #fff; /* Set a background color */
-        border-radius: 10px; /* Optional: rounded corners */
+        display: flex;
+        flex-direction: column; 
+        width: 100%; 
+        max-width: 900px; 
+        padding: 20px;
+        background-color: #fff; 
+        border-radius: 10px; 
       }
 
     .create-modal-title{
-        font-size: 3vh; /* 전체 크기의 10% */
-         margin-bottom: 6%; /* 아래쪽 마진 3% */
-        text-align: center; /* 제목 중앙 정렬 */
+        font-size: 3vh; 
+         margin-bottom: 6%; 
+        text-align: center; 
     }
 
     .btn-gap {
@@ -44,7 +45,10 @@
         width: 100%;
     }
 
-}
+    .chatbot-personality-box{
+        border: 1px #5F6F52;
+    }
+    
 
 @media (max-width: 700px) {
     .hide-button {

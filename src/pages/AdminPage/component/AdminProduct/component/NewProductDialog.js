@@ -39,7 +39,6 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
   const [modalContent, setModalContent] = useState("");
   const dispatch = useDispatch();
 
-  // 다이얼로그가 열리면, 모드에 따라 초기 데이터 설정
   useEffect(() => {
     if (error || !success) {
       dispatch(clearError());
@@ -131,7 +130,7 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
           showCancelButton={false} // 취소 버튼 불필요
         />
       )}
-      <Form className="form-container" onSubmit={handleSubmit}>
+      <Form className="form-container admin-modal" onSubmit={handleSubmit}>
         <Row className="mb-3">
           <Form.Group as={Col} controlId="id">
             <Form.Label>Product ID</Form.Label>
@@ -172,16 +171,7 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
         <Form.Group className="mb-3" controlId="Image" required>
           <Form.Label>Image</Form.Label>
           <CloudinaryUploadWidget uploadImage={uploadImage} />
-
-          {/* 조건부 렌더링: 이미지가 있을 때만 보여줍니다 */}
-          {/* {formData.image && ( */}
-          {/* <img
-            id="uploadedimage"
-            src={formData.image}
-            className="upload-image mt-2"
-            alt="uploadedimage"
-          /> */}
-          {/* 이미지가 있을 때 불투명도 조정 */}
+          
           <img
             id="uploadedimage"
             src={formData.image || "#"} // 이미지가 없을 때 기본 이미지나 빈 값 사용

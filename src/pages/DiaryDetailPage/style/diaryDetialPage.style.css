@@ -20,13 +20,13 @@
 
 @media (max-width: 1600px) {
   .diary-detail-page {
-    width: 100%; /* 댓글 너비에 맞춰 조정 */
+    width: 100%; 
     margin: 0;
-    height: auto; /* 내용에 맞게 높이 조정 */
-    border-radius: 1rem; /* 댓글과 일관된 디자인 */
+    height: auto; 
+    border-radius: 1rem; 
   }
   .diary-detail-row {
-    flex-direction: column; /* 상하 배치 */
+    flex-direction: column; 
   }
   
 }

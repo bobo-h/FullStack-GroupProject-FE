@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../utils/api";
 
-// 현재 회원 불러오기 (TODO : paginate)
 export const getAllUserList = createAsyncThunk(
   "admin/getAllUserList",
   async (_, { rejectWithValue }) => {
@@ -14,7 +13,6 @@ export const getAllUserList = createAsyncThunk(
   }
 );
 
-// 탈퇴 회원 but 탈퇴일로부터 90일이내  (TODO : paginate)
 export const getIneligibleUserList = createAsyncThunk(
   "admin/getIneligibleUserList",
   async (_, { rejectWithValue }) => {
@@ -27,7 +25,6 @@ export const getIneligibleUserList = createAsyncThunk(
   }
 );
 
-// 탈퇴 회원 but 탈퇴일로부터 90일 지난 회원  (TODO : paginate)
 export const getEligibleUserList = createAsyncThunk(
   "admin/getEligibleUserList",
   async (_, { rejectWithValue }) => {
@@ -40,7 +37,6 @@ export const getEligibleUserList = createAsyncThunk(
   }
 );
 
-// 관리자  (TODO : paginate)
 export const getAllAdminList = createAsyncThunk(
   "admin/getAllAdminList",
   async (_, { rejectWithValue }) => {
@@ -53,13 +49,11 @@ export const getAllAdminList = createAsyncThunk(
   }
 );
 
-// 관리자 유저 페이지_역할 수정 (관리자 <-> 유저)
 export const editLevel = createAsyncThunk(
   "admin/editLevel",
   async ({ id, level }, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.put(`/admin/${id}`, { level });
-      // 회원리스트와 관리자리스트 업데이트
       dispatch(getAllUserList());
       dispatch(getAllAdminList());
       return response.data.user;
@@ -69,7 +63,6 @@ export const editLevel = createAsyncThunk(
   }
 );
 
-//탈퇴일로부터 90일 지난 회원 모두 삭제
 export const deleteAllEligibleUsers = createAsyncThunk(
   "admin/deleteAllEligibleUsers",
   async (_, { dispatch, rejectWithValue }) => {
@@ -83,7 +76,6 @@ export const deleteAllEligibleUsers = createAsyncThunk(
   }
 );
 
-// 유저 검색
 export const searchUsers = createAsyncThunk(
   "admin/searchUsers",
   async ({ searchTerm, userType }, { rejectWithValue }) => {
@@ -91,7 +83,7 @@ export const searchUsers = createAsyncThunk(
       const response = await api.get(
         `/admin/users?search=${searchTerm}&type=${userType}`
       );
-      return response.data.data; // 검색 결과 반환
+      return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -102,8 +94,8 @@ const adminSlice = createSlice({
   name: "admin",
   initialState: {
     allUser: [],
-    ineligibleUser: [], //탈퇴로부터 90일이내의 회원리스트
-    eligibleUser: [], //탈퇴로부터 90일이상의 회원리스트
+    ineligibleUser: [],
+    eligibleUser: [],
     allAdmin: [],
     searchResults: [],
     selectedUser: null,
@@ -115,7 +107,7 @@ const adminSlice = createSlice({
   },
   reducers: {
     setSelectedUser: (state, action) => {
-      state.selectedUser = action.payload; //TODO
+      state.selectedUser = action.payload;
     },
     clearStates: (state) => {
       state.error = null;

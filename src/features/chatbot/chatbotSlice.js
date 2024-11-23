@@ -1,7 +1,6 @@
 import api from "../../utils/api";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// getChatbot action
 export const getChatbotList = createAsyncThunk(
   "chatbot/getChatbot",
 
@@ -16,7 +15,6 @@ export const getChatbotList = createAsyncThunk(
   }
 );
 
-// getChatbotDetail action
 export const getChatbotDetail = createAsyncThunk(
   "chatbot/getChatbotDetail",
   async (_, { chatbotId }, { rejectWithValue }) => {
@@ -29,7 +27,6 @@ export const getChatbotDetail = createAsyncThunk(
   }
 );
 
-// createChatbot action
 export const createChatbot = createAsyncThunk(
   "chatbot/createChatbot",
   async ({ user_id, product_id, name, personality }, { rejectWithValue }) => {
@@ -47,7 +44,6 @@ export const createChatbot = createAsyncThunk(
   }
 );
 
-// updateChatbot action
 export const updateChatbot = createAsyncThunk(
   "chatbot/updateChatbot",
   async (
@@ -94,66 +90,42 @@ export const deleteChatbot = createAsyncThunk(
   async (chatbotId, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.delete(`/chatbot/${chatbotId}`);
-      console.log("Chatbot deleted successfully");
-
-      // dispatch(getChatbotList({ page: 1 }));
-
       return response.data;
     } catch (error) {
-      console.error(
-        "Failed to delete chatbot:",
-        error.response?.data || error.message
-      );
-
       return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
-// ============= 신진수 추가 ==================//
-// updateChatbot action
 export const updateChatbotJins = createAsyncThunk(
   "chatbot/updateChatbotJins",
   async ({ id, updateData }, { getState, rejectWithValue }) => {
     try {
-      // API 요청
       const response = await api.put(`/chatbot/${id}`, updateData);
-
-      // 상태 가져오기
       const state = getState();
-      // console.log("뭐니 문제가 뭐니", state.chatbot.cats);
-      const clonedCats = JSON.parse(JSON.stringify(state.chatbot.cats)); // Proxy 객체를 평범한 객체로 변환
-      // console.log("뭐니 문제가 뭐니2", response);
-      // 상태 업데이트
+      const clonedCats = JSON.parse(JSON.stringify(state.chatbot.cats)); 
       const updatedCats = clonedCats.map((cat) =>
         String(cat._id) === String(id) ? response.data.data : cat
       );
-      // console.log("변환 완료", updatedCats);
-      // 토나올거 같애 살려줘
-      // 으악!! 해결!!! ㅠㅠㅠㅠㅠ
-
-      // 업데이트된 배열 반환
       return updatedCats;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
+
 export const updateChatbotMany = createAsyncThunk(
   "chatbot/updateChatbotMany",
   async (updateData, { rejectWithValue }) => {
     try {
-      // API 요청
       const response = await api.put(`/chatbot`, updateData);
 
-      // 성공 응답 처리
       if (response.status === 200) {
-        return response.data.data; // 성공 데이터 반환
+        return response.data.data; 
       } else {
-        return rejectWithValue(response.data); // 에러 데이터 반환
+        return rejectWithValue(response.data); 
       }
     } catch (error) {
-      // 네트워크 또는 서버 에러 처리
       return rejectWithValue(
         error.response?.data || { message: "Something went wrong" }
       );
@@ -161,7 +133,6 @@ export const updateChatbotMany = createAsyncThunk(
   }
 );
 
-// printLineChatbot action
 export const printLineChatbot = createAsyncThunk(
   "chatbot/printLineChatbot",
   async ({ catPersonality }, dispatch) => {
@@ -179,50 +150,26 @@ export const printLineChatbot = createAsyncThunk(
         "고생한 나에게 아무 힘이 되는 말 해줘",
         "내가 행복해질 말을 해줘",
       ];
-      // const randomMessage =
-      //   messages[Math.floor(Math.random() * messages.length)];
-      // const finalMessage =
-      //   randomMessage === "야옹!" || randomMessage === "zzz"
-      //     ? randomMessage
-      //     : `${randomMessage} (Respond in 10 characters or less.)`;
-      // const response = await api.post("/chatbot/printLine", {
-      //   message: finalMessage,
-      //   catPersonality,
-      // });
       const randomMessage =
         messages[Math.floor(Math.random() * messages.length)];
-      // console.log("랜덤 메시지:", randomMessage);
 
-      // "야옹!" 또는 "zzz"일 경우 API 요청 생략
       if (randomMessage === "야옹!" || randomMessage === "Zzz") {
-        const response = randomMessage; // 그대로 반환
-        // 딜레이를 위한 함수 // 너무 빠르면 로딩 펄스 되는 문제 해결
+        const response = randomMessage; 
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-        // 딜레이 추가 (예: 1초)
         await delay(1000);
         return response;
       }
 
-      // 다른 경우에만 API 요청
       const finalMessage = `${randomMessage} (Respond in 10 characters or less.)`;
       const response = await api.post("/chatbot/printLine", {
         message: finalMessage,
         catPersonality,
       });
-      // console.log("ai답변", response);
+
+
       return response.data.reply;
-      // dispatch({
-      //   type: "PRINTLINE_CHATBOT_SUCCESS",
-      //   payload: response.data,
-      // });
-      // // 리스폰이 오지 않음
-      // console.log("API Response:", response.data); // API 응답 확인
-      // return Promise.resolve(response.data);
+
     } catch (error) {
-      // dispatch({
-      //   type: "PRINTLINE_CHATBOT_FAILURE",
-      //   payload: error.response?.data || error.message,
-      // });
       return Promise.reject(error);
     }
   }
@@ -234,7 +181,7 @@ const chatbotSlice = createSlice({
     loading: false,
     registrationError: null,
     success: false,
-    cats: [], // 서버에서 가져온 쳇봇리스트를 저장
+    cats: [], 
     catsLength: 0,
     newItem: false,
     getFlag: false,
@@ -245,7 +192,6 @@ const chatbotSlice = createSlice({
     },
     getListLenght: (state) => {
       if (state.catsLength === 0) {
-        console.log("지금이야", state.catsLength);
         state.getFlag = true;
       }
     },
@@ -273,7 +219,7 @@ const chatbotSlice = createSlice({
       state.registrationError = action.payload;
     };
 
-    builder // 와 ㅋㅋㅋㅋ아이디어 좋으신데요?!
+    builder 
       .addCase(createChatbot.pending, (state, action) => {
         state.newItem = true;
         state.loading = true;
@@ -292,9 +238,8 @@ const chatbotSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.registrationError = null;
-        state.cats = action.payload; // 서버 데이터로 상태 업데이트
+        state.cats = action.payload; 
         state.catsLength = state.cats.length;
-        // console.log("궁금하오1", state.cats);
       })
       .addCase(getChatbotList.rejected, handleRejected)
       .addCase(getChatbotDetail.pending, handlePending)
@@ -313,7 +258,7 @@ const chatbotSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.registrationError = null;
-        state.cats = action.payload; // 업데이트된 배열을 상태에 반영
+        state.cats = action.payload; 
       })
       .addCase(updateChatbotJins.rejected, handleRejected)
       .addCase(updateChatbotMany.pending, handlePending)
@@ -321,7 +266,8 @@ const chatbotSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.registrationError = null;
-        state.cats = action.payload; // 업데이트된 배열을 상태에 반영
+        state.cats = action.payload;
+        state.cats = action.payload;
       })
       .addCase(updateChatbotMany.rejected, handleRejected);
   },

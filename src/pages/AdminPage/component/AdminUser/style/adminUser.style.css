@@ -16,7 +16,7 @@
   }
 
   .user-table-name .user-table-content.container {
-    border-radius: 10px; /* Optional: If you want to round the container inside as well */
+    border-radius: 10px; 
   }
 
   .user-table-name .user-table-content .row {
@@ -26,7 +26,8 @@
 
   .user-table-name .user-table-content .col {
     display: flex;
-    align-items: center; /* Vertically centers the content */
+    align-items: center;
+    align-items: center;
   }
 
   .table-area {
@@ -39,20 +40,20 @@
     border-bottom: 2px solid #000;
   }
 
-  /* 기본 탭 스타일 */
+  
   .nav-tabs .nav-link {
-    color: gray; /* 비활성화된 탭 글자 색 */
+    color: gray; 
   }
 
-  /* 활성화된 탭 스타일 */
+ 
   .nav-tabs .nav-link.active {
-    color: black; /* 활성화된 탭 글자 색 */
-    font-weight: bold; /* 강조 효과 */
+    color: black; 
+    font-weight: bold; 
   }
 
-  /* 탭에 마우스를 올렸을 때 스타일 */
+  
   .nav-tabs .nav-link:hover {
-    color: darkgray; /* 마우스 오버 시 색상 */
+    color: darkgray; 
   }
 
   @media (max-width: 770px) {

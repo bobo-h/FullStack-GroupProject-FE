@@ -24,7 +24,7 @@ const UserLevelEditDialog = ({ showDialog, setShowDialog, selectedUser }) => {
       setModalContent(`수정 실패: ${error}`);
       setShowModal(true);
     }
-    return () => dispatch(clearStates()); // 상태 초기화
+    return () => dispatch(clearStates());
   }, [success, error]);
 
   const handleClose = () => setShowDialog(false);

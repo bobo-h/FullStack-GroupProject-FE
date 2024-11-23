@@ -112,7 +112,7 @@ const NewMoodDialog = ({ mode, showDialog, setShowDialog }) => {
           showCancelButton={false} // 취소 버튼 불필요
         />
       )}
-      <Form className="form-container" onSubmit={handleSubmit}>
+      <Form className="form-container admin-modal" onSubmit={handleSubmit}>
         <Row className="mb-3">
           <Form.Group as={Col} controlId="id">
             <Form.Label>Mood ID</Form.Label>

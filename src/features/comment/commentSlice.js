@@ -1,7 +1,6 @@
 import api from "../../utils/api";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-//리스트를 들고와서 첫번째 챗봇 댓글 -> <Comment/> 나머지 댓글 -> <CommentReply/>
 export const getCommentList = createAsyncThunk(
   "comment/getCommentList",
   async (diaryId, { rejectWithValue }) => {
@@ -14,17 +13,6 @@ export const getCommentList = createAsyncThunk(
   }
 );
 
-//챗봇 댓글 생성 - openAI - 다이어리 생성시(diarySlice) / 유저 댓글 생성시
-//BE에서 해도 될듯해요
-//router.post(
-//  "/:id",
-//   authController.authenticate,
-//   diaryController.createUserComment,
-//   openaiController.createChatbotMessage,
-//   diaryController.createChatbotComment
-//  );
-
-//주석예정 시작
 export const addChatbotComment = createAsyncThunk(
   "diary/createChatbotComment",
 
@@ -43,9 +31,8 @@ export const addChatbotComment = createAsyncThunk(
     }
   }
 );
-//주석예정 끝
 
-//유저 댓글 생성 - diary
+
 export const addUserComment = createAsyncThunk(
   "diary/createUserComment",
 
@@ -54,7 +41,6 @@ export const addUserComment = createAsyncThunk(
     { dispatch, rejectWithValue }
   ) => {
     try {
-      //const response = await api.post(`/diary/${diaryId}`, formData);
       const response = await api.post("comment/create", {
         diaryId,
         userId,
@@ -63,7 +49,6 @@ export const addUserComment = createAsyncThunk(
         parentCommentId,
         content,
       });
-      // 대댓글 등록후, 바로 보이게 하기
       dispatch(getCommentList(diaryId));
       if (response.status !== 200) throw new Error(response.error);
 
@@ -74,10 +59,6 @@ export const addUserComment = createAsyncThunk(
   }
 );
 
-//유저 댓글 수정 불가 - 이미 응답된 챗봇 댓글의 혼선 우려
-
-//유저 댓글 삭제 - 이미 응답된 챗봇 댓글은 삭제되지 않음
-//comment에 isChatbot 같은 유저와 챗봇을 구분하는것이 필요할듯해요
 export const deleteUserComment = createAsyncThunk(
   "diary/deleteUserComment",
   async (diaryId, commentId, { rejectWithValue }) => {
@@ -96,7 +77,7 @@ const commentSlice = createSlice({
     loading: false,
     registrationError: null,
     success: false,
-    comments: [], // 서버에서 가져온 댓글리스트를 저장
+    comments: [], 
   },
   reducers: {
     clearErrors: (state) => {

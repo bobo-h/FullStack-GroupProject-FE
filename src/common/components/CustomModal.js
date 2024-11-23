@@ -10,7 +10,7 @@ const CustomModal = ({
   title = "MeowMemo",
   message,
   onClose,
-  onConfirm, // 함수 값으로 보내주세요
+  onConfirm, 
   redirectTo,
   confirmButtonText = "확인",
   cancelButtonText = "취소",
@@ -26,7 +26,7 @@ const CustomModal = ({
     }
   };
   return ReactDOM.createPortal(
-    <div className="CustomModal">
+    <div className="CustomModal" style={{ fontFamily: "HakgyoansimBunpilR" }}>
       <div className="CustomModal__overlay" onClick={onClose}>
         <div className="CustomModal__container">
           <button className="CustomModal__close-btn" onClick={onClose}>
