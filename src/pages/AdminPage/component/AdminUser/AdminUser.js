@@ -35,17 +35,15 @@ const AdminUser = () => {
 
   useEffect(() => {
     if (success && activeTab === "eligibleUsers") {
-      // 특정 탭에서만 처리
       setModalContent(message);
       setShowModal(true);
     } else if (error && activeTab === "eligibleUsers") {
       setModalContent("삭제에 실패하였습니다.");
       setShowModal(true);
     }
-    return () => dispatch(clearStates()); // 상태 초기화
+    return () => dispatch(clearStates());
   }, [success, error, message, activeTab]);
 
-  // 수정 버튼 클릭 시 호출
   const handleEditUser = (user) => {
     dispatch(setSelectedUser(user));
     setShowDialog(true);
@@ -55,13 +53,12 @@ const AdminUser = () => {
     dispatch(deleteAllEligibleUsers());
   };
 
-  // 검색어 변경 시 검색 로직 실행
   const handleSearchClick = () => {
     dispatch(searchUsers({ searchTerm, userType: activeTab })).then((res) => {
       const results = res.payload;
       setSearchResults((prev) => ({
         ...prev,
-        [activeTab]: results && results.length > 0 ? results : null, // 활성화된 탭의 검색 결과만 업데이트
+        [activeTab]: results && results.length > 0 ? results : null,
       }));
     });
   };
@@ -105,13 +102,11 @@ const AdminUser = () => {
           )}
         </Row>
         <Row className="table-area">
-          {/* 탭 메뉴 */}
           <Tabs
             activeKey={activeTab}
             onSelect={(k) => setActiveTab(k)}
             className="mb-3"
           >
-            {/* 회원 리스트 탭 */}
             <Tab eventKey="allUser" title="회원 리스트">
               <UserTable />
               <UserCard
@@ -122,7 +117,6 @@ const AdminUser = () => {
               />
             </Tab>
 
-            {/* 탈퇴 회원 탭 */}
             <Tab eventKey="ineligibleUsers" title="탈퇴회원 (90일이내)">
               <UserTable />
               <UserCard
@@ -133,7 +127,6 @@ const AdminUser = () => {
               />
             </Tab>
 
-            {/* 탈퇴 회원 탭 */}
             <Tab eventKey="eligibleUsers" title="탈퇴회원 (90일이상)">
               <Button onClick={handleDeleteAllEligibleUsers}>전체 삭제</Button>
               <UserTable />
@@ -144,7 +137,7 @@ const AdminUser = () => {
                 searchResults={searchResults["eligibleUser"]}
               />
             </Tab>
-            {/* 관리자 */}
+
             <Tab eventKey="allAdmin" title="관리자">
               <UserTable />
               <UserCard
@@ -157,7 +150,7 @@ const AdminUser = () => {
           </Tabs>
         </Row>
       </Container>
-      {/* EditDialog 추가 */}
+
       <UserLevelEditDialog
         showDialog={showDialog}
         setShowDialog={setShowDialog}
