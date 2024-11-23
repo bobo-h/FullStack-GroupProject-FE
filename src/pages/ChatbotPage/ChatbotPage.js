@@ -6,13 +6,10 @@ import "./style/chatbot.style.css";
 import Button from "../../common/components/Button";
 import Button2 from "../../common/components/Button2";
 import PersonalityMBTI from "./component/PersonalityMBTI/PersonalityMBTI";
-import Alert from "../../common/components/Alert";
 import CustomModal from "../../common/components/CustomModal";
 import { getProductList } from "../../features/product/productSlice";
 import { updateChatbotJins } from "../../features/chatbot/chatbotSlice";
 import { useNavigate } from "react-router-dom";
-
-// ChatbotCreation 컴포넌트
 
 const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
   const [name, setName] = useState(chatbotItem?.name || "");
@@ -30,7 +27,7 @@ const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
   const [modalContent, setModalContent] = useState("");
   const [modalType, setModalType] = useState(null)
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [submitEvent, setSubmitEvent] = useState(null); // 이벤트 객체를 저장
+  const [submitEvent, setSubmitEvent] = useState(null); 
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -46,22 +43,22 @@ const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
   }, [dispatch]);
 
   const handleOpenConfirmModal = (e) => {
-    e.preventDefault(); // `Form`의 기본 동작을 막음
+    e.preventDefault();
 
-    // chatbotItem이 없으면 ConfirmModal 표시
+  
     if (!chatbotItem) {
       setSubmitEvent(e);
-      setShowConfirmModal(true); // 모달 열기
+      setShowConfirmModal(true); 
     } else {
-      handleSubmit(e); // 바로 수정 진행
+      handleSubmit(e); 
     }
   };
 
   const handleConfirm = () => {
-    setShowConfirmModal(false); // 모달 닫기
+    setShowConfirmModal(false); 
     if (submitEvent) {
-      handleSubmit(submitEvent); // 저장된 이벤트 객체를 handleSubmit에 전달
-      setSubmitEvent(null); // 이벤트 객체 초기화
+      handleSubmit(submitEvent); 
+      setSubmitEvent(null); 
     }
   };
 
@@ -70,21 +67,18 @@ const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
 
 
     if (chatbotItem) {
-      // 수정 로직
       dispatch(
         updateChatbotJins({
-          id: chatbotItem._id, // ID를 전달
+          id: chatbotItem._id,
           updateData: { name },
         })
       )
         .then(() => {
-          if (onEditComplete) onEditComplete(); // 수정 완료 콜백 호출
+          if (onEditComplete) onEditComplete();
         })
         .catch((error) => {
-          console.error("수정 실패", error);
         });
     } else if (selectedProduct) {
-      // 일반 생성 로직
       dispatch(
         createChatbot(
           {
@@ -103,7 +97,6 @@ const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
           setShowModal(true);
         })
         .catch((error) => {
-          console.error("입양 실패", error);
           setAlertContent("입양에 실패했습니다!");
           setAlertType("danger");
           setShowAlert(true);
@@ -134,25 +127,16 @@ const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
 
     
   useEffect(() => {
-    console.log("showAlert:", showAlert);
-    console.log("alertType:", alertType);
   }, [showAlert, alertType]);
 
   return (
     <div className="chatbot-create-modal">
-      {/* {showAlert && (
-        <Alert
-          message={alertContent}
-          onClose={() => setShowAlert(false)}
-          redirectTo={redirectTo}
-        />
-      )} */}
       {showModal && (
         <CustomModal
           message={modalContent}
           redirectTo={redirectTo}
-          onClose={() => setShowModal(false)}  // CustomeModal 닫기
-          showCancelButton={false} // 취소 버튼 불필요
+          onClose={() => setShowModal(false)}  
+          showCancelButton={false} 
         />
       )}
       <Container
@@ -258,13 +242,12 @@ const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
                       <PersonalityMBTI
                         onPersonalitySelect={handlePersonalityChange}
                       />
-                      //<PersonalityBox onPersonalitySelect={handlePersonalityChange}/>
                     )}
                   </Row>
                   <Col className="personality-area btn-gap">
                     <Button
                       variant="primary"
-                      onClick={handleOpenConfirmModal} // onClick으로 수정
+                      onClick={handleOpenConfirmModal} 
                       disabled={loading}
                       className="w-auto"
                     >

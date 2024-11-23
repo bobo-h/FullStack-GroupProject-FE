@@ -80,9 +80,6 @@
 }
 
 
-
-
-
 @media (max-width: 1600px) {
 
     .comment__chatbot-image-area {
@@ -108,7 +105,6 @@
 }
 
 @media (max-width: 768px){
-  
   .comment-user-img{
     display : none;
   }

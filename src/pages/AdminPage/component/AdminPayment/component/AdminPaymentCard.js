@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import Alert from "../../../../../common/components/Alert";
 import "../style/adminPayment.style.css";
-import Button2 from "../../../../../common/components/Button2";
 import { useDispatch } from "react-redux";
-import { getOrderList } from "../../../../../features/order/orderSlice"
 
 const AdminPaymentCard = ({ payment, setMode, setShowDialog }) => {
     const dispatch = useDispatch();

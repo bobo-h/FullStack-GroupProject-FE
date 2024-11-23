@@ -1,6 +1,4 @@
 import React from "react";
-import { Col, Container, Row } from "react-bootstrap";
-
 import "./style/productCard.style.css";
 
 const ProductCard = ({ item, handleOpenPaymentModal }) => {
@@ -9,7 +7,6 @@ const ProductCard = ({ item, handleOpenPaymentModal }) => {
       onClick={() => handleOpenPaymentModal(item)}>
 
       <div className="product-card">
-        {/* <Row className="align-items-center"> */}
         <div className="cat-id">#{item.id}</div>
 
         <div className="image-container">

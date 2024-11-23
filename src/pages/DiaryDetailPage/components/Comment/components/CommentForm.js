@@ -16,7 +16,7 @@ const CommentForm = ({ comment, lastReplyId }) => {
     e.preventDefault();
 
     if (reply.trim()) {
-      const parentCommentId = lastReplyId || comment._id; // lastReplyId가 null일 경우 comment._id 사용
+      const parentCommentId = lastReplyId || comment._id; 
 
       dispatch(
         addUserComment({

@@ -9,7 +9,6 @@ import PaymentForm from "./PaymentForm";
 import Button from "../../../../common/components/Button";
 import Button2 from "../../../../common/components/Button2";
 import ReactDOM from "react-dom";
-import Alert from "../../../../common/components/Alert";
 import CustomModal from "../../../../common/components/CustomModal";
 import LoadingSpinner from "../../../../common/components/LoadingSpinner";
 import { useMediaQuery } from "react-responsive";
@@ -85,19 +84,6 @@ const PaymentInfoModal = ({ onClose }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // if (
-    //   !validatePhoneNumber(orderPersonInfo.phoneNumber) ||
-    //   !validateEmail(orderPersonInfo.email)
-    // ) {
-    //   setAlertContent("전화번호 또는 이메일 주소를 확인해주세요.");
-    //   setShowAlert(true);
-    //   return;
-    // }
-
-    // const handleSubmit = (event) => {
-    //   event.preventDefault();
-
-    // 선택한 상품 정보를 사용하여 주문 생성
     dispatch(
       createOrder({
         name: orderPersonInfo.name,
@@ -111,12 +97,11 @@ const PaymentInfoModal = ({ onClose }) => {
       })
     )
       .then(() => {
-        // setAlertContent(`결제 성공하였습니다! <br /> 주문번호: ${orderNum}`);
         setModalContent("결제 성공하였습니다!");
         setShowModal(true);
         setAlertContent("결제 성공하였습니다!");
         setShowAlert(true);
-        // onClose();  // PaymentInfoModal 닫기 
+
       })
       .catch((error) => {
         setModalContent("결제 실패!");
@@ -126,14 +111,8 @@ const PaymentInfoModal = ({ onClose }) => {
       });
   };
 
-  // const handleFormChange = (event) => {
-  //   // 이름, 이메일 주소 입력
-  //   const { name, value } = event.target;
-  //   setOrderPersonInfo({ ...orderPersonInfo, [name]: value }); // 입력 필드 업데이트
-  // };
 
   const handlePaymentInfoChange = (event) => {
-    //카드정보 넣어주기
     const { name, value } = event.target;
     if (name === "expiry") {
       let newValue = cc_expires_format(value);
@@ -147,11 +126,6 @@ const PaymentInfoModal = ({ onClose }) => {
     setCardValue({ ...cardValue, focus: e.target.name });
   };
 
-  const proceedToPayment = () => {
-    //user_id도 넘겨주세용  --> 추가했어요
-    console.log("orderUserId??", orderUserId);
-    //navigate("/chatbot", { state: { productImage: selectedProduct._id, orderUserId: orderUserId } });
-  };
   const handleBackdropClick = (event) => {
     if (event.target.classList.contains("modal-backdrop")) {
       onClose();
@@ -165,22 +139,12 @@ const PaymentInfoModal = ({ onClose }) => {
             message={modalContent}
             redirectTo="/chatbot"
             onClose={() => {
-              setShowModal(false);  // CustomeModal 닫기
-              onClose();            // PaymentInfoModal 닫기 
+              setShowModal(false);  
+              onClose();            
             }}
-            showCancelButton={false} // 취소 버튼 불필요
+            showCancelButton={false} 
           />
         )}
-      {/* {showAlert && (
-        <Alert
-          message={alertContent}
-          onClose={() => {
-            // proceedToPayment()
-            setShowAlert(false);
-          }}
-          redirectTo="/chatbot"
-        />
-      )} */}
       {loading ? (
         <div className="text-align-center">
           <LoadingSpinner animation="border" role="status">
@@ -191,10 +155,8 @@ const PaymentInfoModal = ({ onClose }) => {
       <Container className="payment-modal-backdrop">
         <h3 className="modal-title">입양 절차</h3>
         <Row>
-          {/* 고양이 카드 */}
           <Col {...(!isMobile && { lg: 4 })}>
             <Row className="mb-4 no-h">
-              {/* 상단 공백 */}
               <Col>
                 <div className="no-h" style={{ height: "20px" }}></div>
               </Col>
@@ -208,7 +170,6 @@ const PaymentInfoModal = ({ onClose }) => {
                     className="img-fluid product-image"
                   />
                   <Row className="mt-3 justify-content-center text-center ">
-                    {/* 결제 금액 표시 */}
                     <Col>
                       <h5>결제 금액: {selectedProduct.price}₩ </h5>
                     </Col>
@@ -219,18 +180,11 @@ const PaymentInfoModal = ({ onClose }) => {
             ) : (
               <p>상품 정보를 불러올 수 없습니다.</p>
             )}
-            {/* <Row className="mt-3 justify-content-center text-center">
-            <Col>
-              <h5>결제 금액: {selectedProduct.price}₩ </h5>
-            </Col>
-          </Row> */}
           </Col>
 
-          {/* 구매자, 카드 정보 */}
           <Col lg={7}>
             <h4 className="payment-title no-h">구매자 정보</h4>
             <Form onSubmit={handleSubmit}>
-              {/* 구매자 이름 입력 */}
               <Row className="mb-3">
                 <Form.Group controlId="buyer-name">
                   <Row>
@@ -243,7 +197,7 @@ const PaymentInfoModal = ({ onClose }) => {
                         className="input-box"
                         type="text"
                         name="name"
-                        value={orderPersonInfo.name} // 초기값 반영
+                        value={orderPersonInfo.name} 
                         onChange={handleFormChange}
                         required
                       />
@@ -252,7 +206,6 @@ const PaymentInfoModal = ({ onClose }) => {
                 </Form.Group>
               </Row>
 
-              {/* 구매자 이메일 입력 */}
               <Row className="mb-3">
                 <Form.Group controlId="email">
                   <Row>
@@ -276,9 +229,9 @@ const PaymentInfoModal = ({ onClose }) => {
                             color: emailValidationMessage.includes("적합")
                               ? "#A9B388"
                               : "red",
-                            textAlign: "left", // 왼쪽 정렬
-                            display: "block", // block 스타일로 설정해 텍스트가 줄바꿈됨
-                            marginTop: "0.5rem", // 위 요소와 간격 추가
+                            textAlign: "left", 
+                            display: "block", 
+                            marginTop: "0.5rem",
                           }}
                         >
                           {emailValidationMessage}
@@ -289,7 +242,6 @@ const PaymentInfoModal = ({ onClose }) => {
                 </Form.Group>
               </Row>
 
-              {/* 구매자 전화번호 입력 */}
               <Row className="mb-3">
                 <Form.Group controlId="phone">
                   <Row>
@@ -314,9 +266,9 @@ const PaymentInfoModal = ({ onClose }) => {
                             color: phoneValidationMessage.includes("적합")
                               ? "#A9B388"
                               : "red",
-                            textAlign: "left", // 왼쪽 정렬
-                            display: "block", // block 스타일로 설정해 텍스트가 줄바꿈됨
-                            marginTop: "0.5rem", // 위 요소와 간격 추가
+                            textAlign: "left", 
+                            display: "block", 
+                            marginTop: "0.5rem", 
                           }}
                         >
                           {phoneValidationMessage}
@@ -327,7 +279,6 @@ const PaymentInfoModal = ({ onClose }) => {
                 </Form.Group>
               </Row>
 
-              {/* 카드 정보 입력 폼 */}
               <h4 className="payment-title no-h">카드 정보</h4>
               <PaymentForm
                 cardValue={cardValue}
@@ -335,7 +286,6 @@ const PaymentInfoModal = ({ onClose }) => {
                 handlePaymentInfoChange={handlePaymentInfoChange}
               />
 
-              {/* 결제 버튼 */}
               <div className="text-center mt-4">
                 <Button
                   variant="primary"
