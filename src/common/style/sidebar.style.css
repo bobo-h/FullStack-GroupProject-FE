@@ -145,6 +145,7 @@
   margin-bottom: 15px;
   position: relative;
   user-select: none; /* 텍스트나 이미지를 선택할 수 없도록 설정 [마우스로 긁을때 파래지는거 막음]*/
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
 }
 .my-cats-info:hover {
   background-color: var(--primary-color-deepGreen);
@@ -220,6 +221,7 @@
   background: #d3d3d3;
   border-radius: 30px; /* 반지름 크기 조정 */
   transition: background 0.4s;
+  box-shadow: 1px 1px 3px rgba(0.5, 0.5, 0.5, 0.5);
 }
 
 .cat-info-toggle-label::after {
@@ -249,17 +251,19 @@
 
 /* 스위치(체크박스)가 토글(체크)되었을 때 */
 .cat-info-toggle-checkbox:checked + .cat-info-toggle-label {
-  background: var(--primary-color-brown);
+  background: var(--primary-color-ivory);
 }
 
 .cat-info-toggle-checkbox:checked + .cat-info-toggle-label::after {
   left: calc(100% - 18px); /* 크기에 맞게 위치 조정 */
+  background-color: var(--primary-color-deepGreen);
 }
 
 .cat-info-toggle-checkbox:checked + .cat-info-toggle-label::before {
   content: "ON";
-  color: #fff;
+  color: var(--primary-color-deepGreen);
   left: 4px; /* 텍스트 위치 조정 */
+  font-weight: bold;
 }
 
 /* ====================== 추가 UI 스타일 끝 ======================================= */
