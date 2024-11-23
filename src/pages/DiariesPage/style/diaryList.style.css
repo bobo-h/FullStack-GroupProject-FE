@@ -26,12 +26,14 @@
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+  height: 123px;
   margin-bottom: 20px;
   padding: 10px;
   border: 2px solid var(--primary-color-lightGreen);
   border-radius: 12px;
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
   flex-wrap: nowrap;
+  overflow: hidden;
 }
 
 .diary-list__item-date {
@@ -44,6 +46,7 @@
   justify-content: center;
   align-items: center;
   font-size: 12px;
+  border-radius: 12px;
 }
 
 .diary-list__item-mood-icon {
@@ -57,6 +60,22 @@
   justify-content: center;
   align-items: start;
   flex: 1;
+  overflow: hidden;
+}
+
+.diary-list__item-content-header {
+  width: -webkit-fill-available;
+  margin-bottom: 5px;
+}
+
+.diary-list__item-title-box {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .diary-list__item-title {
@@ -70,9 +89,11 @@
 }
 
 .diary-list__item-edited {
-  font-size: 12px;
+  font-size: 10px;
+  width: 40px;
   color: #b5c1a4;
   font-style: italic;
+  white-space: nowrap;
 }
 
 .diary-list__item-description {
@@ -133,10 +154,15 @@
     margin: 30px 0 0;
   }
 
+  .diary-list__header {
+    font-size: 18px;
+  }
+
   .diary-list__item {
     flex-direction: row;
     align-items: center;
     padding: 6px;
+    height: 86px;
   }
 
   .diary-list__item-date {

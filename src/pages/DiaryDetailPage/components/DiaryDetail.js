@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteDiary } from "../../../features/diary/diarySlice";
@@ -7,6 +7,7 @@ import CustomModal from "./../../../common/components/CustomModal";
 import Button from "./../../../common/components/Button";
 import Button2 from "./../../../common/components/Button2";
 import "./../style/diaryDetail.style.css";
+import LoadingSpinner from "../../../common/components/LoadingSpinner";
 
 const DiaryDetail = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const DiaryDetail = () => {
   };
 
   const handleDeleteClick = () => {
-    setModalMessage("Are you sure you want to delete this diary?");
+    setModalMessage("해당 다이어리를 삭제하시겠습니까?");
     setShowConfirmModal(true);
   };
 
@@ -43,14 +44,14 @@ const DiaryDetail = () => {
       .unwrap()
       .then(() => {
         setModalMessage(
-          "The diary has been deleted successfully. You can check deleted diaries in My Page."
+          "다이어리가 삭제되었습니다. 삭제된 다이어리는 마이페이지-휴지통에서 확인하실 수 있습니다."
         );
         setShowConfirmModal(false);
         setShowSuccessModal(true);
       })
       .catch((error) => {
         console.error("Failed to delete diary:", error);
-        setModalMessage("Failed to delete the diary. Please try again.");
+        setModalMessage("잠시 후 다시 시도해주세요");
         setShowConfirmModal(false);
       });
   };
@@ -62,53 +63,59 @@ const DiaryDetail = () => {
   };
 
   return (
-    <Container className="diary-detail">
-      <div className="diary-detail__header">
-        <p className="diary-detail__date">{formattedDate}</p>
-        {mood && (
-          <img
-            src={mood.image}
-            alt={mood.name}
-            className="diary-detail__mood-icon"
-          />
-        )}
-      </div>
-      <div className="diary-detail__actions">
-        <Button2 className="diary-detail__btn" onClick={handleEditClick}>
-          Edit
-        </Button2>
-        <Button className="diary-detail__btn" onClick={handleDeleteClick}>
-          Delete
-        </Button>
-      </div>
-      {image && (
-        <div className="diary-detail__image-wrapper">
-          <img src={image} alt={title} className="diary-detail__image" />
-        </div>
+    <>
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <Container className="diary-detail">
+          <div className="diary-detail__header">
+            <p className="diary-detail__date">{formattedDate}</p>
+            {mood && (
+              <img
+                src={mood.image}
+                alt={mood.name}
+                className="diary-detail__mood-icon"
+              />
+            )}
+          </div>
+          <div className="diary-detail__actions">
+            <Button2 className="diary-detail__btn" onClick={handleEditClick}>
+              Edit
+            </Button2>
+            <Button className="diary-detail__btn" onClick={handleDeleteClick}>
+              Delete
+            </Button>
+          </div>
+          {image && (
+            <div className="diary-detail__image-wrapper">
+              <img src={image} alt={title} className="diary-detail__image" />
+            </div>
+          )}
+          <div className="diary-detail__title-box">
+            <h2 className="diary-detail__title">{title}</h2>
+          </div>
+          <div className="diary-detail__content-box">
+            <p className="diary-detail__text">{content}</p>
+          </div>
+          {showConfirmModal && (
+            <CustomModal
+              message={modalMessage}
+              onClose={handleClose}
+              onConfirm={handleConfirmDelete}
+              showCancelButton={true}
+            />
+          )}
+          {showSuccessModal && (
+            <CustomModal
+              message={modalMessage}
+              onClose={handleClose}
+              redirectTo={"/diaries"}
+              showCancelButton={false}
+            />
+          )}
+        </Container>
       )}
-      <div className="diary-detail__title-box">
-        <h2 className="diary-detail__title">{title}</h2>
-      </div>
-      <div className="diary-detail__content-box">
-        <p className="diary-detail__text">{content}</p>
-      </div>
-      {showConfirmModal && (
-        <CustomModal
-          message={modalMessage}
-          onClose={handleClose}
-          onConfirm={handleConfirmDelete}
-          showCancelButton={true}
-        />
-      )}
-      {showSuccessModal && (
-        <CustomModal
-          message={modalMessage}
-          onClose={handleClose}
-          redirectTo={"/diaries"}
-          showCancelButton={false}
-        />
-      )}
-    </Container>
+    </>
   );
 };
 

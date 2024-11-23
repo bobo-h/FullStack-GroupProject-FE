@@ -67,10 +67,10 @@ const DiaryFormPage = () => {
     event.preventDefault();
     setModalMessage(
       diaryId
-        ? "Are you sure you want to update this diary with these details?"
-        : "Are you sure you want to register this diary?"
+        ? "해당 내용으로 다이어리를 수정하시겠습니까?"
+        : "다이어리를 등록하시겠습니까?"
     );
-    setShowConfirmModal(true); // 첫 번째 모달 표시
+    setShowConfirmModal(true);
   };
 
   const handleConfirmSubmit = (event) => {
@@ -85,8 +85,8 @@ const DiaryFormPage = () => {
       .then(() => {
         setModalMessage(
           diaryId
-            ? "The diary has been successfully updated."
-            : "The diary has been successfully registered."
+            ? "다이어리가 성공적으로 수정되었습니다"
+            : "다이어리가 성공적으로 등록되었습니다"
         );
         setShowConfirmModal(false);
         setShowSuccessModal(true);
@@ -213,15 +213,15 @@ const DiaryFormPage = () => {
       {showConfirmModal && (
         <CustomModal
           message={modalMessage}
-          onClose={handleClose} // 취소 버튼
-          onConfirm={handleConfirmSubmit} // Redux API 호출
+          onClose={handleClose}
+          onConfirm={handleConfirmSubmit}
           showCancelButton={true}
         />
       )}
       {showSuccessModal && (
         <CustomModal
           message={modalMessage}
-          onClose={handleClose} // 단순히 모달 닫기
+          onClose={handleClose}
           redirectTo={diaryId ? `/diaries/${diaryId}` : "/diaries"}
           showCancelButton={false}
         />
