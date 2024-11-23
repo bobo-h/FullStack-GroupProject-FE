@@ -5,7 +5,6 @@ import { logout } from "../../features/user/userSlice";
 import {
   getChatbotList,
   updateChatbotJins,
-  getListLenght,
   logoutChatBot,
 } from "../../features/chatbot/chatbotSlice";
 import "../style/sidebar.style.css";
@@ -114,8 +113,13 @@ const SidebarContainer = ({
   useEffect(() => {
     const fetchData = async () => {
       await dispatch(getChatbotList());
-      await dispatch(getListLenght());
+    };
 
+    fetchData();
+  }, [dispatch, newItem]);
+
+  useEffect(() => {
+    const fetchData = async () => {
       if (getFlag) {
         try {
           const response = await api.get(
@@ -136,7 +140,7 @@ const SidebarContainer = ({
     };
 
     fetchData();
-  }, [dispatch, newItem, getFlag]);
+  }, [getFlag]);
 
   const handleRightClick = useCallback(
     (e, catId) => {

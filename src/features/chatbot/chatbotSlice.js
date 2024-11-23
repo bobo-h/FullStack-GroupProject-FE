@@ -90,8 +90,15 @@ export const deleteChatbot = createAsyncThunk(
   async (chatbotId, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.delete(`/chatbot/${chatbotId}`);
+      console.log("Chatbot deleted successfully");
+
       return response.data;
     } catch (error) {
+      console.error(
+        "Failed to delete chatbot:",
+        error.response?.data || error.message
+      );
+
       return rejectWithValue(error.response?.data || error.message);
     }
   }
@@ -102,18 +109,21 @@ export const updateChatbotJins = createAsyncThunk(
   async ({ id, updateData }, { getState, rejectWithValue }) => {
     try {
       const response = await api.put(`/chatbot/${id}`, updateData);
+
       const state = getState();
-      const clonedCats = JSON.parse(JSON.stringify(state.chatbot.cats)); 
+
+      const clonedCats = JSON.parse(JSON.stringify(state.chatbot.cats));
+
       const updatedCats = clonedCats.map((cat) =>
         String(cat._id) === String(id) ? response.data.data : cat
       );
+
       return updatedCats;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
-
 export const updateChatbotMany = createAsyncThunk(
   "chatbot/updateChatbotMany",
   async (updateData, { rejectWithValue }) => {
@@ -121,9 +131,9 @@ export const updateChatbotMany = createAsyncThunk(
       const response = await api.put(`/chatbot`, updateData);
 
       if (response.status === 200) {
-        return response.data.data; 
+        return response.data.data;
       } else {
-        return rejectWithValue(response.data); 
+        return rejectWithValue(response.data);
       }
     } catch (error) {
       return rejectWithValue(
@@ -150,12 +160,15 @@ export const printLineChatbot = createAsyncThunk(
         "고생한 나에게 아무 힘이 되는 말 해줘",
         "내가 행복해질 말을 해줘",
       ];
+
       const randomMessage =
         messages[Math.floor(Math.random() * messages.length)];
 
       if (randomMessage === "야옹!" || randomMessage === "Zzz") {
-        const response = randomMessage; 
+        const response = randomMessage;
+
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
         await delay(1000);
         return response;
       }
@@ -166,9 +179,7 @@ export const printLineChatbot = createAsyncThunk(
         catPersonality,
       });
 
-
       return response.data.reply;
-
     } catch (error) {
       return Promise.reject(error);
     }
@@ -181,7 +192,7 @@ const chatbotSlice = createSlice({
     loading: false,
     registrationError: null,
     success: false,
-    cats: [], 
+    cats: [],
     catsLength: 0,
     newItem: false,
     getFlag: false,
@@ -189,11 +200,6 @@ const chatbotSlice = createSlice({
   reducers: {
     clearErrors: (state) => {
       state.registrationError = null;
-    },
-    getListLenght: (state) => {
-      if (state.catsLength === 0) {
-        state.getFlag = true;
-      }
     },
     logoutChatBot: (state) => {
       state.cats = [];
@@ -219,7 +225,7 @@ const chatbotSlice = createSlice({
       state.registrationError = action.payload;
     };
 
-    builder 
+    builder
       .addCase(createChatbot.pending, (state, action) => {
         state.newItem = true;
         state.loading = true;
@@ -233,15 +239,29 @@ const chatbotSlice = createSlice({
         state.registrationError = null;
       })
       .addCase(createChatbot.rejected, handleRejected)
-      .addCase(getChatbotList.pending, handlePending)
+      .addCase(getChatbotList.pending, (state) => {
+        state.loading = true;
+        state.success = false;
+        state.getFlag = false;
+      })
       .addCase(getChatbotList.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.registrationError = null;
-        state.cats = action.payload; 
+        state.cats = action.payload;
         state.catsLength = state.cats.length;
+        state.getFlag = false;
       })
-      .addCase(getChatbotList.rejected, handleRejected)
+      .addCase(getChatbotList.rejected, (state, action) => {
+        state.loading = false;
+        state.success = false;
+        state.registrationError = action.payload;
+        console.log("이거입니다1", state.registrationError);
+        console.log("이거입니다2", action.payload);
+        if (state.registrationError === "No chatbots found") {
+          state.getFlag = true;
+        }
+      })
       .addCase(getChatbotDetail.pending, handlePending)
       .addCase(getChatbotDetail.fulfilled, handleFulfilled)
       .addCase(getChatbotDetail.rejected, handleRejected)
@@ -258,7 +278,7 @@ const chatbotSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.registrationError = null;
-        state.cats = action.payload; 
+        state.cats = action.payload;
       })
       .addCase(updateChatbotJins.rejected, handleRejected)
       .addCase(updateChatbotMany.pending, handlePending)
@@ -266,7 +286,6 @@ const chatbotSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.registrationError = null;
-        state.cats = action.payload;
         state.cats = action.payload;
       })
       .addCase(updateChatbotMany.rejected, handleRejected);
