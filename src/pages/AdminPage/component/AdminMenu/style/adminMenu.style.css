@@ -2,7 +2,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 18%; 
+  width: 15%; 
   height: 100%; /* Full height of the screen */
   background-color: #b99470;
   color: white;
@@ -90,6 +90,11 @@
   background-color: #fefae0;
   color: #000;
 }
+@media (max-width: 1500px) {
+  .admin-menubar {
+    width: 25%;
+   }
+}
 
 @media (max-width: 1210px) {
   .admin-menubar {
@@ -99,4 +104,10 @@
   .admin-menubar.open {
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
   }
+}
+
+@media (max-width: 700px) {
+  .admin-menubar {
+    width: 60%;
+   }
 }

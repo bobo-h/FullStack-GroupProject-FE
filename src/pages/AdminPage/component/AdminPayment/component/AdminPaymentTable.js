@@ -4,7 +4,7 @@ import "../style/adminPayment.style.css";
 
 const AdminPaymentTable = () => {
   return (
-    <div className='product-table-name '>
+    <div className='product-table-name'>
       <Container>
         <Row className="mb-4">
           <Col md={2} className="d-flex align-items-center">

@@ -4,9 +4,9 @@ import "../style/adminPayment.style.css";
 
 const OrderTable = () => {
   return (
-    <div className='payment-table-name'>
+    <div>
       <Container>
-        <Row className="mb-4">
+        <Row className="mb-4 order-table-name">
           <Col md={1} className="d-flex align-items-center">
             <strong>#</strong>
           </Col>

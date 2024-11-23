@@ -62,9 +62,15 @@ const AdminPage = () => {
           setIsSidebarOpen={setIsSidebarOpen}
         />
       )}
-      <div className="admin-content" style={{ marginLeft: isSidebarOpen ? '250px' : '0px' }}>
+      <div className="admin-content">
         <div className="content-component">
           <div className="admin-menu-btns">
+            <button
+              className="open-menu-button"
+              onClick={goToMainPage}
+            >
+              <i class="ri-home-4-fill"></i>
+            </button>
             {!isSidebarOpen && (
               <button
                 className="open-menu-button"
@@ -73,12 +79,6 @@ const AdminPage = () => {
                 <i class="ri-menu-line"></i>
               </button>
             )}
-            <button
-              className="open-menu-button"
-              onClick={goToMainPage}
-            >
-              <i class="ri-home-4-fill"></i>
-            </button>
           </div>
           {renderSelectedComponent()}
         </div>
