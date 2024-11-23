@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import Alert from "../../../../../common/components/Alert";
 import CustomModal from "../../../../../common/components/CustomModal";
 import "../style/adminMood.style.css";
 import Button2 from '../../../../../common/components/Button2';
@@ -9,8 +8,6 @@ import { setSelectedMood, deleteMood, getMoodList } from "../../../../../feature
 
 const AdminMoodCard = ({ mood, setMode, setShowDialog }) => {
   const dispatch = useDispatch();
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertContent, setAlertContent] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
 
@@ -28,14 +25,10 @@ const AdminMoodCard = ({ mood, setMode, setShowDialog }) => {
 
     dispatch(deleteMood(mood._id))
       .then(() => {
-        setAlertContent("무드 삭제 완료하였습니다!");
-        setShowAlert(true);
         setModalContent("무드 삭제 완료하였습니다!");
         setShowModal(true);
       })
       .catch((error) => {
-        setAlertContent("무드 삭제 실패!");
-        setShowAlert(true);
         setModalContent("무드 삭제 실패!");
         setShowModal(true);
       });
@@ -44,17 +37,6 @@ const AdminMoodCard = ({ mood, setMode, setShowDialog }) => {
 
   return (
     <div className='mood-table-content'>
-      {/* {showAlert && (
-        <Alert
-          message={alertContent}
-          onClose={() => {
-            setShowAlert(false);
-            setShowDialog(false);
-            dispatch(getMoodList({ page: 1 }));
-          }}
-          redirectTo="/admin"
-        />
-      )} */}
       {showModal && (
         <CustomModal
           message={modalContent}

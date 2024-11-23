@@ -13,8 +13,6 @@ import {
 
 const AdminProductCard = ({ product, setMode, setShowDialog }) => {
   const dispatch = useDispatch();
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertContent, setAlertContent] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
 
@@ -30,14 +28,10 @@ const AdminProductCard = ({ product, setMode, setShowDialog }) => {
   const handleClickDeleteItem = () => {
     dispatch(deleteProduct(product._id))
       .then(() => {
-        setAlertContent("상품 삭제 완료하였습니다!");
-        setShowAlert(true);
         setModalContent("상품 삭제 완료하였습니다!");
         setShowModal(true);
       })
       .catch((error) => {
-        setAlertContent("상품 삭제 실패!");
-        setShowAlert(true);
         setModalContent("상품 삭제 실패!");
         setShowModal(true);
       });
@@ -45,17 +39,6 @@ const AdminProductCard = ({ product, setMode, setShowDialog }) => {
 
   return (
     <div className="product-table-content">
-      {/* {showAlert && (
-        <Alert
-          message={alertContent}
-          onClose={() => {
-            setShowAlert(false);
-            setShowDialog(false);
-            dispatch(getProductList({ page: 1 }));
-          }}
-          redirectTo="/admin"
-        />
-      )} */}
       {showModal && (
         <CustomModal
           message={modalContent}

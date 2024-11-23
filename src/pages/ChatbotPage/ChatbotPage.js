@@ -6,7 +6,6 @@ import "./style/chatbot.style.css";
 import Button from "../../common/components/Button";
 import Button2 from "../../common/components/Button2";
 import PersonalityMBTI from "./component/PersonalityMBTI/PersonalityMBTI";
-import Alert from "../../common/components/Alert";
 import CustomModal from "../../common/components/CustomModal";
 import { getProductList } from "../../features/product/productSlice";
 import { updateChatbotJins } from "../../features/chatbot/chatbotSlice";
@@ -22,10 +21,7 @@ const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
   );
 
   const [isDirectInput, setIsDirectInput] = useState(true);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertType, setAlertType] = useState(null);
   const [redirectTo, setRedirectTo] = useState("")
-  const [alertContent, setAlertContent] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const [modalType, setModalType] = useState(null)
@@ -93,20 +89,12 @@ const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
             personality,
           }))
         .then(() => {
-          setAlertContent("입양에 성공했습니다!");
-          setAlertType("success");
-          setRedirectTo("/");
-          setShowAlert(true);
           setModalContent("입양에 성공했습니다!");
           setModalType("success");
           setRedirectTo("/");
           setShowModal(true);
         })
         .catch((error) => {
-          console.error("입양 실패", error);
-          setAlertContent("입양에 실패했습니다!");
-          setAlertType("danger");
-          setShowAlert(true);
           setModalContent("입양에 실패했습니다!");
           setModalType("danger");
           setShowModal(true);
@@ -132,21 +120,8 @@ const ChatbotCreation = ({ chatbotItem, onEditComplete }) => {
     navigate("/");
   };
 
-    
-  useEffect(() => {
-    console.log("showAlert:", showAlert);
-    console.log("alertType:", alertType);
-  }, [showAlert, alertType]);
-
   return (
     <div className="chatbot-create-modal">
-      {/* {showAlert && (
-        <Alert
-          message={alertContent}
-          onClose={() => setShowAlert(false)}
-          redirectTo={redirectTo}
-        />
-      )} */}
       {showModal && (
         <CustomModal
           message={modalContent}

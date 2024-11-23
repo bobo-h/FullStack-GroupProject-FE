@@ -9,7 +9,6 @@ import PaymentForm from "./PaymentForm";
 import Button from "../../../../common/components/Button";
 import Button2 from "../../../../common/components/Button2";
 import ReactDOM from "react-dom";
-import Alert from "../../../../common/components/Alert";
 import CustomModal from "../../../../common/components/CustomModal";
 import LoadingSpinner from "../../../../common/components/LoadingSpinner";
 import { useMediaQuery } from "react-responsive";
@@ -19,9 +18,7 @@ const PaymentInfoModal = ({ onClose }) => {
   const selectedProduct = useSelector((state) => state.product.selectedProduct);
   const { orderUserId, loading } = useSelector((state) => state.order);
   const user = useSelector((state) => state.user.user);
-  const [showAlert, setShowAlert] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [alertContent, setAlertContent] = useState("");
   const [modalContent, setModalContent] = useState("");
   const isMobile = useMediaQuery({ query: "(max-width: 700px)" });
 
@@ -85,18 +82,6 @@ const PaymentInfoModal = ({ onClose }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // if (
-    //   !validatePhoneNumber(orderPersonInfo.phoneNumber) ||
-    //   !validateEmail(orderPersonInfo.email)
-    // ) {
-    //   setAlertContent("전화번호 또는 이메일 주소를 확인해주세요.");
-    //   setShowAlert(true);
-    //   return;
-    // }
-
-    // const handleSubmit = (event) => {
-    //   event.preventDefault();
-
     // 선택한 상품 정보를 사용하여 주문 생성
     dispatch(
       createOrder({
@@ -111,26 +96,14 @@ const PaymentInfoModal = ({ onClose }) => {
       })
     )
       .then(() => {
-        // setAlertContent(`결제 성공하였습니다! <br /> 주문번호: ${orderNum}`);
         setModalContent("결제 성공하였습니다!");
         setShowModal(true);
-        setAlertContent("결제 성공하였습니다!");
-        setShowAlert(true);
-        // onClose();  // PaymentInfoModal 닫기 
       })
       .catch((error) => {
         setModalContent("결제 실패!");
         setShowModal(true);
-        setAlertContent("결제 실패!");
-        setShowAlert(true);
       });
   };
-
-  // const handleFormChange = (event) => {
-  //   // 이름, 이메일 주소 입력
-  //   const { name, value } = event.target;
-  //   setOrderPersonInfo({ ...orderPersonInfo, [name]: value }); // 입력 필드 업데이트
-  // };
 
   const handlePaymentInfoChange = (event) => {
     //카드정보 넣어주기
@@ -147,11 +120,6 @@ const PaymentInfoModal = ({ onClose }) => {
     setCardValue({ ...cardValue, focus: e.target.name });
   };
 
-  const proceedToPayment = () => {
-    //user_id도 넘겨주세용  --> 추가했어요
-    console.log("orderUserId??", orderUserId);
-    //navigate("/chatbot", { state: { productImage: selectedProduct._id, orderUserId: orderUserId } });
-  };
   const handleBackdropClick = (event) => {
     if (event.target.classList.contains("modal-backdrop")) {
       onClose();
@@ -171,16 +139,7 @@ const PaymentInfoModal = ({ onClose }) => {
             showCancelButton={false} // 취소 버튼 불필요
           />
         )}
-      {/* {showAlert && (
-        <Alert
-          message={alertContent}
-          onClose={() => {
-            // proceedToPayment()
-            setShowAlert(false);
-          }}
-          redirectTo="/chatbot"
-        />
-      )} */}
+
       {loading ? (
         <div className="text-align-center">
           <LoadingSpinner animation="border" role="status">
@@ -219,11 +178,6 @@ const PaymentInfoModal = ({ onClose }) => {
             ) : (
               <p>상품 정보를 불러올 수 없습니다.</p>
             )}
-            {/* <Row className="mt-3 justify-content-center text-center">
-            <Col>
-              <h5>결제 금액: {selectedProduct.price}₩ </h5>
-            </Col>
-          </Row> */}
           </Col>
 
           {/* 구매자, 카드 정보 */}

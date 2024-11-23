@@ -38,7 +38,6 @@ export const createMood = createAsyncThunk(
     try {
       const response = await api.post("/mood", formData);
       if (response.status !== 200) throw new Error(response.error);
-
       dispatch(getMoodList({ page: 1 }));
 
       return response.data;

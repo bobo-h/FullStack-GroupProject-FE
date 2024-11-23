@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Form, Modal, Row, Col } from "react-bootstrap";
-import Alert from "../../../../../common/components/Alert";
 import CustomModal from "../../../../../common/components/CustomModal";
 import { useDispatch, useSelector } from "react-redux";
 import CloudinaryUploadWidget from "../../../../../utils/CloudinaryUploadWidget";
@@ -20,21 +19,14 @@ const InitialFormData = {
   isDeleted: "No",
 };
 
-const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
+const NewMoodDialog = ({ mode, showDialog, setShowDialog }) => {
   const { error, success, selectedMood } = useSelector((state) => state.mood);
   const [formData, setFormData] = useState(
     mode === "new" ? { ...InitialFormData } : selectedMood
   );
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertContent, setAlertContent] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const dispatch = useDispatch();
-
-  // 성공 시 다이얼로그 닫기
-  // useEffect(() => {
-  //   if (success) setShowDialog(false);
-  // }, [success]);
 
   // 다이얼로그가 열리면, 모드에 따라 초기 데이터 설정
   useEffect(() => {
@@ -55,39 +47,27 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
     setShowDialog(false);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (mode === "new") {
-      //새 무드 만들기
-      dispatch(createMood(formData))
-        .then(() => {
-          setAlertContent("무드 생성 완료하였습니다!");
-          setShowAlert(true);
-          setModalContent("무드 생성 완료하였습니다!");
-          setShowModal(true);
-        })
-        .catch((error) => {
-          setAlertContent("무드 생성 실패!");
-          setShowAlert(true);
-          setModalContent("무드 생성 실패!");
-          setShowModal(true);
-        });
+      try {
+        await dispatch(createMood(formData)).unwrap();
+        setModalContent("무드 생성 완료하였습니다!");
+        setShowModal(true);
+      } catch (error) {
+        setModalContent("무드 생성 실패! 다시 시도해주세요.");
+        setShowModal(true);
+      }
     } else {
-      // 무드 수정하기
-      dispatch(editMood({ ...formData, id: selectedMood._id }))
-        .then(() => {
-          setAlertContent("무드 수정 완료하였습니다!");
-          setShowAlert(true);
-          setModalContent("무드 수정 완료하였습니다!");
-          setShowModal(true);
-        })
-        .catch((error) => {
-          setAlertContent("무드 수정 실패!");
-          setShowAlert(true);
-          setModalContent("무드 수정 실패!");
-          setShowModal(true);
-        });
+      try {
+        await dispatch(editMood({ ...formData, id: selectedMood._id })).unwrap();
+        setModalContent("무드 수정 완료하였습니다!");
+        setShowModal(true);
+      } catch (error) {
+        setModalContent("무드 수정 실패! 다시 시도해주세요.");
+        setShowModal(true);
+      }
     }
   };
 
@@ -112,20 +92,15 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
         )}
       </Modal.Header>
       {error && (
-        <div className="error-message">
-          <Alert variant="danger">{error}</Alert>
-        </div>
-      )}
-      {/* {showAlert && (
-        <Alert
-          message={alertContent}
+        <CustomModal
+          message={error}
           onClose={() => {
-            setShowAlert(false);
-            setShowDialog(false);
+            setShowModal(false);
+            setShowDialog(true);
           }}
-          redirectTo="/admin"
+          showCancelButton={false} // 취소 버튼 불필요
         />
-      )} */}
+      )}
       {showModal && (
         <CustomModal
           message={modalContent}
@@ -194,7 +169,6 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
               value={formData.isDeleted} // 초기값이 "No"로 설정되었는지 확인
               onChange={(e) => {
                 const newValue = e.target.value;
-                console.log("Updated isDeleted:", newValue); // 값 디버깅
                 setFormData({ ...formData, isDeleted: newValue });
               }}
               required
@@ -218,4 +192,4 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
   );
 };
 
-export default NewProductDialog;
+export default NewMoodDialog;

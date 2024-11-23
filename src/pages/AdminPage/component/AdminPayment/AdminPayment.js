@@ -18,7 +18,7 @@ const AdminPaymentPage = () => {
   const { orderList, totalPageNum, loading } = useSelector(
     (state) => state.order
   );
-  // const [mode, setMode] = useState("new");
+ 
   const [showModal, setShowModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedSearchType, setSelectedSearchType] = useState("All");
@@ -41,7 +41,7 @@ const AdminPaymentPage = () => {
     if (newQuery.ordernum === '') { delete newQuery.ordernum; }
     if (newQuery.orderemail === '') { delete newQuery.orderemail; }
     if (newQuery.orderitem === '') { delete newQuery.orderitem; }
-    if (newQuery.category == '') { delete newQuery.category }
+    if (newQuery.category === '') { delete newQuery.category }
 
     const params = new URLSearchParams(newQuery);
 
@@ -69,7 +69,6 @@ const AdminPaymentPage = () => {
     setSearchQuery(updatedQuery);
     updateQueryParams(updatedQuery);
   };
-  console.log("orderList???", orderList)
 
   const filteredPayments = orderList.filter((payment) => {
     if (selectedCategory === "All") return true; // "All" 선택 시 모든 상품 표시
@@ -111,15 +110,7 @@ const AdminPaymentPage = () => {
       updatedQuery.ordernum = "";
       updatedQuery.orderemail = "";
       updatedQuery.orderitem = ""
-      // // 초기 상태로 설정
-      // setSearchQuery({
-      //   page: 1,
-      //   ordernum: "",
-      //   orderitem: "",
-      //   orderemail: "",
-
-      // });
-      // // updateQueryParams({});
+      
     }
 
     setSearchQuery(updatedQuery);
@@ -156,16 +147,6 @@ const AdminPaymentPage = () => {
     updateQueryParams(updatedQuery);
 
   };
-
-  // useEffect(() => {
-  //   if (loading === false) {
-  //     if ((selectedCategory === "All") & (selectedSearchType === "All")) {
-  //       setFilteredOrders(orderList);
-  //     } else {
-  //       setFilteredOrders(filteredPayments);
-  //     }
-  //   }
-  // }, [loading, selectedSearchType, selectedCategory, searchParam]);
 
   return (
     <div className="admin-payment-page">

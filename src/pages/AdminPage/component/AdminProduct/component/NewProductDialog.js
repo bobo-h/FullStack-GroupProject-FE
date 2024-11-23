@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Form, Modal, Row, Col } from "react-bootstrap";
-import Alert from "../../../../../common/components/Alert";
 import CustomModal from "../../../../../common/components/CustomModal";
 import { useDispatch, useSelector } from "react-redux";
 import CloudinaryUploadWidget from "../../../..//../utils/CloudinaryUploadWidget";
@@ -35,16 +34,10 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
   const [formData, setFormData] = useState(
     mode === "new" ? { ...InitialFormData } : selectedProduct
   );
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertContent, setAlertContent] = useState("");
+
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const dispatch = useDispatch();
-
-  // 성공 시 다이얼로그 닫기
-  // useEffect(() => {
-  //   if (success) setShowDialog(false);
-  // }, [success]);
 
   // 다이얼로그가 열리면, 모드에 따라 초기 데이터 설정
   useEffect(() => {
@@ -65,39 +58,27 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
     setShowDialog(false);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
 
     if (mode === "new") {
-      //새 상품 만들기
-      dispatch(createProduct(formData))
-        .then(() => {
-          setAlertContent("상품 생성 완료하였습니다!");
-          setShowAlert(true);
-          setModalContent("상품 생성 완료하였습니다!");
-          setShowModal(true);
-        })
-        .catch((error) => {
-          setAlertContent("상품 생성 실패!");
-          setShowAlert(true);
-          setModalContent("상품 생성 실패!");
-          setShowModal(true);
-        });
+      try {
+        await dispatch(createProduct(formData)).unwrap();
+        setModalContent("상품 생성 완료하였습니다!");
+        setShowModal(true);
+      } catch (error) {
+        setModalContent("상품 생성 실패! 다시 시도해주세요.");
+        setShowModal(true);
+      }
     } else {
-      // 상품 수정하기
-      dispatch(editProduct({ ...formData, id: selectedProduct._id }))
-        .then(() => {
-          setAlertContent("상품 정보 변경되었습니다!");
-          setShowAlert(true);
-          setModalContent("상품 정보 변경되었습니다!");
-          setShowModal(true);
-        })
-        .catch((error) => {
-          setAlertContent("상품 정보 변경 실패!");
-          setShowAlert(true);
-          setModalContent("상품 정보 변경 실패!");
-          setShowModal(true);
-        });
+      try {
+        await dispatch(editProduct({ ...formData, id: selectedProduct._id })).unwrap();
+        setModalContent("상품 수정 완료하였습니다!");
+        setShowModal(true);
+      } catch (error) {
+        setModalContent("상품 수정 실패! 다시 시도해주세요.");
+        setShowModal(true);
+      }
     }
   };
 
@@ -128,21 +109,17 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
           <Modal.Title>Edit Product</Modal.Title>
         )}
       </Modal.Header>
+    
       {error && (
-        <div className="error-message">
-          <Alert variant="danger">{error}</Alert>
-        </div>
-      )}
-      {/* {showAlert && (
-        <Alert
-          message={alertContent}
+        <CustomModal
+          message={error}
           onClose={() => {
-            setShowAlert(false);
-            setShowDialog(false);
+            setShowModal(false);
+            setShowDialog(true);
           }}
-          redirectTo="/admin"
+          showCancelButton={false} // 취소 버튼 불필요
         />
-      )} */}
+      )}
       {showModal && (
         <CustomModal
           message={modalContent}

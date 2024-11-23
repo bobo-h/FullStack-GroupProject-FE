@@ -34,7 +34,6 @@ const AdminDashboard = ({ showModal }) => {
         try {
             const response = await api.get("/sales/daily"); // GET 요청
             const result = response.data;
-            console.log("result??", result)
             if (result.status === "success") {
                 setDailySalesData(result.data);
             } else {
