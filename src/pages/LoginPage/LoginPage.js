@@ -50,6 +50,9 @@ const LoginPage = () => {
           showCancelButton={false}
         />
       )}
+      <div className="login-area__title">
+        <h1>MeowMemo</h1>
+      </div>
       <Form className="login-form" onSubmit={handleLoginWithEmail}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>이메일</Form.Label>

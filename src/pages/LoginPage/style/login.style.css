@@ -1,11 +1,14 @@
 .login-area {
-  max-width: 400px;
+  max-width: 600px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh; /* 화면 높이 전체를 차지 */
 
+  .login-area__title {
+    margin-bottom: 50px;
+  }
   .login-button-area {
     display: flex;
     flex-direction: column;
