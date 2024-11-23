@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Form, Col, Row, Image, Container } from "react-bootstrap";
 import Button from "../../../common/components/Button";
 import { useDispatch, useSelector } from "react-redux";
-import Alert from "../../../common/components/Alert";
-import Alert3 from "../../../common/components/Alert3";
 import {
   editUserInfo,
   clearErrors,
@@ -13,6 +11,7 @@ import CloudinaryUploadWidget from "../../../utils/CloudinaryUploadWidget";
 import userDefaultLogo from "../../../assets/userDefaultLogo.png";
 import "../style/userInfo.style.css";
 import { useNavigate } from "react-router-dom";
+import CustomModal from "../../../common/components/CustomModal";
 
 const UserInfo = () => {
   const navigate = useNavigate();
@@ -27,9 +26,9 @@ const UserInfo = () => {
   });
 
   const [isEditing, setIsEditing] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
-  const [deleteShowAlert, setDeleteShowAlert] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [deleteShowModal, setDeleteShowModal] = useState(false);
 
   // user 정보가 변경되면 formData 갱신
   useEffect(() => {
@@ -52,13 +51,11 @@ const UserInfo = () => {
     setFormData({ ...formData, profileImage: url });
   };
 
-  // 정보 업데이트 핸들러
   const handleUpdate = () => {
     if (isEditing) {
-      // 업데이트 BE
       if (!formData.name) {
-        setAlertMessage("이름은 필수 입력 값입니다.");
-        setShowAlert(true);
+        setModalMessage("이름은 필수 입력 값입니다.");
+        setShowModal(true);
         return;
       }
       dispatch(editUserInfo({ id: user?._id, formData }));
@@ -67,20 +64,20 @@ const UserInfo = () => {
       setIsEditing(true);
     }
   };
-  // Alert창 닫을 때의 설정 (에러 초기화)
-  const handleCloseAlert = () => {
+
+  const handleCloseModal = () => {
     dispatch(clearErrors());
-    setShowAlert(false);
-    setDeleteShowAlert(false);
+    setShowModal(false);
+    setDeleteShowModal(false);
   };
 
   const handleDelete = () => {
-    setDeleteShowAlert(true);
+    setDeleteShowModal(true);
   };
 
   const handleConfirmDelete = () => {
     dispatch(deleteUserInfo({ id: user?._id, navigate }));
-    setDeleteShowAlert(false);
+    setDeleteShowModal(false);
   };
 
   return (
@@ -166,20 +163,20 @@ const UserInfo = () => {
         </Row>
       </Container>
 
-      {showAlert && <Alert onClose={handleCloseAlert}>{alertMessage}</Alert>}
-      {editError && <Alert onClose={handleCloseAlert}>{editError}</Alert>}
+      {showModal && (
+        <CustomModal onClose={handleCloseModal}>{modalMessage}</CustomModal>
+      )}
+      {editError && (
+        <CustomModal onClose={handleCloseModal}>{editError}</CustomModal>
+      )}
 
-      {deleteShowAlert && (
-        <Alert3
-          onClose={handleCloseAlert}
-          buttonText="확인"
-          onButtonClick={handleConfirmDelete}
-        >
+      {deleteShowModal && (
+        <CustomModal onClose={handleCloseModal} onConfirm={handleConfirmDelete}>
           <p>
             회원 탈퇴를 하면 90일 동안 해당 이메일을 사용하실 수 없습니다.
             정말로 탈퇴하시겠습니까?
           </p>
-        </Alert3>
+        </CustomModal>
       )}
     </div>
   );
