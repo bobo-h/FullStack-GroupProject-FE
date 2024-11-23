@@ -29,18 +29,15 @@ const NavBar = memo(({ isAdminPage }) => {
     { icon: <InfoIcon className="app-icon" />, text: "My", path: "/my-page" },
   ];
 
-  // 화면 크기 변경 감지
   useEffect(() => {
     const handleResize = debounce(() => {
       setWindowWidth(window.innerWidth);
-    }, 300); // 300ms debounce 적용
+    }, 300);
 
     window.addEventListener("resize", handleResize);
-    // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // 메모이제이션된 이벤트 핸들러
   const handleMouseEnter = useCallback(
     (index) => {
       if (hoveredIndex !== index) {

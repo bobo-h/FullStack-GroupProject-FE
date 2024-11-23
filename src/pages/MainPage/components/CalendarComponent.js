@@ -6,7 +6,7 @@ import {
 } from "../../../features/diary/diarySlice";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin from "@fullcalendar/interaction"; // 추가
+import interactionPlugin from "@fullcalendar/interaction";
 import "../style/calendarcomponent.style.css";
 
 const CalendarComponent = ({ onDateClick }) => {
@@ -14,11 +14,9 @@ const CalendarComponent = ({ onDateClick }) => {
   const { diaryList, loading } = useSelector((state) => state.diary);
 
   useEffect(() => {
-    // 초기 데이터 로드
     dispatch(getDiaryList(1));
 
     return () => {
-      // 컴포넌트 언마운트 시 상태 초기화
       dispatch(clearDiaryList());
     };
   }, [dispatch]);
@@ -28,31 +26,26 @@ const CalendarComponent = ({ onDateClick }) => {
     return diaryList.flatMap((entry) => entry.diaries);
   };
 
-  // 평탄화된 diary 데이터 생성
   const flattenedDiaries = flattenDiaryList(diaryList);
 
-  // 날짜 셀 클릭 이벤트 핸들러
   const handleDateClick = (info) => {
-    const dateStr = info.dateStr; // 클릭된 날짜 (YYYY-MM-DD 형식)
+    const dateStr = info.dateStr;
 
-    // flattenedDiaries에서 클릭된 날짜에 해당하는 diary 찾기
     const diary = flattenedDiaries.find(
       (entry) =>
         new Date(entry.selectedDate).toISOString().split("T")[0] === dateStr
     );
 
     if (diary) {
-      onDateClick(diary.id); // 다이어리 상세 페이지로 이동
+      onDateClick(diary.id);
     } else {
       console.log("No diary found for this date:", dateStr);
     }
   };
 
   const renderDayCellContent = (dayCell) => {
-    // dayCell.date를 로컬 시간대의 "YYYY-MM-DD" 형식으로 변환
     const dateStr = new Date(dayCell.date).toLocaleDateString("en-CA");
 
-    // diaryList의 selectedDate도 로컬 시간대로 변환
     const matchedDiary = flattenedDiaries.find((entry) => {
       const selectedDate = new Date(entry.selectedDate).toLocaleDateString(
         "en-CA"
@@ -79,8 +72,8 @@ const CalendarComponent = ({ onDateClick }) => {
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
-        dateClick={handleDateClick} // 날짜 클릭 이벤트 핸들러 연결
-        dayCellContent={renderDayCellContent} // 날짜 셀 표시 방식 연결
+        dateClick={handleDateClick}
+        dayCellContent={renderDayCellContent}
       />
     </div>
   );

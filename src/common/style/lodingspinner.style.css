@@ -51,10 +51,3 @@
 .piano-keyboard:last-child {
   animation-delay: 0.4s;
 }
-
-/* 
-var(--primary-color-deepGreen)
-var(--primary-color-lightGreen)
-var(--primary-color-ivory)
-var(--primary-color-brown) 
-*/

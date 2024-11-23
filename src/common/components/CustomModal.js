@@ -26,7 +26,7 @@ const CustomModal = ({
     }
   };
   return ReactDOM.createPortal(
-    <div className="CustomModal">
+    <div className="CustomModal" style={{ fontFamily: "HakgyoansimBunpilR" }}>
       <div className="CustomModal__overlay" onClick={onClose}>
         <div className="CustomModal__container">
           <button className="CustomModal__close-btn" onClick={onClose}>
