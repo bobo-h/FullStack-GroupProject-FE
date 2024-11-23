@@ -48,7 +48,7 @@ const MainPage = () => {
 
   return (
     <div className="main-container">
-      <img className="cats-room" src="backgroundimage.png" alt="cats room" />
+      <img className="cats-room" src="/backgroundimage.png" alt="cats room" />
       <MyCatsComponent />
 
       {/* 관리자일 때만 AdminIcon 렌더링 */}
