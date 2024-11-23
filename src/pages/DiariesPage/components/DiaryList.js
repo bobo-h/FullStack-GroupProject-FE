@@ -109,13 +109,15 @@ const DiaryList = () => {
                   {diary.content}
                 </p>
               </Col>
-              <Col xs={3} className="diary-list__item-photo px-0">
-                <img
-                  src={diary.image}
-                  alt={diary.title}
-                  className="img-fluid rounded"
-                />
-              </Col>
+              {diary.image && (
+                <Col xs={3} className="diary-list__item-photo px-0">
+                  <img
+                    src={diary.image}
+                    alt={diary.title}
+                    className="img-fluid rounded"
+                  />
+                </Col>
+              )}
             </Row>
           ))}
         </div>
