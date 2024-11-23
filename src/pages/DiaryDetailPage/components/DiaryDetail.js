@@ -7,7 +7,6 @@ import CustomModal from "./../../../common/components/CustomModal";
 import Button from "./../../../common/components/Button";
 import Button2 from "./../../../common/components/Button2";
 import "./../style/diaryDetail.style.css";
-import LoadingSpinner from "../../../common/components/LoadingSpinner";
 
 const DiaryDetail = () => {
   const navigate = useNavigate();
@@ -44,13 +43,12 @@ const DiaryDetail = () => {
       .unwrap()
       .then(() => {
         setModalMessage(
-          "다이어리가 삭제되었습니다. 삭제된 다이어리는 마이페이지-휴지통에서 확인하실 수 있습니다."
+          "다이어리가 삭제되었습니다. 삭제된 다이어리는 <마이페이지-휴지통>에서 확인하실 수 있습니다."
         );
         setShowConfirmModal(false);
         setShowSuccessModal(true);
       })
       .catch((error) => {
-        console.error("Failed to delete diary:", error);
         setModalMessage("잠시 후 다시 시도해주세요");
         setShowConfirmModal(false);
       });
