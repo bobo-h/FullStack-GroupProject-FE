@@ -166,6 +166,7 @@ export const printLineChatbot = createAsyncThunk(
         catPersonality,
       });
 
+
       return response.data.reply;
 
     } catch (error) {
@@ -265,6 +266,7 @@ const chatbotSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.registrationError = null;
+        state.cats = action.payload;
         state.cats = action.payload;
       })
       .addCase(updateChatbotMany.rejected, handleRejected);

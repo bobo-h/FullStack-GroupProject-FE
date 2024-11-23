@@ -1,29 +1,27 @@
 .main-container {
-  width: 100%; /* 부모 요소를 전체 화면으로 가정 */
-  height: 100%; /* 전체 높이로 설정 */
+  width: 100%;
+  height: 100%;
   position: relative;
-  /* overflow: hidden; 이미지가 잘릴 수 있으므로, 넘치는 부분은 숨기기 이거 말고 그 박스 안에 내용이 모두 들어오게 제한 할 수 있지 않나?*/
 }
 
 .cats-room {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* 이미지가 꽉 차도록 조절 */
+  object-fit: cover;
   position: absolute;
   top: 0;
   left: 0;
   z-index: -1;
-  pointer-events: none; /* 마우스 클릭 이벤트를 무효화 */
-  user-select: none; /* 텍스트나 이미지를 선택할 수 없도록 설정 [마우스로 긁을때 파래지는거 막음]*/
+  pointer-events: none;
+  user-select: none;
 }
 
-/* 메인에서 사용할 버튼 */
 .main-opt {
   cursor: pointer;
   height: 70px;
   width: 70px;
   z-index: 30;
-  animation: mainOptFadeIn 0.5s ease forwards; /* 등장 시 애니메이션 추가 */
+  animation: mainOptFadeIn 0.5s ease forwards;
 }
 @keyframes mainOptFadeIn {
   0% {
@@ -68,13 +66,3 @@
   top: 12px;
   right: 100px;
 }
-/*
- #5F6F52
-#A9B388
-#FEFAE0
-#B99470 
-var(--primary-color-deepGreen)
-var(--primary-color-lightGreen)
-var(--primary-color-ivory)
-var(--primary-color-brown)
-*/

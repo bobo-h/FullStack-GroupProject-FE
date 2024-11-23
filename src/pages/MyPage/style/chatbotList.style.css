@@ -13,8 +13,8 @@
     width: 150px;
     height: 150px;
     border-radius: 20px;
-    object-fit: cover; /* 비율을 유지하면서 크기에 맞게 자름 */
-    display: block; /* 부모와의 여백 제거 */
+    object-fit: cover;
+    display: block;
   }
 
   .chatbot-info-area {
@@ -28,8 +28,8 @@
   }
   .chatbot-btn__modify,
   .chatbot-btn__toggle-visualization {
-    font-size: 15px; /* 글자 크기 줄이기 */
-    padding: 5px 10px; /* 버튼 안쪽 여백 (상하, 좌우) */
+    font-size: 15px;
+    padding: 5px 10px;
   }
 }
 
@@ -56,8 +56,8 @@
       width: 60px;
       height: 60px;
       border-radius: 20px;
-      object-fit: cover; /* 비율을 유지하면서 크기에 맞게 자름 */
-      display: block; /* 부모와의 여백 제거 */
+      object-fit: cover;
+      display: block;
     }
 
     .chatbot-info-area {
@@ -73,8 +73,8 @@
     }
     .chatbot-btn__modify,
     .chatbot-btn__toggle-visualization {
-      font-size: 11px; /* 글자 크기 줄이기 */
-      padding: 5px 10px; /* 버튼 안쪽 여백 (상하, 좌우) */
+      font-size: 11px;
+      padding: 5px 10px;
     }
   }
 }

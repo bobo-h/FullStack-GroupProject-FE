@@ -1,13 +1,10 @@
-/* 달력 컨테이너 */
 .cat-calendar-container {
   position: absolute;
   top: 10px;
   right: 20px;
-  width: 650px; /* 전체 달력의 너비 고정 */
-  height: 650px; /* 전체 달력의 높이 고정 */
-  background-color: var(
-    --primary-color-ivory
-  ); /* 달력 배경을 아이보리로 설정 */
+  width: 650px;
+  height: 650px;
+  background-color: var(--primary-color-ivory);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,35 +13,32 @@
   z-index: 31;
 }
 
-/*캘린더 UI고정 */
 .fc {
-  width: 600px; /* 전체 달력의 너비 고정 */
-  height: 600px; /* 전체 달력의 높이 고정 */
-  max-width: 100%; /* 화면이 작은 경우를 대비해 최대 너비 제한 */
-  margin: 0 auto; /* 중앙 정렬 */
+  width: 600px;
+  height: 600px;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .fc-daygrid-day {
-  width: 80px !important; /* 각 날짜 셀의 너비 고정 */
-  height: 80px !important; /* 각 날짜 셀의 높이 고정 */
-  overflow: hidden; /* 날짜 셀에 넘치는 내용을 숨기기 */
+  width: 80px !important;
+  height: 80px !important;
+  overflow: hidden;
 }
 
-/* 날짜 텍스트 색상 */
 .date-text {
-  color: var(--primary-color-brown); /* 날짜 텍스트를 갈색으로 설정 */
+  color: var(--primary-color-brown);
 }
 
 .fc-col-header-cell-cushion {
-  color: black; /* 요일 헤더 텍스트 색상 */
-  text-decoration: none; /* 밑줄 제거 */
+  color: black;
+  text-decoration: none;
 }
 
 .fc-col-header-cell {
-  background-color: var(--primary-color-brown); /* 요일 헤더 배경색 */
+  background-color: var(--primary-color-brown);
 }
 
-/* 공통 버튼 스타일 */
 .fc-button.fc-today-button,
 .fc-button.fc-prev-button,
 .fc-button.fc-next-button {
@@ -53,17 +47,15 @@
   border-color: var(--primary-color-deepGreen);
 }
 
-/* 투데이 비활성화 상태 스타일 */
 .fc-button.fc-today-button:disabled,
 .fc-button.fc-today-button:disabled.fc-button-primary:active,
 .fc-button.fc-today-button:disabled:hover {
-  background-color: var(--primary-color-deepGreen); /* 배경색 */
+  background-color: var(--primary-color-deepGreen);
   border-color: var(--primary-color-deepGreen);
-  cursor: not-allowed; /* 커서 모양 */
-  opacity: 0.6; /* 투명도 */
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
-/* 다음 버튼의 상태별 스타일 */
 .fc-button.fc-today-button:hover,
 .fc-button.fc-prev-button:hover,
 .fc-button.fc-next-button:hover {
@@ -86,64 +78,47 @@
   width: 100%;
 }
 .date-text {
-  position: absolute; /* 상대적인 위치를 잡기 위해서 absolute 필요 */
-  top: 0; /* 상단 기준으로 위치 설정 */
-  right: 0; /* 오른쪽 끝에 맞추어 배치 */
+  position: absolute;
+  top: 0;
+  right: 0;
 }
-/* 고양이 발바닥 표시  // 날짜와 고양이 도장 사이에 약간의 간격 추가*/
 .paw-mark {
-  display: block; /* 불필요한 여백을 제거하기 위해 이미지 요소를 블록 요소로 설정 */
-  width: 55px; /* 고양이 도장의 너비를 줄여서 날짜 셀 안에 맞추기 */
-  height: 55px; /* 고양이 도장의 높이도 셀 크기에 맞게 조정 */
-  margin: 0 auto; /* 이미지가 중앙에 위치하도록 설정 */
-  /* border-radius: 50%; 둥근 이미지로 설정 */
-  position: absolute; /* 상대적인 위치를 잡기 위해서 absolute 필요 */
-  top: 20px; /* 상단 기준으로 위치 설정 */
-  right: 11px; /* 오른쪽 끝에 맞추어 배치 */
-  object-fit: contain; /* 비율 유지하며 채움 */
-  /* transform: scale(1.2);  이미지 내용물만 1.2배 확대 */
-  transform-origin: center; /* 확대 기준점을 이미지의 중심으로 설정 */
+  display: block;
+  width: 55px;
+  height: 55px;
+  margin: 0 auto;
+  position: absolute;
+  top: 20px;
+  right: 11px;
+  object-fit: contain;
+  transform-origin: center;
 }
 
-/* 모바일 환경에서 스타일 변경 */
 @media (max-width: 700px) {
-  /* 달력 컨테이너 */
   .cat-calendar-container {
-    width: 390px; /* 전체 달력의 너비 고정 */
-    height: 600px; /* 전체 달력의 높이 고정 */
+    width: 390px;
+    height: 600px;
     top: 70px;
     right: 0;
   }
 
-  /*캘린더 UI고정 */
   .fc {
-    width: 380px; /* 전체 달력의 너비 고정 */
-    height: 550px; /* 전체 달력의 높이 고정 */
-    max-width: 100%; /* 화면이 작은 경우를 대비해 최대 너비 제한 */
+    width: 380px;
+    height: 550px;
+    max-width: 100%;
   }
 
   .fc-daygrid-day {
-    width: 30px !important; /* 각 날짜 셀의 너비 고정 */
-    height: 75px !important; /* 각 날짜 셀의 높이 고정 */
+    width: 30px !important;
+    height: 75px !important;
   }
-  /* 고양이 발바닥 표시  // 날짜와 고양이 도장 사이에 약간의 간격 추가*/
+
   .paw-mark {
-    width: 50px; /* 고양이 도장의 너비를 줄여서 날짜 셀 안에 맞추기 */
-    height: 50px; /* 고양이 도장의 높이도 셀 크기에 맞게 조정 */
-    border-radius: 50%; /* 둥근 이미지로 설정 */
-    position: absolute; /* 상대적인 위치를 잡기 위해서 absolute 필요 */
-    top: 20px; /* 상단 기준으로 위치 설정 */
-    right: -2.5px; /* 오른쪽 끝에 맞추어 배치 */
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    position: absolute;
+    top: 20px;
+    right: -2.5px;
   }
 }
-
-/*
- #5F6F52
-#A9B388
-#FEFAE0
-#B99470 
-var(--primary-color-deepGreen)
-var(--primary-color-lightGreen)
-var(--primary-color-ivory)
-var(--primary-color-brown)
-*/

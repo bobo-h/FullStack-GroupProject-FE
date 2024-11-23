@@ -13,7 +13,7 @@ const CloudinaryUploadWidget = ({ uploadImage }) => {
       (error, result) => {
         if (!error && result && result.event === "success") {
           console.log("Uploaded image info:", result.info);
-          uploadImage(result.info.secure_url); // 부모 컴포넌트에 URL 전달
+          uploadImage(result.info.secure_url);
         }
       }
     );
@@ -22,7 +22,7 @@ const CloudinaryUploadWidget = ({ uploadImage }) => {
 
   const handleOpenWidget = () => {
     if (widgetRef.current) {
-      widgetRef.current.open(); // 위젯 열기
+      widgetRef.current.open();
     }
   };
 

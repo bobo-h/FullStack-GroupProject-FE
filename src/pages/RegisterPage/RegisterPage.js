@@ -158,7 +158,7 @@ const RegisterPage = () => {
             isInvalid={policyError}
           />
         </Form.Group>
-        <Button className="resgister__button" type="submit">
+        <Button className="register__button" type="submit">
           회원가입
         </Button>
       </Form>

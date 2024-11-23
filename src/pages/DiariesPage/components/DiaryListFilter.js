@@ -37,8 +37,6 @@ const DiaryListFilter = () => {
 
   const handleFilterChange = (name, value) => {
     setFilters((prev) => ({ ...prev, [name]: value }));
-
-    // URL 업데이트
     const updatedParams = new URLSearchParams(searchParams);
     if (value) {
       updatedParams.set(name, value);
@@ -46,8 +44,6 @@ const DiaryListFilter = () => {
       updatedParams.delete(name);
     }
     setSearchParams(updatedParams);
-
-    // 드롭다운 닫기
     setDropdowns((prev) => ({
       ...prev,
       [name]: false,
@@ -55,12 +51,10 @@ const DiaryListFilter = () => {
   };
 
   useEffect(() => {
-    // 필터 옵션 데이터 로드
     dispatch(getFilterOptions());
   }, [dispatch]);
 
   useEffect(() => {
-    // 필터 변경 시 상태 초기화 및 데이터 로드
     const { year, month } = filters;
     dispatch(clearDiaryList());
     dispatch(getDiaryList({ page: 1, year, month }));

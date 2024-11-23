@@ -24,34 +24,30 @@ const DiaryList = () => {
     };
   }, [dispatch]);
 
-  // Intersection Observer 콜백
   const handleObserver = useCallback(
     (entries) => {
       const target = entries[0];
-      if (
-        target.isIntersecting && // 화면에 보이는 경우
-        currentPage < totalPages && // 현재 페이지가 전체 페이지보다 작은 경우
-        !loading // 로딩 중이 아닌 경우
-      ) {
+      if (target.isIntersecting && currentPage < totalPages && !loading) {
         dispatch(getDiaryList({ page: currentPage + 1 }));
       }
     },
     [dispatch, currentPage, totalPages, loading]
   );
 
-  // Observer 등록
   useEffect(() => {
     const observer = new IntersectionObserver(handleObserver, {
       threshold: 1.0,
     });
 
-    if (observerRef.current) {
-      observer.observe(observerRef.current);
+    const currentObserverRef = observerRef.current;
+
+    if (currentObserverRef) {
+      observer.observe(currentObserverRef);
     }
 
     return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current);
+      if (currentObserverRef) {
+        observer.unobserve(currentObserverRef);
       }
     };
   }, [handleObserver]);
