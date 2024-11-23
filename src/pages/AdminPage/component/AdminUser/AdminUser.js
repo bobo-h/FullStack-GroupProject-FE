@@ -10,16 +10,15 @@ import {
   searchUsers,
 } from "../../../../features/admin/adminSlice";
 import { useDispatch, useSelector } from "react-redux";
-import Button2 from "../../../../common/components/Button2";
-import Alert from "../../../../common/components/Alert";
 import Button from "./../../../../common/components/Button";
+import CustomModal from "../../../../common/components/CustomModal";
 
 const AdminUser = () => {
   const [sortBy, setSortBy] = useState("");
   const [activeTab, setActiveTab] = useState("allUser");
   const [showDialog, setShowDialog] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertContent, setAlertContent] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState("");
   const [searchTerm, setSearchTerm] = useState(""); // 검색
   const [searchResults, setSearchResults] = useState({
     allUser: [],
@@ -37,11 +36,11 @@ const AdminUser = () => {
   useEffect(() => {
     if (success && activeTab === "eligibleUsers") {
       // 특정 탭에서만 처리
-      setAlertContent(message);
-      setShowAlert(true);
+      setModalContent(message);
+      setShowModal(true);
     } else if (error && activeTab === "eligibleUsers") {
-      setAlertContent("삭제에 실패하였습니다.");
-      setShowAlert(true);
+      setModalContent("삭제에 실패하였습니다.");
+      setShowModal(true);
     }
     return () => dispatch(clearStates()); // 상태 초기화
   }, [success, error, message, activeTab]);
@@ -59,9 +58,10 @@ const AdminUser = () => {
   // 검색어 변경 시 검색 로직 실행
   const handleSearchClick = () => {
     dispatch(searchUsers({ searchTerm, userType: activeTab })).then((res) => {
+      const results = res.payload;
       setSearchResults((prev) => ({
         ...prev,
-        [activeTab]: res.payload, // 활성화된 탭의 검색 결과만 업데이트
+        [activeTab]: results && results.length > 0 ? results : null, // 활성화된 탭의 검색 결과만 업데이트
       }));
     });
   };
@@ -69,14 +69,13 @@ const AdminUser = () => {
   return (
     <div className="admin-user-page">
       <Container>
-        {showAlert && (
-          <Alert
-            message={alertContent}
+        {showModal && (
+          <CustomModal
+            message={modalContent}
             onClose={() => {
-              setShowAlert(false);
+              setShowModal(false);
               dispatch(clearStates());
             }}
-            redirectTo="/admin"
           />
         )}
         <Row>

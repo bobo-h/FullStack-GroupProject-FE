@@ -1,7 +1,13 @@
 .register-area {
   max-width: 550px !important;
-  margin-top: 10px;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
 
+  flex-direction: column;
+  .register-area__title {
+    text-align: center;
+  }
   .form-group {
     display: flex !important; /* Flex 설정을 강제 적용 */
     flex-direction: column;

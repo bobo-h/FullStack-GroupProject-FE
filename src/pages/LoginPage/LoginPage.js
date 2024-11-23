@@ -9,7 +9,7 @@ import {
 } from "../../features/user/userSlice";
 import "./style/login.style.css";
 import { GoogleLogin } from "@react-oauth/google";
-import Alert from "./../../common/components/Alert";
+import CustomModal from "../../common/components/CustomModal";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -43,12 +43,16 @@ const LoginPage = () => {
   return (
     <Container className="login-area">
       {loginError && (
-        <div className="error-message">
-          <Alert variant="danger" onClose={onClose} redirectTo="/login">
-            {loginError}
-          </Alert>
-        </div>
+        <CustomModal
+          message={loginError}
+          onClose={onClose}
+          redirectTo={"/"}
+          showCancelButton={false}
+        />
       )}
+      <div className="login-area__title">
+        <h1>MeowMemo</h1>
+      </div>
       <Form className="login-form" onSubmit={handleLoginWithEmail}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>이메일</Form.Label>

@@ -6,23 +6,23 @@ import {
   setSelectedUser,
   clearStates,
 } from "../../../../../features/admin/adminSlice";
-import Alert from "../../../../../common/components/Alert";
 import Button from "../../../../../common/components/Button";
 import "../style/adminUser.style.css";
+import CustomModal from "../../../../../common/components/CustomModal";
 
 const UserLevelEditDialog = ({ showDialog, setShowDialog, selectedUser }) => {
   const dispatch = useDispatch();
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertContent, setAlertContent] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState("");
   const { error, success } = useSelector((state) => state.admin);
 
   useEffect(() => {
     if (success) {
-      setAlertContent("역할이 성공적으로 변경되었습니다!");
-      setShowAlert(true);
+      setModalContent("역할이 성공적으로 변경되었습니다!");
+      setShowModal(true);
     } else if (error) {
-      setAlertContent(`수정 실패: ${error}`);
-      setShowAlert(true);
+      setModalContent(`수정 실패: ${error}`);
+      setShowModal(true);
     }
     return () => dispatch(clearStates()); // 상태 초기화
   }, [success, error]);
@@ -34,11 +34,11 @@ const UserLevelEditDialog = ({ showDialog, setShowDialog, selectedUser }) => {
   return (
     <Modal show={showDialog} onHide={handleClose}>
       <Modal.Header closeButton>
-        {showAlert && (
-          <Alert
-            message={alertContent}
+        {showModal && (
+          <CustomModal
+            message={modalContent}
             onClose={() => {
-              setShowAlert(false);
+              setShowModal(false);
               setShowDialog(false);
               dispatch(clearStates());
             }}
@@ -69,12 +69,11 @@ const UserLevelEditDialog = ({ showDialog, setShowDialog, selectedUser }) => {
             <Form.Group className="mb-3">
               <Form.Label>Level</Form.Label>
               <div>
-                {/* Customer 선택 */}
                 <Form.Check
                   type="radio"
                   id="customer"
                   label="Customer"
-                  name="userLevel" // 같은 name으로 그룹화
+                  name="userLevel"
                   value="customer"
                   checked={selectedUser.level === "customer"}
                   onChange={(e) =>
@@ -86,7 +85,6 @@ const UserLevelEditDialog = ({ showDialog, setShowDialog, selectedUser }) => {
                     )
                   }
                 />
-                {/* Admin 선택 */}
                 <Form.Check
                   type="radio"
                   id="admin"

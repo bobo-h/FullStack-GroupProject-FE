@@ -18,7 +18,7 @@ const UserCard = ({ sortBy, userType, onEditUser, searchResults = [] }) => {
   const { allAdmin = [] } = useSelector((state) => state.admin);
 
   const data =
-    searchResults.length > 0
+    searchResults && searchResults.length > 0
       ? searchResults
       : userType === "allUser"
       ? allUser
@@ -30,7 +30,7 @@ const UserCard = ({ sortBy, userType, onEditUser, searchResults = [] }) => {
 
   useEffect(() => {
     //API 호출
-    if (searchResults.length === 0) {
+    if (searchResults && searchResults.length === 0) {
       if (userType === "allUser") {
         console.log("allUser", allUser);
         dispatch(getAllUserList());
@@ -47,9 +47,11 @@ const UserCard = ({ sortBy, userType, onEditUser, searchResults = [] }) => {
   return (
     <div className="user-table-content">
       <Container>
-        {data && data.length > 0 ? (
+        {searchResults === null ? ( // 검색 결과가 없을 때
+          <p>검색된 데이터가 없습니다.</p>
+        ) : data && data.length > 0 ? ( // 검색 또는 기본 데이터가 있을 때
           data.map((user, index) => (
-            <Row className="mb-4">
+            <Row key={user.id || index} className="mb-4">
               <Col xs={1} md={1} className="d-flex align-items-center">
                 {index + 1}
               </Col>
@@ -80,11 +82,10 @@ const UserCard = ({ sortBy, userType, onEditUser, searchResults = [] }) => {
             </Row>
           ))
         ) : (
-          <p>데이터가 존재하지 않습니다.</p>
+          <p>데이터가 존재하지 않습니다.</p> // 기본 데이터가 없을 때
         )}
       </Container>
     </div>
   );
 };
-
 export default UserCard;
