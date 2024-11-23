@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { getDiaryDetail, clearError } from "../../features/diary/diarySlice";
 import DiaryDetail from "./components/DiaryDetail";
 import CommentArea from "./components/Comment/CommentArea";
-import { Spinner, Container, Col, Row } from "react-bootstrap";
+import { Container, Col, Row } from "react-bootstrap";
 import "./style/diaryDetialPage.style.css";
 
 const DiaryDetailPage = () => {
@@ -12,13 +12,12 @@ const DiaryDetailPage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Diary 상세 정보를 가져옴
     if (diaryId) {
       dispatch(getDiaryDetail(diaryId));
     }
 
     return () => {
-      dispatch(clearError()); // 컴포넌트 언마운트 시 에러 초기화
+      dispatch(clearError());
     };
   }, [diaryId, dispatch]);
 
