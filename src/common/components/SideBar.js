@@ -274,10 +274,10 @@ const LogoutButton = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     // Redux 상태 초기화
-    dispatch(logout());
-    dispatch(logoutChatBot());
+    await dispatch(logout());
+    await dispatch(logoutChatBot());
 
     // 로그인 페이지로 리디렉션
     navigate("/login");

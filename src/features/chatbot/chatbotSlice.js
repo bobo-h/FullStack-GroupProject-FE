@@ -252,6 +252,7 @@ const chatbotSlice = createSlice({
     logoutChatBot: (state) => {
       state.cats = [];
       state.catsLength = 0;
+      state.getFlag = false;
     },
   },
   extraReducers: (builder) => {
