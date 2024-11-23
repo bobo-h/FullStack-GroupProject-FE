@@ -5,3 +5,17 @@
   align-items: center;
   margin: 20px 50px;
 }
+
+/* 화면 너비 768px 이하일 때 */
+@media (max-width: 768px) {
+  .diaries-page {
+    margin: 15px 30px; /* 좌우 여백 축소 */
+  }
+}
+
+/* 화면 너비 480px 이하일 때 */
+@media (max-width: 480px) {
+  .diaries-page {
+    margin: 10px 15px; /* 더욱 좁은 여백 */
+  }
+}

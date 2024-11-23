@@ -1,31 +1,30 @@
 import React, { useState } from "react";
 import { Row, Col, Badge } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
 import "../style/chatbotList.style.css";
 import Button2 from "../../../common/components/Button2";
 import ChatbotCreation from "../../ChatbotPage/ChatbotPage";
 import { useDispatch, useSelector } from "react-redux";
 import { updateChatbotJins } from "../../../features/chatbot/chatbotSlice";
-import Alert from "../../../common/components/Alert";
+import CustomModal from "../../../common/components/CustomModal";
 
 const ChatbotList = ({ chatbotItem, index }) => {
   const dispatch = useDispatch();
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertContent, setAlertContent] = useState("");
-  const [isEditing, setIsEditing] = useState(false); // 수정 모드 상태 관리
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
   // 수정 버튼 클릭 핸들러
   const handleModifyClick = () => {
     setIsEditing(true); // 수정 모드 활성화
   };
-  // Alert 닫힘 핸들러
-  const handleAlertClose = () => {
-    setShowAlert(false); // Alert 창 닫기
-    setIsEditing(false); // 수정 모드 비활성화
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    setIsEditing(false);
   };
 
   // 비활성화 클릭 핸들러
   const handleToggleVisualization = () => {
-    const newVisualizationValue = !chatbotItem.visualization; // 현재 값의 반대
+    const newVisualizationValue = !chatbotItem.visualization;
     dispatch(
       updateChatbotJins({
         id: chatbotItem?._id,
@@ -33,34 +32,32 @@ const ChatbotList = ({ chatbotItem, index }) => {
       })
     )
       .then(() => {
-        setAlertContent(
+        setModalContent(
           `챗봇이 ${newVisualizationValue ? "활성화" : "비활성화"}되었습니다.`
         );
-        setShowAlert(true);
+        setShowModal(true);
       })
       .catch((error) => {
         console.log("상태 변경 실패", error);
-        setAlertContent("상태 변경에 실패했습니다!");
-        setShowAlert(true);
+        setModalContent("상태 변경에 실패했습니다!");
+        setShowModal(true);
       });
   };
   return (
     <>
-      {/* Alert 컴포넌트 */}
-      {showAlert && (
-        <Alert
-          message={alertContent}
-          onClose={handleAlertClose} // Alert 닫힘 시 호출
+      {showModal && (
+        <CustomModal
+          message={modalContent}
+          onClose={handleModalClose}
           redirectTo={"/my-page"}
         />
       )}
-      {/* 수정 모드 여부에 따라 ChatbotCreation 컴포넌트 표시 */}
       {isEditing ? (
         <ChatbotCreation
           chatbotItem={chatbotItem}
           onEditComplete={() => {
-            setAlertContent("수정이 완료되었습니다."); // Alert 메시지 설정
-            setShowAlert(true); // Alert 표시
+            setModalContent("수정이 완료되었습니다.");
+            setShowModal(true);
           }}
         /> // 수정 화면 컴포넌트
       ) : (

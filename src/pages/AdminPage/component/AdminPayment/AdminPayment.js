@@ -27,6 +27,7 @@ const AdminPaymentPage = () => {
     ordernum: "",
     orderitem: "",
     orderemail: "",
+    category: "",
   });
   const [searchParam, setSearchParam] = useState("");
 
@@ -40,7 +41,8 @@ const AdminPaymentPage = () => {
     if (newQuery.ordernum === '') { delete newQuery.ordernum; }
     if (newQuery.orderemail === '') { delete newQuery.orderemail; }
     if (newQuery.orderitem === '') { delete newQuery.orderitem; }
-    
+    if (newQuery.category == '') { delete newQuery.category }
+
     const params = new URLSearchParams(newQuery);
 
     navigate("?" + params.toString());
@@ -53,6 +55,7 @@ const AdminPaymentPage = () => {
       ordernum: "",
       orderitem: "",
       orderemail: "",
+      category: "",
     });
     updateQueryParams({});
   }, []);
@@ -66,6 +69,7 @@ const AdminPaymentPage = () => {
     setSearchQuery(updatedQuery);
     updateQueryParams(updatedQuery);
   };
+  console.log("orderList???", orderList)
 
   const filteredPayments = orderList.filter((payment) => {
     if (selectedCategory === "All") return true; // "All" 선택 시 모든 상품 표시
@@ -76,20 +80,50 @@ const AdminPaymentPage = () => {
     return false; // 기본적으로 필터링 조건에 맞지 않으면 제외
   });
 
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+
+    const updatedQuery = { ...searchQuery, page: 1 };
+
+    if (e.target.value === "All") {
+      updatedQuery.category = ""
+    } else {
+      if (e.target.value === "고양이") {
+        updatedQuery.category = "Cat"
+      }
+      else {
+        updatedQuery.category = "BG_IMG"
+      }
+    }
+
+    setSearchQuery(updatedQuery);
+    updateQueryParams(updatedQuery);
+  }
+
   const handleSearchTypeChange = (e) => {
     setSelectedSearchType(e.target.value);
     setSearchParam("");
 
+    const updatedQuery = { ...searchQuery, page: 1 };
+
     if (e.target.value === "All") {
-      // 초기 상태로 설정
-      setSearchQuery({
-        page: 1,
-        ordernum: "",
-        orderitem: "",
-        orderemail: "",
-      });
-      updateQueryParams({});
+
+      updatedQuery.ordernum = "";
+      updatedQuery.orderemail = "";
+      updatedQuery.orderitem = ""
+      // // 초기 상태로 설정
+      // setSearchQuery({
+      //   page: 1,
+      //   ordernum: "",
+      //   orderitem: "",
+      //   orderemail: "",
+
+      // });
+      // // updateQueryParams({});
     }
+
+    setSearchQuery(updatedQuery);
+    updateQueryParams(updatedQuery);
   };
 
   const handleSearchInputChange = (e) => {
@@ -137,15 +171,17 @@ const AdminPaymentPage = () => {
     <div className="admin-payment-page">
       <Container>
         <Row>
-          <Col md={2}>
-            <h2>Payment History</h2>
+          <Col md={7} className="d-flex align-items-center payment-title">
+            <h2 className="me-3 ">Payment History</h2>
+            <Button onClick={handleClickDashboard}>Dashboard</Button>
           </Col>
-          <Col md={2}>
-            <Form.Group controlId="categorySelect">
-              <Form.Label> Category </Form.Label>
+
+          <Col md={6} className="d-flex align-items-center mb-3">
+            <span className="me-2" style={{ flexBasis: '15%' }}>Category:</span>
+            <Form.Group controlId="categorySelect" className="mb-0" style={{ flexBasis: '55%' }}>
               <Form.Select
                 value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
+                onChange={handleCategoryChange}
               >
                 <option>All</option>
                 <option>고양이</option>
@@ -154,12 +190,13 @@ const AdminPaymentPage = () => {
             </Form.Group>
           </Col>
 
-          <Col md={2}>
-            <Form.Group controlId="searchType">
-              <Form.Label>Search</Form.Label>
+          <Col md={12} className="d-flex align-items-center mb-3">
+            <span className="me-2" style={{ flexBasis: '3%' }}>Search:</span>
+            <Form.Group controlId="searchType" className="mb-0" style={{ flexBasis: '29%' }}>
               <Form.Select
                 value={selectedSearchType}
                 onChange={handleSearchTypeChange}
+                className="w-100"
               >
                 <option>All</option>
                 <option>Order Item</option>
@@ -167,27 +204,26 @@ const AdminPaymentPage = () => {
                 <option>Order Num</option>
               </Form.Select>
             </Form.Group>
-          </Col>
-          <Col md={2}>
             {selectedSearchType !== "All" && (
-              <Form.Control
-                type="text"
-                placeholder={`Search ${selectedSearchType}`}
-                value={searchParam}
-                onChange={handleSearchInputChange}
-              />
+              <>
+                <Col md={4} className="ps-0">
+                  <Form.Control
+                    type="text"
+                    placeholder={`Search ${selectedSearchType}`}
+                    value={searchParam}
+                    onChange={handleSearchInputChange}
+                  />
+                </Col>
+                <Col md={2} className="ps-0">
+                  <Button onClick={handleSearchClick}>Search</Button>
+                </Col>
+              </>
             )}
-          </Col>
-          <Col md={2}>
-            {selectedSearchType !== "All" && (
-              <Button onClick={handleSearchClick}>Search</Button>
-            )}
+
           </Col>
 
-          <Col md={2} >
-            <Button onClick={handleClickDashboard}>Dashboard</Button>
-          </Col>
         </Row>
+
         {loading ? (
           <div className="text-align-center">
             <LoadingSpinner animation="border" role="status">

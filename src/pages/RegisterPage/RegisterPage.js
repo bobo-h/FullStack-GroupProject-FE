@@ -1,14 +1,17 @@
 import React from "react";
 import { useState } from "react";
-import { Container, Form, Button, Alert } from "react-bootstrap";
+import { Container, Form, Button } from "react-bootstrap";
 import "./style/resgister.style.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { registerUser } from "../../features/user/userSlice";
+import {
+  clearErrors,
+  registerUser,
+  ClearSuccess,
+} from "../../features/user/userSlice";
+import CustomModal from "../../common/components/CustomModal";
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -22,12 +25,19 @@ const RegisterPage = () => {
   const [passwordError, setPasswordError] = useState("");
   const [policyError, setPolicyError] = useState(false);
 
-  const { loading, success, registrationError } = useSelector(
+  const { registrationError, registrationSuccess } = useSelector(
     (state) => state.user
   );
 
+  const onCloseForError = () => {
+    dispatch(clearErrors());
+  };
+
+  const onCloseForSuccess = () => {
+    dispatch(ClearSuccess());
+  };
+
   const register = (event) => {
-    console.log("Register function called1");
     event.preventDefault();
     const { email, name, password, confirmPassword, birthday, policy } =
       formData;
@@ -37,7 +47,6 @@ const RegisterPage = () => {
       setPasswordError("비밀번호가 일치하지 않습니다.");
       return;
     }
-    console.log("Register function called2");
     if (!policy) {
       setPolicyError(true);
       return;
@@ -45,9 +54,7 @@ const RegisterPage = () => {
 
     setPasswordError("");
     setPolicyError(false);
-    console.log("Register function called3");
-    // API 호출
-    dispatch(registerUser({ name, email, password, birthday, navigate }));
+    dispatch(registerUser({ name, email, password, birthday }));
   };
 
   const handleChange = (event) => {
@@ -66,11 +73,27 @@ const RegisterPage = () => {
     <Container className="register-area">
       {registrationError && (
         <div>
-          <Alert variant="danger" className="resgister__error-message">
-            {registrationError}
-          </Alert>
+          <CustomModal
+            message={registrationError}
+            onClose={onCloseForError}
+            showCancelButton={false}
+          />
         </div>
       )}
+
+      {registrationSuccess && (
+        <div>
+          <CustomModal
+            message={registrationSuccess}
+            onClose={onCloseForSuccess}
+            redirectTo={"/login"}
+            showCancelButton={false}
+          />
+        </div>
+      )}
+      <div className="register-area__title">
+        <h2>회원가입</h2>
+      </div>
       <Form onSubmit={register}>
         <Form.Group controlId="formEmail">
           <Form.Label>이메일</Form.Label>

@@ -130,6 +130,7 @@ const DiaryFormPage = () => {
                   name="selectedDate"
                   value={formValues.selectedDate}
                   onChange={handleChange}
+                  max={new Date().toISOString().split("T")[0]}
                   required
                 />
               </Form.Group>

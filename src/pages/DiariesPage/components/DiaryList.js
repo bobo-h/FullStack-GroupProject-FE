@@ -69,8 +69,10 @@ const DiaryList = () => {
         </div>
       )}
       {diaryList.map((group) => (
-        <div key={group.yearMonth}>
-          <h5 className="text-muted">{group.yearMonth}</h5>
+        <div key={group.yearMonth} className="diary-list__group-box">
+          <h5 className="diary-list__header text-muted">
+            &lt; {group.yearMonth} &gt;
+          </h5>
           {group.diaries.map((diary) => (
             <Row
               key={diary.id}
@@ -109,13 +111,15 @@ const DiaryList = () => {
                   {diary.content}
                 </p>
               </Col>
-              <Col xs={3} className="diary-list__item-photo px-0">
-                <img
-                  src={diary.image}
-                  alt={diary.title}
-                  className="img-fluid rounded"
-                />
-              </Col>
+              {diary.image && (
+                <Col xs={3} className="diary-list__item-photo px-0">
+                  <img
+                    src={diary.image}
+                    alt={diary.title}
+                    className="img-fluid rounded"
+                  />
+                </Col>
+              )}
             </Row>
           ))}
         </div>

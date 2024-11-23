@@ -4,7 +4,7 @@ import api from "../../utils/api";
 export const registerUser = createAsyncThunk(
   "user/registerUser",
   async (
-    { name, email, password, birthday, profileImage, navigate },
+    { name, email, password, birthday, profileImage },
     { rejectWithValue }
   ) => {
     try {
@@ -15,8 +15,7 @@ export const registerUser = createAsyncThunk(
         birthday,
         profileImage,
       });
-      // 성공 -> 로그인 페이지로 이동
-      navigate("/login");
+
       return response.data.data;
     } catch (error) {
       // 실패
@@ -109,6 +108,7 @@ const userSlice = createSlice({
     loading: false,
     loginError: null,
     registrationError: null,
+    registrationSuccess: null,
     editError: null,
     editSuccess: false,
     deleteError: null,
@@ -120,6 +120,9 @@ const userSlice = createSlice({
       state.editError = null;
       state.deleteError = null;
       state.editSuccess = false;
+    },
+    ClearSuccess: (state) => {
+      state.registrationSuccess = null;
     },
     logout: (state) => {
       state.user = null;
@@ -134,6 +137,7 @@ const userSlice = createSlice({
       .addCase(registerUser.fulfilled, (state) => {
         state.loading = false;
         state.registrationError = null;
+        state.registrationSuccess = "회원가입에 성공하셨습니다!";
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
@@ -202,5 +206,5 @@ const userSlice = createSlice({
       });
   },
 });
-export const { clearErrors } = userSlice.actions;
+export const { clearErrors, ClearSuccess } = userSlice.actions;
 export default userSlice.reducer;
