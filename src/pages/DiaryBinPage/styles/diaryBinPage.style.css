@@ -1,7 +1,7 @@
 .diary-bin {
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  margin: 50px 0;
 }
 
 .diary-bin__title {
@@ -46,6 +46,19 @@
   text-align: center;
 }
 
+.diary-bin__empty-row {
+  width: 800px;
+  text-align: center;
+  padding: 20px 0;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #eee;
+}
+
+.diary-bin__empty-message {
+  font-size: 18px;
+  color: #888;
+}
+
 .diary-bin__row {
   padding: 10px 0;
   border-bottom: 1px solid #eee;
@@ -75,4 +88,60 @@
   border-radius: 4px;
   line-height: 1;
   width: 50px;
+}
+
+/* 반응형 스타일 */
+/* 화면 너비 768px 이하 */
+@media (max-width: 768px) {
+  .diary-bin__header,
+  .diary-bin__row {
+    flex-wrap: wrap;
+  }
+
+  .diary-bin__header > div,
+  .diary-bin__row > div {
+    flex: 0 0 50%;
+    margin-bottom: 10px;
+  }
+
+  .diary-bin__header-item {
+    font-size: 14px;
+  }
+
+  .diary-bin__cell {
+    font-size: 12px;
+  }
+
+  .diary-bin__image {
+    max-width: 100px;
+  }
+}
+
+/* 화면 너비 480px 이하 */
+@media (max-width: 480px) {
+  .diary-bin__header {
+    display: none;
+  }
+  .diary-bin__row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .diary-bin__header > div,
+  .diary-bin__row > div {
+    flex: 0 0 100%;
+  }
+
+  .diary-bin__title {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .diary-bin__restore-button {
+    width: auto;
+  }
+
+  .diary-bin__image {
+    max-width: 80px;
+  }
 }

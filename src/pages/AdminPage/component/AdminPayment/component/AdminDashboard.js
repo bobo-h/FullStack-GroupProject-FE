@@ -62,8 +62,8 @@ const AdminDashboard = ({ showModal }) => {
             {
                 label: "판매 금액",
                 data: salesData.map((item) => item.totalSales),
-                backgroundColor: "#B99470", // 판매 금액의 배경색 (Camel Brown)
-                borderColor: "#B99470",    
+                backgroundColor: "#5f5f5f", // 판매 금액의 배경색 (Camel Brown)
+                borderColor: "#5f5f5f",    
                 borderWidth: 1,
                 yAxisID: "y1",
             },
@@ -111,8 +111,8 @@ const AdminDashboard = ({ showModal }) => {
             {
                 label: "판매 금액",
                 data: dailySalesData.map((item) => item.totalSales), // 날짜별 판매 금액
-                backgroundColor: "#B99470", // 판매 금액의 배경색 (Camel Brown)
-                borderColor: "#B99470", 
+                backgroundColor: "#5f5f5f", // 판매 금액의 배경색 (Camel Brown)
+                borderColor: "#5f5f5f", 
                 borderWidth: 1,
                 yAxisID: "y2", // 오른쪽 Y축에 매핑
             },

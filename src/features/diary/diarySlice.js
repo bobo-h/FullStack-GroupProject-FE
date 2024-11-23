@@ -36,6 +36,7 @@ export const getDiaryDetail = createAsyncThunk(
   async (diaryId, { rejectWithValue }) => {
     try {
       const response = await api.get(`/diary/${diaryId}`);
+      console.log("Diary Detail Response:", response.data);
       return response.data.diary;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -172,7 +173,14 @@ const diarySlice = createSlice({
         state.loading = false;
         state.error = null;
         const { data = [], currentPage = 1, totalPages = 1 } = action.payload;
-        state.diaryList = [...state.diaryList, ...data];
+        // 고유 ID를 기준으로 중복 제거
+        const newDiaries = data.filter(
+          (group) =>
+            !state.diaryList.some(
+              (existingGroup) => existingGroup.yearMonth === group.yearMonth
+            )
+        );
+        state.diaryList = [...state.diaryList, ...newDiaries];
         state.currentPage = currentPage;
         state.totalPages = totalPages;
       })

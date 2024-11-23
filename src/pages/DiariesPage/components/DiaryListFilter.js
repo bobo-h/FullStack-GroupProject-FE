@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   getDiaryList,
   clearDiaryList,
   getFilterOptions,
 } from "../../../features/diary/diarySlice";
+import { Pencil } from "../../../assets";
 import { ReactComponent as Up } from "../../../assets/up.svg";
 import { ReactComponent as Down } from "../../../assets/down.svg";
 import "../style/diaryListFilter.style.css";
@@ -14,6 +14,7 @@ import "../style/diaryListFilter.style.css";
 const DiaryListFilter = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { filterOptions, loading } = useSelector((state) => state.diary);
 
@@ -67,6 +68,12 @@ const DiaryListFilter = () => {
 
   return (
     <div className="diary-filter-container">
+      <div
+        className="diary-filter__new-entry"
+        onClick={() => navigate("/diaries/new")}
+      >
+        <img src={Pencil} alt="New Entry" className="diary-filter__new-icon" />
+      </div>
       <div className="diary-filter">
         <div
           className={`diary-filter__label ${

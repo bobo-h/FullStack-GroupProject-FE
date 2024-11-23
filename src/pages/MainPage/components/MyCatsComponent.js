@@ -181,8 +181,8 @@ function DraggableCat({
   id,
   image,
   defaultPosition,
-  zIndex,
-  flip,
+  zIndex: initialZIndex,
+  flip: initialFlip,
   onZIndexChange,
   onFlip,
   onDragStop,
@@ -191,23 +191,41 @@ function DraggableCat({
   // 말풍선 표시 상태와 타이머 참조 추가
   const [isSpeechBubbleVisible, setIsSpeechBubbleVisible] = useState(false);
   const [activeInputId, setActiveInputId] = useState(null); // 현재 입력 필드가 활성화된 고양이 ID
-  const { loading } = useSelector((state) => state.chatbot);
-  const [localPosition, setLocalPosition] = useState(defaultPosition); // 로딩중 임시 좌표
-  const timerRef = useRef(null);
+  const [localLoading, setLocalLoading] = useState(false); // 드래그 로딩 객체별 조정
+  const timerRef = useRef(null); // 말풍선 요청 대기
+  const lastRequestRef = useRef(null); // 드래그 마지막 요청 저장
+  const [zIndex, setZIndex] = useState(initialZIndex); // 로컬 zIndex 상태 추가
+  const [flip, setFlip] = useState(initialFlip); // 로컬 flip 상태 추가
 
-  useEffect(() => {
-    setLocalPosition(defaultPosition);
-  }, [defaultPosition]); // 이게 정답이였던 것 ㅠㅠㅠㅠ
+  const handleStart = () => {
+    setLocalLoading(true); // 드래그 시작 시 로딩 상태 활성화
+  };
 
-  // 로딩중일때 임시 좌표
-  const handleDragStopLoding = (e, data) => {
+  const handleDragStopLoading = async (data) => {
     const newXY = { x: data.x, y: data.y };
 
-    // 1. 로컬 상태 업데이트
-    setLocalPosition(newXY);
+    // 현재 요청의 식별자 생성
+    const currentRequest = Symbol("request");
+    lastRequestRef.current = currentRequest;
 
-    // 2. 상위 컴포넌트에 새 위치 전달
-    onDragStop(id, newXY);
+    try {
+      // 비동기 작업 완료 대기
+      await onDragStop(id, newXY);
+
+      // 현재 요청이 마지막 요청인지 확인
+      if (lastRequestRef.current === currentRequest) {
+        console.log("이 요청은 마지막 요청입니다.");
+      } else {
+        console.log("이 요청은 무시됩니다.");
+      }
+    } catch (error) {
+      console.error("onDragStop 에러 발생:", error);
+    } finally {
+      // 마지막 요청만 로딩 종료
+      if (lastRequestRef.current === currentRequest) {
+        setLocalLoading(false);
+      }
+    }
   };
 
   // 이미지 클릭 시 말풍선 표시 및 타이머 설정
@@ -231,6 +249,22 @@ function DraggableCat({
     setActiveInputId((prevId) => (prevId === id ? null : id)); // 동일 ID 클릭 시 닫기
   };
 
+  // zIndex 즉각 변경 후 서버 동기화
+  const handleZIndexChange = (change) => {
+    const newZIndex = zIndex + change;
+    if (newZIndex >= 2 && newZIndex <= 20) {
+      setZIndex(newZIndex); // 클라이언트에서 즉각 변경
+      onZIndexChange(id, newZIndex); // 서버와 동기화
+    }
+  };
+
+  // flip 즉각 변경 후 서버 동기화
+  const handleFlip = () => {
+    const newFlip = !flip;
+    setFlip(newFlip); // 클라이언트에서 즉각 변경
+    onFlip(id, newFlip); // 서버와 동기화
+  };
+
   // 컴포넌트 언마운트 시 타이머 정리
   useEffect(() => {
     return () => {
@@ -242,8 +276,9 @@ function DraggableCat({
 
   return (
     <Draggable
-      position={!loading ? defaultPosition : localPosition} // defaultPosition 사용 보류
-      onStop={(e, data) => handleDragStopLoding(id, data)}
+      position={!localLoading ? defaultPosition : undefined} // defaultPosition 사용 보류
+      onStart={handleStart}
+      onStop={(e, data) => handleDragStopLoading(data)}
       bounds="parent"
     >
       <div
@@ -251,6 +286,7 @@ function DraggableCat({
           position: "absolute",
           zIndex: zIndex,
           cursor: "grab",
+          userSelect: "none",
         }}
         onContextMenu={handleContextMenu}
       >
@@ -296,18 +332,18 @@ function DraggableCat({
             }}
           >
             <button
-              onClick={() => onZIndexChange(id, zIndex - 1)}
+              onClick={() => handleZIndexChange(-1)}
               disabled={zIndex <= 2}
             >
-              아래로
+              뒤로
             </button>
             <button
-              onClick={() => onZIndexChange(id, zIndex + 1)}
+              onClick={() => handleZIndexChange(1)}
               disabled={zIndex >= 20}
             >
-              위로
+              앞으로
             </button>
-            <button onClick={() => onFlip(id)}>좌우 반전</button>
+            <button onClick={handleFlip}>좌우 반전</button>
           </div>
         )}
       </div>
