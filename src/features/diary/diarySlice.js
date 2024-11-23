@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const createDiary = createAsyncThunk(
   "diary/createDiary",
-  async (payload, { dispatch, rejectWithValue }) => {
+  async (payload, { rejectWithValue }) => {
     try {
       const response = await api.post("/diary", payload);
       return response.data.data;
@@ -173,7 +173,6 @@ const diarySlice = createSlice({
         state.loading = false;
         state.error = null;
         const { data = [], currentPage = 1, totalPages = 1 } = action.payload;
-        // 고유 ID를 기준으로 중복 제거
         const newDiaries = data.filter(
           (group) =>
             !state.diaryList.some(

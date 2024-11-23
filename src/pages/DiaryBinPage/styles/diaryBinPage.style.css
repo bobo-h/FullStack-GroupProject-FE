@@ -90,8 +90,6 @@
   width: 50px;
 }
 
-/* 반응형 스타일 */
-/* 화면 너비 768px 이하 */
 @media (max-width: 768px) {
   .diary-bin__header,
   .diary-bin__row {
@@ -117,7 +115,6 @@
   }
 }
 
-/* 화면 너비 480px 이하 */
 @media (max-width: 480px) {
   .diary-bin__header {
     display: none;
