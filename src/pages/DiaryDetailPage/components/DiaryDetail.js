@@ -6,6 +6,7 @@ import { deleteDiary } from "../../../features/diary/diarySlice";
 import CustomModal from "./../../../common/components/CustomModal";
 import Button from "./../../../common/components/Button";
 import Button2 from "./../../../common/components/Button2";
+import LoadingSpinner from "./../../../common/components/LoadingSpinner";
 import "./../style/diaryDetail.style.css";
 
 const DiaryDetail = () => {
