@@ -73,7 +73,7 @@ const DiaryFormPage = () => {
         ? "해당 내용으로 다이어리를 수정하시겠습니까?"
         : "다이어리를 등록하시겠습니까?"
     );
-    setShowConfirmModal(true); // 첫 번째 모달 표시
+    setShowConfirmModal(true);
   };
 
   const handleConfirmSubmit = (event) => {

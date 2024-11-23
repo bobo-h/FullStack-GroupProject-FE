@@ -102,7 +102,7 @@
   }
 
   .diary-detail__actions {
-    justify-content: flex-start; /* 버튼을 왼쪽으로 정렬 */
+    justify-content: flex-start;
     gap: 8px;
   }
 
@@ -121,7 +121,6 @@
   }
 }
 
-/* 화면 너비 480px 이하 */
 @media (max-width: 480px) {
   .diary-detail {
     padding: 10px;

@@ -10,7 +10,7 @@ const CustomModal = ({
   title = "MeowMemo",
   message,
   onClose,
-  onConfirm, // 함수 값으로 보내주세요
+  onConfirm,
   redirectTo,
   confirmButtonText = "확인",
   cancelButtonText = "취소",
