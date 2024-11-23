@@ -1,6 +1,10 @@
 .register-area {
   max-width: 550px !important;
-  margin-top: 100px;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+
+  flex-direction: column;
   .register-area__title {
     text-align: center;
   }
