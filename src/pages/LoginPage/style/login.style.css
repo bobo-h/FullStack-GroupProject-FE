@@ -34,6 +34,9 @@
   }
 
   .login-area__title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-top: 10px;
     margin-bottom: 50px;
   }
@@ -91,6 +94,10 @@
     }
     .login-area__logo-image {
       width: 250px;
+    }
+    .login-area__title {
+      justify-content: center;
+      align-items: center;
     }
   }
 

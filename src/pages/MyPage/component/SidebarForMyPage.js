@@ -50,7 +50,7 @@ const SidebarForMyPage = () => {
 
       <Navbar bg="light" expand={false} className="mobile-sidebar-toggle">
         <Container fluid>
-          <img width={80} src="logo1.png" alt="logo1.png" />
+          <img width={80} src="/logo1.png" alt="logo1.png" />
           <Navbar.Toggle
             aria-controls={`offcanvasNavbar-expand`}
             onClick={() => setShow(true)}

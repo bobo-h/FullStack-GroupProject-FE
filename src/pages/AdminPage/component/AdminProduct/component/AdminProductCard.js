@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import {
   setSelectedProduct,
   deleteProduct,
-  getProductList
+  getProductList,
 } from "../../../../../features/product/productSlice";
 
 const AdminProductCard = ({ product, setMode, setShowDialog }) => {
@@ -17,10 +17,7 @@ const AdminProductCard = ({ product, setMode, setShowDialog }) => {
   const [modalContent, setModalContent] = useState("");
 
   const handleClickEditItem = () => {
-    // Edit 모드로 설정하고 다이얼로그 열기
     setMode("edit");
-
-    // 선택한 상품을 Redux 상태에 저장
     dispatch(setSelectedProduct(product));
     setShowDialog(true);
   };
@@ -48,7 +45,7 @@ const AdminProductCard = ({ product, setMode, setShowDialog }) => {
             setShowDialog(false);
             dispatch(getProductList({ page: 1 }));
           }}
-          showCancelButton={false} // 취소 버튼 불필요
+          showCancelButton={false}
         />
       )}
       <Container className="product-card-content">
@@ -75,7 +72,9 @@ const AdminProductCard = ({ product, setMode, setShowDialog }) => {
             md={3}
             className="d-flex align-items-center justify-content-center order-btn"
           >
-            <Button className="btn-gap" onClick={handleClickEditItem}>수정</Button>
+            <Button className="btn-gap" onClick={handleClickEditItem}>
+              수정
+            </Button>
             <Button2 onClick={handleClickDeleteItem}>삭제</Button2>
           </Col>
         </Row>

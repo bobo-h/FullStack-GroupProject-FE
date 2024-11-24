@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Container, Row, Col, Spinner } from "react-bootstrap";
+import LoadingSpinner from "./../../../common/components/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 import {
   getDiaryList,
@@ -11,9 +12,14 @@ import "../style/diaryList.style.css";
 const DiaryList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { diaryList, loading, currentPage, totalPages, error } = useSelector(
-    (state) => state.diary
-  );
+  const {
+    diaryList,
+    loading,
+    infiniteScrollLoading,
+    currentPage,
+    totalPages,
+    error,
+  } = useSelector((state) => state.diary);
 
   const observerRef = useRef();
 
@@ -27,11 +33,15 @@ const DiaryList = () => {
   const handleObserver = useCallback(
     (entries) => {
       const target = entries[0];
-      if (target.isIntersecting && currentPage < totalPages && !loading) {
+      if (
+        target.isIntersecting &&
+        currentPage < totalPages &&
+        !infiniteScrollLoading
+      ) {
         dispatch(getDiaryList({ page: currentPage + 1 }));
       }
     },
-    [dispatch, currentPage, totalPages, loading]
+    [dispatch, currentPage, totalPages, infiniteScrollLoading]
   );
 
   useEffect(() => {
@@ -54,7 +64,8 @@ const DiaryList = () => {
 
   return (
     <Container className="diary-list">
-      {error && (
+      {loading && <LoadingSpinner />}
+      {!loading && error && (
         <div className="diary-list__status diary-list__status--error">
           잠시 후 다시 시도해 주세요.
         </div>
@@ -123,8 +134,8 @@ const DiaryList = () => {
         </div>
       ))}
       <div ref={observerRef} className="text-center mt-4">
-        {loading && <Spinner animation="border" />}
-        {!loading && currentPage >= totalPages && (
+        {infiniteScrollLoading && <Spinner animation="border" />}
+        {!loading & !infiniteScrollLoading && currentPage >= totalPages && (
           <p>No more diary entries to load.</p>
         )}
       </div>

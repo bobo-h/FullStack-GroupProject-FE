@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Form } from 'react-bootstrap';
+import React, { useEffect, useState } from "react";
+import { Container, Row, Col } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
-import MoodTable from './component/AdminMoodTable';
-import Button from '../../../../common/components/Button';
-import MoodCard from './component/AdminMoodCard';
-import NewMoodDialog from './component/NewMoodDialog';
-import { useDispatch, useSelector } from 'react-redux';
-import { setSelectedMood, getMoodList, clearError } from '../../../../features/mood/moodSlice';
-import LoadingSpinner from '../../../../common/components/LoadingSpinner';
+import MoodTable from "./component/AdminMoodTable";
+import Button from "../../../../common/components/Button";
+import MoodCard from "./component/AdminMoodCard";
+import NewMoodDialog from "./component/NewMoodDialog";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setSelectedMood,
+  getMoodList,
+  clearError,
+} from "../../../../features/mood/moodSlice";
+import LoadingSpinner from "../../../../common/components/LoadingSpinner";
 
 const AdminDiary = () => {
   const dispatch = useDispatch();
@@ -15,44 +19,37 @@ const AdminDiary = () => {
   const moodList = useSelector((state) => state.mood.moodList);
   const selectedMood = useSelector((state) => state.mood.selectedMood);
   const success = useSelector((state) => state.mood.success);
-  const loading = useSelector((state) => state.mood.loading)
+  const loading = useSelector((state) => state.mood.loading);
   const [mode, setMode] = useState("new");
   const [showDialog, setShowDialog] = useState(false);
   const [searchQuery, setSearchQuery] = useState({
     page: query.get("page") || 1,
     name: query.get("name") || "",
-  }); //검색 조건들을 저장하는 객체
+  });
   const [isMobile, setIsMobile] = useState(false);
 
   const handleClickNewItem = () => {
-    //new 모드로 설정하고
-    setMode("new")
-
-    //selectedProduct 는 null로
+    setMode("new");
     dispatch(setSelectedMood(null));
-
-    // 다이얼로그 열어주기
     setShowDialog(true);
-
   };
 
   useEffect(() => {
     if (success) {
-      setShowDialog(false); // 다이얼로그 닫기
-      dispatch(clearError()); // 오류 상태 초기화
+      setShowDialog(false);
+      dispatch(clearError());
     }
   }, [success, dispatch, setShowDialog]);
 
   useEffect(() => {
     dispatch(getMoodList({ ...searchQuery }));
-  }, [query])
+  }, [query]);
 
   useEffect(() => {
-    // Update isMobile state based on window size
     const handleResize = () => setIsMobile(window.innerWidth <= 770);
-    window.addEventListener('resize', handleResize);
-    handleResize(); // Check on mount
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
@@ -62,10 +59,8 @@ const AdminDiary = () => {
           <Col md={2}>
             <h2>Mood</h2>
           </Col>
-          <Col md={3}>
-            {/* 무드 항목 구분시 여기를 활용 */}
-          </Col>
-          <Col md={7} className='text-end'>
+          <Col md={3}>{/* 무드 항목 구분시 여기를 활용 */}</Col>
+          <Col md={7} className="text-end">
             <Button onClick={handleClickNewItem}>add Item</Button>
           </Col>
         </Row>
@@ -81,7 +76,7 @@ const AdminDiary = () => {
             {moodList.length > 0 ? (
               moodList.map((mood) => (
                 <MoodCard
-                  key={mood.id} // 고유한 키 설정
+                  key={mood.id}
                   mood={mood}
                   setMode={setMode}
                   setShowDialog={setShowDialog}

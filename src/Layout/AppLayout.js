@@ -13,8 +13,6 @@ const AppLayout = ({ children }) => {
   const location = useLocation();
   const dispatch = useDispatch();
 
-  const [isAlertVisible, setIsAlertVisible] = useState(false);
-
   const [currentPage, setCurrentPage] = useState("");
   const [isSidebarActive, setIsSidebarActive] = useState(false);
   const pageMapping = [
@@ -108,10 +106,6 @@ const AppLayout = ({ children }) => {
       }
     };
   }, []);
-
-  const toggleAlert = () => {
-    setIsAlertVisible(!isAlertVisible);
-  };
 
   const isAdminPage = location.pathname === "/admin";
 

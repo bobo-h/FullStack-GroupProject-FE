@@ -63,7 +63,7 @@ export const loginWithToken = createAsyncThunk(
 
 export const editUserInfo = createAsyncThunk(
   "user/editUserInfo",
-  async ({ id, formData }, { dispatch, rejectWithValue }) => {
+  async ({ id, formData }, { rejectWithValue }) => {
     try {
       const response = await api.put(`/user/${id}`, formData);
       return response.data.user;

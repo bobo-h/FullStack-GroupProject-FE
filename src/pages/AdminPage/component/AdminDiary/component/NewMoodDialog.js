@@ -20,30 +20,33 @@ const InitialFormData = {
 };
 
 const NewMoodDialog = ({ mode, showDialog, setShowDialog }) => {
-  const { error, success, selectedMood } = useSelector((state) => state.mood);
-  const [formData, setFormData] = useState(
-    mode === "new" ? { ...InitialFormData } : selectedMood
-  );
-  const [showModal, setShowModal] = useState(false);
+  const { error, selectedMood } = useSelector((state) => state.mood);
+  const [formData, setFormData] = useState({ ...InitialFormData });
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const dispatch = useDispatch();
 
-  // 다이얼로그가 열리면, 모드에 따라 초기 데이터 설정
   useEffect(() => {
-    if (error || !success) {
+    if (showDialog) {
+      setFormData(
+        mode === "new"
+          ? { ...InitialFormData }
+          : selectedMood || { ...InitialFormData }
+      );
+    }
+  }, [showDialog, mode, selectedMood]);
+
+  useEffect(() => {
+    if (error) {
+      setModalContent(error);
+      setShowErrorModal(true);
       dispatch(clearError());
     }
-    if (showDialog) {
-      if (mode === "edit") {
-        setFormData(selectedMood);
-      } else {
-        setFormData({ ...InitialFormData });
-      }
-    }
-  }, [showDialog]);
+  }, [error, dispatch]);
 
   const handleClose = () => {
-    // 다이얼로그 닫아주기
+    setShowSuccessModal(false);
     setShowDialog(false);
   };
 
@@ -54,31 +57,31 @@ const NewMoodDialog = ({ mode, showDialog, setShowDialog }) => {
       try {
         await dispatch(createMood(formData)).unwrap();
         setModalContent("무드 생성 완료하였습니다!");
-        setShowModal(true);
+        setShowSuccessModal(true);
       } catch (error) {
         setModalContent("무드 생성 실패! 다시 시도해주세요.");
-        setShowModal(true);
+        setShowErrorModal(true);
       }
     } else {
       try {
-        await dispatch(editMood({ ...formData, id: selectedMood._id })).unwrap();
+        await dispatch(
+          editMood({ ...formData, id: selectedMood._id })
+        ).unwrap();
         setModalContent("무드 수정 완료하였습니다!");
-        setShowModal(true);
+        setShowSuccessModal(true);
       } catch (error) {
         setModalContent("무드 수정 실패! 다시 시도해주세요.");
-        setShowModal(true);
+        setShowErrorModal(true);
       }
     }
   };
 
   const handleChange = (event) => {
-    //form에 데이터 넣어주기
     const { id, value } = event.target;
     setFormData({ ...formData, [id]: value });
   };
 
   const uploadImage = (url) => {
-    //이미지 업로드
     setFormData({ ...formData, image: url });
   };
 
@@ -91,25 +94,20 @@ const NewMoodDialog = ({ mode, showDialog, setShowDialog }) => {
           <Modal.Title>Edit Mood</Modal.Title>
         )}
       </Modal.Header>
-      {error && (
-        <CustomModal
-          message={error}
-          onClose={() => {
-            setShowModal(false);
-            setShowDialog(true);
-          }}
-          showCancelButton={false} // 취소 버튼 불필요
-        />
-      )}
-      {showModal && (
+      {showErrorModal && (
         <CustomModal
           message={modalContent}
-          redirectTo="/admin"
-          onClose={() => {
-            setShowModal(false);
-            setShowDialog(false);
-          }}
-          showCancelButton={false} // 취소 버튼 불필요
+          onClose={() => setShowErrorModal(false)}
+          onConfirm={() => setShowErrorModal(false)}
+          showCancelButton={false}
+        />
+      )}
+      {showSuccessModal && (
+        <CustomModal
+          message={modalContent}
+          onClose={handleClose}
+          onConfirm={handleClose}
+          showCancelButton={false}
         />
       )}
       <Form className="form-container admin-modal" onSubmit={handleSubmit}>
@@ -155,9 +153,10 @@ const NewMoodDialog = ({ mode, showDialog, setShowDialog }) => {
           <CloudinaryUploadWidget uploadImage={uploadImage} />
           <img
             id="uploadedimage"
-            src={formData.image || "#"} // 이미지가 없을 때 기본 이미지나 빈 값 사용
-            className={`upload-image mt-2 ${formData.image ? "" : "blurred-image"
-              }`}
+            src={formData.image || "#"}
+            className={`upload-image mt-2 ${
+              formData.image ? "" : "blurred-image"
+            }`}
             alt="uploadedimage"
           />
         </Form.Group>
@@ -166,7 +165,7 @@ const NewMoodDialog = ({ mode, showDialog, setShowDialog }) => {
           <Form.Group as={Col} controlId="isDeleted">
             <Form.Label>isDeleted</Form.Label>
             <Form.Select
-              value={formData.isDeleted} // 초기값이 "No"로 설정되었는지 확인
+              value={formData.isDeleted}
               onChange={(e) => {
                 const newValue = e.target.value;
                 setFormData({ ...formData, isDeleted: newValue });

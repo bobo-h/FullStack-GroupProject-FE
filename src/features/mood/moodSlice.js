@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../utils/api";
 
-// 비동기 액션 생성
 export const getMoodList = createAsyncThunk(
   "moods/getMoodList",
   async (query, { rejectWithValue }) => {
@@ -39,7 +38,6 @@ export const createMood = createAsyncThunk(
       const response = await api.post("/mood", formData);
       if (response.status !== 200) throw new Error(response.error);
       dispatch(getMoodList({ page: 1 }));
-
       return response.data;
     } catch (error) {
       return rejectWithValue(error.error);
@@ -53,7 +51,6 @@ export const editMood = createAsyncThunk(
     try {
       const response = await api.put(`/mood/${id}`, formData);
       if (response.status !== 200) throw new Error(response.error);
-
       dispatch(getMoodList({ page: 1 }));
       return response.data;
     } catch (error) {
@@ -64,18 +61,16 @@ export const editMood = createAsyncThunk(
 
 export const deleteMood = createAsyncThunk(
   "moods/deleteMood",
-  async (id, { dispatch, rejectWithValue }) => {
+  async (id, { rejectWithValue }) => {
     try {
       const response = await api.delete(`/mood/${id}`);
       if (response.status !== 200) throw new Error(response.error);
-
     } catch (error) {
       return rejectWithValue(error.error);
     }
   }
 );
 
-// 슬라이스 생성
 const moodSlice = createSlice({
   name: "moods",
   initialState: {
@@ -105,7 +100,6 @@ const moodSlice = createSlice({
     builder.addCase(createMood.fulfilled, (state, action) => {
       state.loading = false;
       state.error = "";
-      //state.success = true; // 신규 Alert 적용으로 주석 처리
     });
     builder.addCase(createMood.rejected, (state, action) => {
       state.loading = false;
@@ -131,7 +125,6 @@ const moodSlice = createSlice({
     builder.addCase(editMood.fulfilled, (state, action) => {
       state.loading = false;
       state.error = "";
-      //state.success = true; // 신규 Alert 적용으로 주석 처리
     });
     builder.addCase(editMood.rejected, (state, action) => {
       state.loading = false;

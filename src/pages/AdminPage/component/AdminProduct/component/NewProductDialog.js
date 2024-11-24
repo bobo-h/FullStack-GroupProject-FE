@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Form, Modal, Row, Col } from "react-bootstrap";
 import CustomModal from "../../../../../common/components/CustomModal";
 import { useDispatch, useSelector } from "react-redux";
-import CloudinaryUploadWidget from "../../../..//../utils/CloudinaryUploadWidget";
+import CloudinaryUploadWidget from "../../../../../utils/CloudinaryUploadWidget";
 import {
   CATEGORY,
   DEFAULT_PRODUCT,
@@ -28,74 +28,75 @@ const InitialFormData = {
 };
 
 const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
-  const { error, success, selectedProduct } = useSelector(
-    (state) => state.product
-  );
-  const [formData, setFormData] = useState(
-    mode === "new" ? { ...InitialFormData } : selectedProduct
-  );
-
-  const [showModal, setShowModal] = useState(false);
+  const { error, selectedProduct } = useSelector((state) => state.product);
+  const [formData, setFormData] = useState({ ...InitialFormData });
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (error || !success) {
+    if (showDialog) {
+      setFormData(
+        mode === "new"
+          ? { ...InitialFormData }
+          : selectedProduct || { ...InitialFormData }
+      );
+    }
+  }, [showDialog, mode, selectedProduct]);
+
+  useEffect(() => {
+    if (error) {
+      setModalContent(error);
+      setShowErrorModal(true);
       dispatch(clearError());
     }
-    if (showDialog) {
-      if (mode === "edit") {
-        setFormData(selectedProduct);
-      } else {
-        setFormData({ ...InitialFormData });
-      }
-    }
-  }, [showDialog]);
+  }, [error, dispatch]);
 
   const handleClose = () => {
-    // 다이얼로그 닫아주기
+    setShowSuccessModal(false);
     setShowDialog(false);
   };
 
-  const handleSubmit = async(event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (mode === "new") {
       try {
         await dispatch(createProduct(formData)).unwrap();
         setModalContent("상품 생성 완료하였습니다!");
-        setShowModal(true);
+        setShowSuccessModal(true);
       } catch (error) {
         setModalContent("상품 생성 실패! 다시 시도해주세요.");
-        setShowModal(true);
+        setShowErrorModal(true);
       }
     } else {
       try {
-        await dispatch(editProduct({ ...formData, id: selectedProduct._id })).unwrap();
+        await dispatch(
+          editProduct({ ...formData, id: selectedProduct._id })
+        ).unwrap();
         setModalContent("상품 수정 완료하였습니다!");
-        setShowModal(true);
+        setShowSuccessModal(true);
       } catch (error) {
         setModalContent("상품 수정 실패! 다시 시도해주세요.");
-        setShowModal(true);
+        setShowErrorModal(true);
       }
     }
   };
 
   const handleChange = (event) => {
-    //form에 데이터 넣어주기
     const { id, value } = event.target;
     setFormData({ ...formData, [id]: value });
   };
 
   const handleCategoryChange = (value) => {
-    setFormData((prevFormData) => {
-      const updatedCategory = [value]; // 기존 값을 지우고 새로 선택된 값만 배열로 저장
-      return { ...prevFormData, category: updatedCategory };
-    });
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      category: [value],
+    }));
   };
 
   const uploadImage = (url) => {
-    //이미지 업로드
     setFormData({ ...formData, image: url });
   };
 
@@ -108,29 +109,24 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
           <Modal.Title>Edit Product</Modal.Title>
         )}
       </Modal.Header>
-    
-      {error && (
-        <CustomModal
-          message={error}
-          onClose={() => {
-            setShowModal(false);
-            setShowDialog(true);
-          }}
-          showCancelButton={false} // 취소 버튼 불필요
-        />
-      )}
-      {showModal && (
+
+      {showErrorModal && (
         <CustomModal
           message={modalContent}
-          redirectTo="/admin"
-          onClose={() => {
-            setShowModal(false);
-            setShowDialog(false);
-          }}
-          showCancelButton={false} // 취소 버튼 불필요
+          onClose={() => setShowErrorModal(false)}
+          onConfirm={() => setShowErrorModal(false)}
+          showCancelButton={false}
         />
       )}
-      <Form className="form-container admin-modal" onSubmit={handleSubmit}>
+      {showSuccessModal && (
+        <CustomModal
+          message={modalContent}
+          onClose={handleClose}
+          onConfirm={handleClose}
+          showCancelButton={false}
+        />
+      )}
+      <Form className="form-container" onSubmit={handleSubmit}>
         <Row className="mb-3">
           <Form.Group as={Col} controlId="id">
             <Form.Label>Product ID</Form.Label>
@@ -171,12 +167,12 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
         <Form.Group className="mb-3" controlId="Image" required>
           <Form.Label>Image</Form.Label>
           <CloudinaryUploadWidget uploadImage={uploadImage} />
-          
           <img
             id="uploadedimage"
-            src={formData.image || "#"} // 이미지가 없을 때 기본 이미지나 빈 값 사용
-            className={`upload-image mt-2 ${formData.image ? "" : "blurred-image"
-              }`}
+            src={formData.image || "#"}
+            className={`upload-image mt-2 ${
+              formData.image ? "" : "blurred-image"
+            }`}
             alt="uploadedimage"
           />
         </Form.Group>
@@ -196,8 +192,8 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
           <Form.Group as={Col} controlId="category">
             <Form.Label>Category</Form.Label>
             <Form.Select
-              value={formData.category[0] || ""} // 첫 번째 선택된 값을 표시
-              onChange={(e) => handleCategoryChange(e.target.value)} // 변경 핸들러 호출
+              value={formData.category[0] || ""}
+              onChange={(e) => handleCategoryChange(e.target.value)}
               required
             >
               {CATEGORY.map((item, idx) => (
@@ -211,10 +207,10 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
           <Form.Group as={Col} controlId="defaultProduct">
             <Form.Label>DefaultProduct</Form.Label>
             <Form.Select
-              value={formData.defaultProduct} // 초기값이 "No"로 설정되었는지 확인
+              value={formData.defaultProduct}
               onChange={(e) =>
                 setFormData({ ...formData, defaultProduct: e.target.value })
-              } // 선택 값 반영
+              }
               required
             >
               <option value="Yes">Yes</option>
@@ -237,15 +233,9 @@ const NewProductDialog = ({ mode, showDialog, setShowDialog }) => {
             </Form.Select>
           </Form.Group>
         </Row>
-        {mode === "new" ? (
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
-        ) : (
-          <Button variant="primary" type="submit">
-            Edit
-          </Button>
-        )}
+        <Button variant="primary" type="submit">
+          {mode === "new" ? "Submit" : "Edit"}
+        </Button>
       </Form>
     </Modal>
   );

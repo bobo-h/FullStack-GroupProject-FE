@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Col, Row, Form } from "react-bootstrap";
+import { Container, Col, Row } from "react-bootstrap";
 import "../style/comment.style.css";
 import { Link } from "react-router-dom";
 import CommentReply from "./CommentReply";
@@ -12,7 +12,7 @@ const Comment = ({ comments }) => {
   const toggleReplies = (commentId) => {
     setExpandedComments((prev) => ({
       ...prev,
-      [commentId]: !prev[commentId], 
+      [commentId]: !prev[commentId],
     }));
   };
 
@@ -36,14 +36,15 @@ const Comment = ({ comments }) => {
               <Row>
                 <div>{comment.content}</div>
               </Row>
-              <Row >
+              <Row>
                 <Link
                   to="#"
                   onClick={() => toggleReplies(comment._id)}
                   className="comment__toggle-link"
                 >
-                  {expandedComments[comment._id] 
-                  ? "--- 숨기기 ------------" : "--- 댓글 더보기 -------"}
+                  {expandedComments[comment._id]
+                    ? "--- 숨기기 ------------"
+                    : "--- 댓글 더보기 -------"}
                 </Link>
               </Row>
 
@@ -53,13 +54,13 @@ const Comment = ({ comments }) => {
                 </div>
               )}
             </Col>
-            {expandedComments[comment._id] 
-              ? <CommentForm  comment={comment} lastReplyId={lastReplyId}/> 
-              : "" 
-            }
+            {expandedComments[comment._id] ? (
+              <CommentForm comment={comment} lastReplyId={lastReplyId} />
+            ) : (
+              ""
+            )}
           </Row>
         ))}
-              
       </Container>
     </div>
   );

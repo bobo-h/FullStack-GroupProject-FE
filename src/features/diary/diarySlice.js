@@ -20,7 +20,6 @@ export const getDiaryList = createAsyncThunk(
       const query = [`page=${encodeURIComponent(page)}`];
       if (year) query.push(`year=${encodeURIComponent(year)}`);
       if (month) query.push(`month=${encodeURIComponent(month)}`);
-      console.log("Generated URL:", `/diary?${query.join("&")}`);
       const response = await api.get(`/diary?${query.join("&")}`);
       return response.data;
     } catch (error) {
@@ -36,7 +35,6 @@ export const getDiaryDetail = createAsyncThunk(
   async (diaryId, { rejectWithValue }) => {
     try {
       const response = await api.get(`/diary/${diaryId}`);
-      console.log("Diary Detail Response:", response.data);
       return response.data.diary;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -61,7 +59,6 @@ export const deleteDiary = createAsyncThunk(
   async (diaryId, { rejectWithValue }) => {
     try {
       const response = await api.delete(`/diary/${diaryId}`);
-      console.log("API Response for delete:", response.data);
       return response.data;
     } catch (error) {
       console.error("API Error for delete:", error.response || error.message);
@@ -120,6 +117,7 @@ const diarySlice = createSlice({
   name: "diary",
   initialState: {
     loading: false,
+    infiniteScrollLoading: false,
     error: "",
     diaryList: [],
     filter: { year: "", month: "" },
@@ -166,11 +164,16 @@ const diarySlice = createSlice({
         state.error = action.payload;
         state.success = false;
       })
-      .addCase(getDiaryList.pending, (state) => {
-        state.loading = true;
+      .addCase(getDiaryList.pending, (state, action) => {
+        if (action.meta.arg.page === 1) {
+          state.loading = true;
+        } else {
+          state.infiniteScrollLoading = true;
+        }
       })
       .addCase(getDiaryList.fulfilled, (state, action) => {
         state.loading = false;
+        state.infiniteScrollLoading = false;
         state.error = null;
         const { data = [], currentPage = 1, totalPages = 1 } = action.payload;
         const newDiaries = data.filter(
@@ -185,8 +188,11 @@ const diarySlice = createSlice({
       })
       .addCase(getDiaryList.rejected, (state, action) => {
         state.loading = false;
+        state.infiniteScrollLoading = false;
         state.error = action.payload || "Failed to fetch diaries.";
-        state.diaryList = [];
+        if (action.meta.arg.page === 1) {
+          state.diaryList = [];
+        }
       })
       .addCase(getDiaryDetail.pending, (state) => {
         state.loading = true;

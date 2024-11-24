@@ -52,6 +52,7 @@
   padding: 20px 0;
   background-color: #f9f9f9;
   border-bottom: 1px solid #eee;
+  margin: 0 auto;
 }
 
 .diary-bin__empty-message {
@@ -113,6 +114,17 @@
   .diary-bin__image {
     max-width: 100px;
   }
+  .diary-bin__empty-row {
+    width: 100%;
+    padding: 15px 10px;
+    text-align: center;
+  }
+
+  .diary-bin__empty-message {
+    font-size: 16px;
+    padding: 0 15px;
+    word-wrap: break-word;
+  }
 }
 
 @media (max-width: 480px) {
@@ -140,5 +152,15 @@
 
   .diary-bin__image {
     max-width: 80px;
+  }
+
+  .diary-bin__empty-row {
+    padding: 10px 5px;
+    background-color: #fefae0;
+  }
+
+  .diary-bin__empty-message {
+    font-size: 14px;
+    color: #666;
   }
 }

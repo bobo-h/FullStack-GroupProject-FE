@@ -3,7 +3,7 @@
   font-size: 16px;
   color: #fff;
   background-color: var(--primary-color-lightGreen);
-  border: 2px solid #a9b388;
+  border: 2px solid var(--primary-color-lightGreen);
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
@@ -11,7 +11,7 @@
 
 .common-button:hover {
   background-color: var(--primary-color-deepGreen);
-  border: 3px solid #5f6f52;
+  border: 3px solid var(--primary-color-deepGreen);
 }
 
 .common-button2 {
@@ -31,7 +31,7 @@
 }
 
 .common-button.active {
-  border: 3px solid #a9b388;
+  border: 3px solid var(--primary-color-lightGreen);
   background-color: var(--primary-color-deepGreen);
 }
 
@@ -40,4 +40,3 @@
   background-color: var(--primary-color-lightGreen);
   color: #fff;
 }
-

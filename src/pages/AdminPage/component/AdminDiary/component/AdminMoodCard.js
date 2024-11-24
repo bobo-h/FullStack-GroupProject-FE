@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import React, { useState } from "react";
+import { Container, Row, Col } from "react-bootstrap";
 import CustomModal from "../../../../../common/components/CustomModal";
 import "../style/adminMood.style.css";
-import Button2 from '../../../../../common/components/Button2';
-import { useDispatch } from 'react-redux';
-import { setSelectedMood, deleteMood, getMoodList } from "../../../../../features/mood/moodSlice";
+import Button2 from "../../../../../common/components/Button2";
+import { useDispatch } from "react-redux";
+import {
+  setSelectedMood,
+  deleteMood,
+  getMoodList,
+} from "../../../../../features/mood/moodSlice";
 
 const AdminMoodCard = ({ mood, setMode, setShowDialog }) => {
   const dispatch = useDispatch();
@@ -12,31 +16,25 @@ const AdminMoodCard = ({ mood, setMode, setShowDialog }) => {
   const [modalContent, setModalContent] = useState("");
 
   const handleClickEditItem = () => {
-    // Edit 모드로 설정하고 다이얼로그 열기
     setMode("edit");
-
-    // 선택한 상품을 Redux 상태에 저장
     dispatch(setSelectedMood(mood));
     setShowDialog(true);
-
   };
 
   const handleClickDeleteItem = () => {
-
     dispatch(deleteMood(mood._id))
       .then(() => {
         setModalContent("무드 삭제 완료하였습니다!");
         setShowModal(true);
       })
-      .catch((error) => {
+      .catch(() => {
         setModalContent("무드 삭제 실패!");
         setShowModal(true);
       });
-
   };
 
   return (
-    <div className='mood-table-content'>
+    <div className="mood-table-content">
       {showModal && (
         <CustomModal
           message={modalContent}
@@ -46,7 +44,7 @@ const AdminMoodCard = ({ mood, setMode, setShowDialog }) => {
             setShowDialog(false);
             dispatch(getMoodList({ page: 1 }));
           }}
-          showCancelButton={false} // 취소 버튼 불필요
+          showCancelButton={false}
         />
       )}
       <Container className="mood-card-content">
@@ -55,7 +53,11 @@ const AdminMoodCard = ({ mood, setMode, setShowDialog }) => {
             {mood.id}
           </Col>
           <Col md={2} className="d-flex align-items-center mood-img">
-            <img src={mood.image} alt={mood.name} className="img-fluid mood-admin-img" />
+            <img
+              src={mood.image}
+              alt={mood.name}
+              className="img-fluid mood-admin-img"
+            />
           </Col>
           <Col md={2} className="d-flex align-items-center mood-name ">
             {mood.name}
@@ -63,12 +65,15 @@ const AdminMoodCard = ({ mood, setMode, setShowDialog }) => {
           <Col md={3} className="d-flex align-items-center mood-description">
             {mood.description}
           </Col>
-          <Col md={1} className="d-flex align-items-cente mood-btn">
-            {/* 추가 하려면 이곳에 */}
-          </Col>
+          <Col md={1} className="d-flex align-items-cente mood-btn"></Col>
 
-          <Col md={3} className="d-flex align-items-center justify-content-center">
-            <Button2 className="btn-gap" onClick={handleClickEditItem}>수정</Button2>
+          <Col
+            md={3}
+            className="d-flex align-items-center justify-content-center"
+          >
+            <Button2 className="btn-gap" onClick={handleClickEditItem}>
+              수정
+            </Button2>
             <Button2 onClick={handleClickDeleteItem}>삭제</Button2>
           </Col>
         </Row>
