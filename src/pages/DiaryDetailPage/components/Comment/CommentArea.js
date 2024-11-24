@@ -2,8 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCommentList } from "../../../../features/comment/commentSlice";
 import Comment from "./components/Comment";
-import "./style/comment.style.css"
-
+import "./style/comment.style.css";
 
 const CommentArea = ({ diaryId }) => {
   const dispatch = useDispatch();
@@ -18,7 +17,9 @@ const CommentArea = ({ diaryId }) => {
 
   return (
     <div className="comment-area-list">
-      <h3 className="comment-count"><i class="ri-message-3-line"></i> 댓글 {comments?.length || 0} 개</h3>
+      <h3 className="comment-count">
+        <i class="ri-message-3-line"></i> 댓글 {comments?.length || 0} 개
+      </h3>
       {comments && comments.length > 0 ? (
         <>
           <Comment comments={comments} />
@@ -26,7 +27,6 @@ const CommentArea = ({ diaryId }) => {
       ) : (
         <p>No comments yet.</p>
       )}
-
     </div>
   );
 };

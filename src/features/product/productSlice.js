@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../utils/api";
 
-// 비동기 액션 생성
 export const getProductList = createAsyncThunk(
   "products/getProductList",
   async (query, { rejectWithValue }) => {
@@ -21,9 +20,7 @@ export const createProduct = createAsyncThunk(
     try {
       const response = await api.post("/product", formData);
       if (response.status !== 200) throw new Error(response.error);
-
       dispatch(getProductList({ page: 1 }));
-
       return true;
     } catch (error) {
       return rejectWithValue(error.error);
@@ -37,7 +34,6 @@ export const editProduct = createAsyncThunk(
     try {
       const response = await api.put(`/product/${id}`, formData);
       if (response.status !== 200) throw new Error(response.error);
-
       dispatch(getProductList({ page: 1 }));
       return true;
     } catch (error) {
@@ -48,18 +44,16 @@ export const editProduct = createAsyncThunk(
 
 export const deleteProduct = createAsyncThunk(
   "products/deleteProduct",
-  async (id, { dispatch, rejectWithValue }) => {
+  async (id, { rejectWithValue }) => {
     try {
       const response = await api.delete(`/product/${id}`);
       if (response.status !== 200) throw new Error(response.error);
-
     } catch (error) {
       return rejectWithValue(error.error);
     }
   }
 );
 
-// 슬라이스 생성
 const productSlice = createSlice({
   name: "products",
   initialState: {
@@ -89,7 +83,6 @@ const productSlice = createSlice({
     builder.addCase(createProduct.fulfilled, (state, action) => {
       state.loading = false;
       state.error = "";
-      // state.success = true; // 신규 alert 적용으로 주석처리
     });
     builder.addCase(createProduct.rejected, (state, action) => {
       state.loading = false;
@@ -115,7 +108,6 @@ const productSlice = createSlice({
     builder.addCase(editProduct.fulfilled, (state, action) => {
       state.loading = false;
       state.error = "";
-      //state.success = true;   // 신규 alert 적용으로 주석처리
     });
     builder.addCase(editProduct.rejected, (state, action) => {
       state.loading = false;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./style/adminMenu.style.css";
 import { Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -9,25 +9,23 @@ const AdminMenu = ({
   isSidebarOpen,
   setIsSidebarOpen,
 }) => {
-  // const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth > 1210);
   const navigate = useNavigate();
 
   return (
     <div className={`admin-menubar ${isSidebarOpen ? "open" : "closed"}`}>
       <div className="admin-menu-header">
-      <button
-              className="menu-toggle-button"
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            >
-              <i class="ri-menu-line"></i>
-            </button>
+        <button
+          className="menu-toggle-button"
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        >
+          <i class="ri-menu-line"></i>
+        </button>
         <img
           className="menu-title"
           src="logo2.png"
           alt="menu-title"
           onClick={() => navigate(`/`)}
         />
-
       </div>
       <Row className="button-container">
         <button

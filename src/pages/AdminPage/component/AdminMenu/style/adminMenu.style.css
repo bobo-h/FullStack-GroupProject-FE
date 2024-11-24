@@ -2,14 +2,14 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 15%; 
-  height: 100%; 
-  background-color: #b99470;
+  width: 15%;
+  height: 100%;
+  background-color: var(--primary-color-brown);
   color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 20px; 
+  padding-top: 20px;
   transition: transform 0.3s ease;
   z-index: 100;
 }
@@ -22,38 +22,36 @@
   transform: translateX(-100%);
 }
 
-
 .menu-toggle-button {
   position: absolute;
-  top: 10px;                
-  right: 10px;               
-  background-color: #b99470;
+  top: 10px;
+  right: 10px;
+  background-color: var(--primary-color-brown);
   color: white;
   border: none;
   cursor: pointer;
   font-size: 16px;
-  width: 50px; 
-  height: 50px; 
-  border-radius: 50%; 
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
 }
 
 .menu-toggle-button:hover {
-  background-color: #fefae0;
+  background-color: var(--primary-color-ivory);
   color: #000;
 }
 
 .admin-menu-header {
   display: flex;
-  justify-content: center;   
-  align-items: center;       
-  position: relative;        
-  width: 100%;         
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
 }
 
 .menu-title {
   cursor: pointer;
   width: 50%;
-
 }
 
 .button-container {
@@ -63,7 +61,7 @@
 }
 
 .admin-button {
-  background-color: #b99470;
+  background-color: var(--primary-color-brown);
   color: white;
   border: none;
   padding: 15px;
@@ -74,18 +72,18 @@
 }
 
 .admin-button.active {
-  background-color: #fefae0;
+  background-color: var(--primary-color-ivory);
   color: #000;
 }
 
 .admin-button:hover {
-  background-color: #fefae0;
+  background-color: var(--primary-color-ivory);
   color: #000;
 }
 @media (max-width: 1500px) {
   .admin-menubar {
     width: 25%;
-   }
+  }
 }
 
 @media (max-width: 1210px) {
@@ -101,5 +99,5 @@
 @media (max-width: 700px) {
   .admin-menubar {
     width: 60%;
-   }
+  }
 }

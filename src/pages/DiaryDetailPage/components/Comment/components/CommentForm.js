@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import Button from "../../../../../common/components/Button";
 import { addUserComment } from "../../../../../features/comment/commentSlice";
 import userDefaultLogo from "../../../../../assets/userDefaultLogo.png";
 
@@ -16,7 +15,7 @@ const CommentForm = ({ comment, lastReplyId }) => {
     e.preventDefault();
 
     if (reply.trim()) {
-      const parentCommentId = lastReplyId || comment._id; 
+      const parentCommentId = lastReplyId || comment._id;
 
       dispatch(
         addUserComment({
@@ -67,7 +66,6 @@ const CommentForm = ({ comment, lastReplyId }) => {
         </Row>
       </Form>
     </Container>
-
   );
 };
 

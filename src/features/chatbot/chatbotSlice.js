@@ -87,11 +87,9 @@ export const updateChatbot = createAsyncThunk(
 
 export const deleteChatbot = createAsyncThunk(
   "chatbot/deleteChatbot",
-  async (chatbotId, { dispatch, rejectWithValue }) => {
+  async (chatbotId, { rejectWithValue }) => {
     try {
       const response = await api.delete(`/chatbot/${chatbotId}`);
-      console.log("Chatbot deleted successfully");
-
       return response.data;
     } catch (error) {
       console.error(
@@ -109,15 +107,11 @@ export const updateChatbotJins = createAsyncThunk(
   async ({ id, updateData }, { getState, rejectWithValue }) => {
     try {
       const response = await api.put(`/chatbot/${id}`, updateData);
-
       const state = getState();
-
       const clonedCats = JSON.parse(JSON.stringify(state.chatbot.cats));
-
       const updatedCats = clonedCats.map((cat) =>
         String(cat._id) === String(id) ? response.data.data : cat
       );
-
       return updatedCats;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
@@ -129,7 +123,6 @@ export const updateChatbotMany = createAsyncThunk(
   async (updateData, { rejectWithValue }) => {
     try {
       const response = await api.put(`/chatbot`, updateData);
-
       if (response.status === 200) {
         return response.data.data;
       } else {
@@ -160,25 +153,19 @@ export const printLineChatbot = createAsyncThunk(
         "고생한 나에게 아무 힘이 되는 말 해줘",
         "내가 행복해질 말을 해줘",
       ];
-
       const randomMessage =
         messages[Math.floor(Math.random() * messages.length)];
-
       if (randomMessage === "야옹!" || randomMessage === "Zzz") {
         const response = randomMessage;
-
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
         await delay(1000);
         return response;
       }
-
       const finalMessage = `${randomMessage} (Respond in 10 characters or less.)`;
       const response = await api.post("/chatbot/printLine", {
         message: finalMessage,
         catPersonality,
       });
-
       return response.data.reply;
     } catch (error) {
       return Promise.reject(error);
@@ -256,8 +243,6 @@ const chatbotSlice = createSlice({
         state.loading = false;
         state.success = false;
         state.registrationError = action.payload;
-        console.log("이거입니다1", state.registrationError);
-        console.log("이거입니다2", action.payload);
         if (state.registrationError === "No chatbots found") {
           state.getFlag = true;
         }

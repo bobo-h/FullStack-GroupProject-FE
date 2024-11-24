@@ -54,7 +54,7 @@
   }
 
   .register__button {
-    background-color: #5f6f52;
-    border: #5f6f52;
+    background-color: var(--primary-color-deepGreen);
+    border: var(--primary-color-deepGreen);
   }
 }

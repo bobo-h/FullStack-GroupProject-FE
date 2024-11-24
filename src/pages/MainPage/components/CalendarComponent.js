@@ -11,7 +11,7 @@ import "../style/calendarcomponent.style.css";
 
 const CalendarComponent = ({ onDateClick }) => {
   const dispatch = useDispatch();
-  const { diaryList, loading } = useSelector((state) => state.diary);
+  const { diaryList } = useSelector((state) => state.diary);
 
   useEffect(() => {
     dispatch(getDiaryList(1));

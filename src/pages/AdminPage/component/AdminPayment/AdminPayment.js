@@ -18,7 +18,7 @@ const AdminPaymentPage = () => {
   const { orderList, totalPageNum, loading } = useSelector(
     (state) => state.order
   );
- 
+
   const [showModal, setShowModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedSearchType, setSelectedSearchType] = useState("All");
@@ -35,20 +35,25 @@ const AdminPaymentPage = () => {
     setShowModal(true);
   };
 
-  // URL 업데이트 및 query 초기화
   const updateQueryParams = (newQuery) => {
-
-    if (newQuery.ordernum === '') { delete newQuery.ordernum; }
-    if (newQuery.orderemail === '') { delete newQuery.orderemail; }
-    if (newQuery.orderitem === '') { delete newQuery.orderitem; }
-    if (newQuery.category === '') { delete newQuery.category }
+    if (newQuery.ordernum === "") {
+      delete newQuery.ordernum;
+    }
+    if (newQuery.orderemail === "") {
+      delete newQuery.orderemail;
+    }
+    if (newQuery.orderitem === "") {
+      delete newQuery.orderitem;
+    }
+    if (newQuery.category === "") {
+      delete newQuery.category;
+    }
 
     const params = new URLSearchParams(newQuery);
 
     navigate("?" + params.toString());
   };
 
-  // 페이지 진입 시 query 초기화
   useEffect(() => {
     setSearchQuery({
       page: 1,
@@ -71,12 +76,12 @@ const AdminPaymentPage = () => {
   };
 
   const filteredPayments = orderList.filter((payment) => {
-    if (selectedCategory === "All") return true; // "All" 선택 시 모든 상품 표시
+    if (selectedCategory === "All") return true;
     if (selectedCategory === "고양이")
       return payment.productCategory[0] === "Cat";
     if (selectedCategory === "배경지")
       return payment.productCategory[0] === "BG_IMG";
-    return false; // 기본적으로 필터링 조건에 맞지 않으면 제외
+    return false;
   });
 
   const handleCategoryChange = (e) => {
@@ -85,32 +90,27 @@ const AdminPaymentPage = () => {
     const updatedQuery = { ...searchQuery, page: 1 };
 
     if (e.target.value === "All") {
-      updatedQuery.category = ""
+      updatedQuery.category = "";
     } else {
       if (e.target.value === "고양이") {
-        updatedQuery.category = "Cat"
-      }
-      else {
-        updatedQuery.category = "BG_IMG"
+        updatedQuery.category = "Cat";
+      } else {
+        updatedQuery.category = "BG_IMG";
       }
     }
 
     setSearchQuery(updatedQuery);
     updateQueryParams(updatedQuery);
-  }
+  };
 
   const handleSearchTypeChange = (e) => {
     setSelectedSearchType(e.target.value);
     setSearchParam("");
-
     const updatedQuery = { ...searchQuery, page: 1 };
-
     if (e.target.value === "All") {
-
       updatedQuery.ordernum = "";
       updatedQuery.orderemail = "";
-      updatedQuery.orderitem = ""
-      
+      updatedQuery.orderitem = "";
     }
 
     setSearchQuery(updatedQuery);
@@ -122,9 +122,7 @@ const AdminPaymentPage = () => {
   };
 
   const handleSearchClick = () => {
-
     const updatedQuery = { ...searchQuery, page: 1 };
-
     if (selectedSearchType === "User Email") {
       updatedQuery.orderemail = searchParam;
       updatedQuery.orderitem = "";
@@ -136,7 +134,7 @@ const AdminPaymentPage = () => {
     } else if (selectedSearchType === "Order Num") {
       updatedQuery.ordernum = searchParam;
       updatedQuery.orderemail = "";
-      updatedQuery.orderitem = ""
+      updatedQuery.orderitem = "";
     } else {
       updatedQuery.orderemail = "";
       updatedQuery.orderitem = "";
@@ -145,7 +143,6 @@ const AdminPaymentPage = () => {
 
     setSearchQuery(updatedQuery);
     updateQueryParams(updatedQuery);
-
   };
 
   return (
@@ -158,8 +155,14 @@ const AdminPaymentPage = () => {
           </Col>
 
           <Col md={6} className="d-flex align-items-center mb-3">
-            <span className="me-2" style={{ flexBasis: '15%' }}>Category:</span>
-            <Form.Group controlId="categorySelect" className="mb-0" style={{ flexBasis: '55%' }}>
+            <span className="me-2" style={{ flexBasis: "15%" }}>
+              Category:
+            </span>
+            <Form.Group
+              controlId="categorySelect"
+              className="mb-0"
+              style={{ flexBasis: "55%" }}
+            >
               <Form.Select
                 value={selectedCategory}
                 onChange={handleCategoryChange}
@@ -172,8 +175,14 @@ const AdminPaymentPage = () => {
           </Col>
 
           <Col md={12} className="d-flex align-items-center mb-3">
-            <span className="me-2" style={{ flexBasis: '3%' }}>Search:</span>
-            <Form.Group controlId="searchType" className="mb-0" style={{ flexBasis: '29%' }}>
+            <span className="me-2" style={{ flexBasis: "3%" }}>
+              Search:
+            </span>
+            <Form.Group
+              controlId="searchType"
+              className="mb-0"
+              style={{ flexBasis: "29%" }}
+            >
               <Form.Select
                 value={selectedSearchType}
                 onChange={handleSearchTypeChange}
@@ -200,9 +209,7 @@ const AdminPaymentPage = () => {
                 </Col>
               </>
             )}
-
           </Col>
-
         </Row>
 
         {loading ? (
@@ -216,10 +223,7 @@ const AdminPaymentPage = () => {
             <AdminPaymentTable className="unser-line" />
             {filteredPayments && filteredPayments.length > 0 ? (
               filteredPayments.map((payment) => (
-                <AdminPaymentCard
-                  key={payment._id}
-                  payment={payment} // 개별 `product` 객체를 `ProductCard`에 전달
-                />
+                <AdminPaymentCard key={payment._id} payment={payment} />
               ))
             ) : (
               <div className="text-center">

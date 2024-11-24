@@ -63,11 +63,25 @@ const DiaryFormPage = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === "selectedDate") {
+      const today = new Date().toISOString().split("T")[0];
+      if (value > today) {
+        alert("미래 날짜는 선택할 수 없습니다.");
+        return;
+      }
+    }
     setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    const today = new Date().toISOString().split("T")[0];
+    if (formValues.selectedDate > today) {
+      alert("미래 날짜는 선택할 수 없습니다. 날짜를 다시 선택해주세요.");
+      return;
+    }
+
     setModalMessage(
       diaryId
         ? "해당 내용으로 다이어리를 수정하시겠습니까?"
@@ -127,7 +141,7 @@ const DiaryFormPage = () => {
           </h1>
           <Form onSubmit={handleSubmit}>
             <Row className="mb-3">
-              <Col md={6}>
+              <Col md={6} className="diary-form__group--responsive">
                 <Form.Group controlId="selectedDate">
                   <Form.Label>Date</Form.Label>
                   <Form.Control

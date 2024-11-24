@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form } from "react-bootstrap";
-import { useNavigate } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import "./style/paymentInfoModal.style.css";
 import { cc_expires_format } from "../../../../utils/number";
@@ -16,7 +15,7 @@ import { useMediaQuery } from "react-responsive";
 const PaymentInfoModal = ({ onClose }) => {
   const dispatch = useDispatch();
   const selectedProduct = useSelector((state) => state.product.selectedProduct);
-  const { orderUserId, loading } = useSelector((state) => state.order);
+  const { loading } = useSelector((state) => state.order);
   const user = useSelector((state) => state.user.user);
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
@@ -38,8 +37,6 @@ const PaymentInfoModal = ({ onClose }) => {
 
   const [phoneValidationMessage, setPhoneValidationMessage] = useState("");
   const [emailValidationMessage, setEmailValidationMessage] = useState("");
-
-  const navigate = useNavigate();
 
   const validatePhoneNumber = (phone) => {
     const phoneRegex = /^010-\d{4}-\d{4}$/;
@@ -125,18 +122,21 @@ const PaymentInfoModal = ({ onClose }) => {
   };
 
   const PaymentInfoContent = (
-    <div className="modal-backdrop payment-info-mobile" onClick={handleBackdropClick}>
+    <div
+      className="modal-backdrop payment-info-mobile"
+      onClick={handleBackdropClick}
+    >
       {showModal && (
-          <CustomModal
-            message={modalContent}
-            redirectTo="/chatbot"
-            onClose={() => {
-              setShowModal(false);  
-              onClose();            
-            }}
-            showCancelButton={false} 
-          />
-        )}
+        <CustomModal
+          message={modalContent}
+          redirectTo="/chatbot"
+          onClose={() => {
+            setShowModal(false);
+            onClose();
+          }}
+          showCancelButton={false}
+        />
+      )}
       {loading ? (
         <div className="text-align-center">
           <LoadingSpinner animation="border" role="status">
@@ -168,7 +168,6 @@ const PaymentInfoModal = ({ onClose }) => {
                   </Row>
                 </div>
               </div>
-
             ) : (
               <p>상품 정보를 불러올 수 없습니다.</p>
             )}
@@ -182,14 +181,16 @@ const PaymentInfoModal = ({ onClose }) => {
                   <Row>
                     <Col lg={2} xs="auto">
                       <Form.Label className="no-h">이름</Form.Label>
-                      <Form.Label className="yes-h"><i class="ri-user-line"></i></Form.Label>
+                      <Form.Label className="yes-h">
+                        <i class="ri-user-line"></i>
+                      </Form.Label>
                     </Col>
                     <Col>
                       <Form.Control
                         className="input-box"
                         type="text"
                         name="name"
-                        value={orderPersonInfo.name} 
+                        value={orderPersonInfo.name}
                         onChange={handleFormChange}
                         required
                       />
@@ -203,7 +204,9 @@ const PaymentInfoModal = ({ onClose }) => {
                   <Row>
                     <Col lg={2} xs="auto">
                       <Form.Label className="no-h">이메일</Form.Label>
-                      <Form.Label className="yes-h"><i class="ri-mail-line"></i></Form.Label>
+                      <Form.Label className="yes-h">
+                        <i class="ri-mail-line"></i>
+                      </Form.Label>
                     </Col>
                     <Col>
                       <Form.Control
@@ -221,8 +224,8 @@ const PaymentInfoModal = ({ onClose }) => {
                             color: emailValidationMessage.includes("적합")
                               ? "#A9B388"
                               : "red",
-                            textAlign: "left", 
-                            display: "block", 
+                            textAlign: "left",
+                            display: "block",
                             marginTop: "0.5rem",
                           }}
                         >
@@ -239,8 +242,9 @@ const PaymentInfoModal = ({ onClose }) => {
                   <Row>
                     <Col lg={2} xs="auto">
                       <Form.Label className="no-h">전화번호</Form.Label>
-                      <Form.Label className="yes-h"><i class="ri-phone-line"></i></Form.Label>
-
+                      <Form.Label className="yes-h">
+                        <i class="ri-phone-line"></i>
+                      </Form.Label>
                     </Col>
                     <Col>
                       <Form.Control
@@ -258,9 +262,9 @@ const PaymentInfoModal = ({ onClose }) => {
                             color: phoneValidationMessage.includes("적합")
                               ? "#A9B388"
                               : "red",
-                            textAlign: "left", 
-                            display: "block", 
-                            marginTop: "0.5rem", 
+                            textAlign: "left",
+                            display: "block",
+                            marginTop: "0.5rem",
                           }}
                         >
                           {phoneValidationMessage}

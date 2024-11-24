@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Container, Col, Row } from "react-bootstrap";
-import CommentForm from "./CommentForm";
-import "../style/comment.style.css"
+import "../style/comment.style.css";
 
 const CommentReply = ({ comment }) => {
-  const [lastReplyId, setLastReplyId] = useState(null); 
+  const [lastReplyId, setLastReplyId] = useState(null);
 
   const findLastReplyId = (replies) => {
     if (!replies || replies.length === 0) return null;
@@ -14,7 +13,7 @@ const CommentReply = ({ comment }) => {
       lastId = reply._id;
       if (reply.replies && reply.replies.length > 0) {
         const nestedLastId = findLastReplyId(reply.replies);
-        if (nestedLastId) lastId = nestedLastId; 
+        if (nestedLastId) lastId = nestedLastId;
       }
     });
 
@@ -24,7 +23,7 @@ const CommentReply = ({ comment }) => {
   useEffect(() => {
     if (comment.replies && comment.replies.length > 0) {
       const deepestLastReplyId = findLastReplyId(comment.replies);
-      setLastReplyId(deepestLastReplyId); 
+      setLastReplyId(deepestLastReplyId);
     }
   }, [comment.replies]);
 
@@ -35,15 +34,15 @@ const CommentReply = ({ comment }) => {
           <Row key={nestedReply._id} className="comment__reply-style">
             <Col>
               <div>
-                <span className="comment__reply-name">  
-                {nestedReply.userId?.name ||
-                  nestedReply.chatbotId?.name ||
-                  "Anonymous"}
+                <span className="comment__reply-name">
+                  {nestedReply.userId?.name ||
+                    nestedReply.chatbotId?.name ||
+                    "Anonymous"}
                 </span>
                 {": "}
                 {nestedReply.content || "No content provided"}
               </div>
-              {renderReplies(nestedReply.replies)} 
+              {renderReplies(nestedReply.replies)}
             </Col>
           </Row>
         ))}
@@ -52,8 +51,8 @@ const CommentReply = ({ comment }) => {
   };
 
   return (
-    <div  >
-      <Container >
+    <div>
+      <Container>
         {comment.replies && comment.replies.length > 0 ? (
           comment.replies.map((reply) => (
             <Row key={reply._id} className="comment__reply-style">
@@ -65,16 +64,14 @@ const CommentReply = ({ comment }) => {
                   {" : "}
                   <span>{reply.content || "No content provided"}</span>
                 </div>
-               
-                {renderReplies(reply.replies)} 
+                {renderReplies(reply.replies)}
               </Col>
             </Row>
           ))
         ) : (
           <div> 답글을 작성 해 주세요!</div>
         )}
-        </Container>
-
+      </Container>
     </div>
   );
 };

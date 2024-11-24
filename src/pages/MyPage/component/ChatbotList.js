@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Row, Col, Badge } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import "../style/chatbotList.style.css";
 import Button2 from "../../../common/components/Button2";
 import ChatbotCreation from "../../ChatbotPage/ChatbotPage";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { updateChatbotJins } from "../../../features/chatbot/chatbotSlice";
 import CustomModal from "../../../common/components/CustomModal";
 
