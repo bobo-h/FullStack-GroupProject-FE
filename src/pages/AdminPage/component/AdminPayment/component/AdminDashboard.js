@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import api from "../../../../../utils/api";
+import Chart from "chart.js/auto";
 import LoadingSpinner from "../../../../../common/components/LoadingSpinner";
 
 const AdminDashboard = ({ showModal }) => {
@@ -44,6 +45,27 @@ const AdminDashboard = ({ showModal }) => {
   };
 
   useEffect(() => {
+    if (showModal) {
+      fetchProductSales();
+      fetchDailySales();
+    }
+  }, [showModal]);
+
+  useEffect(() => {
+    const productSalesChart = {
+      labels: salesData.map((item) => item.productName),
+      datasets: [
+        {
+          label: "판매 금액",
+          data: salesData.map((item) => item.totalSales),
+          backgroundColor: "#5f5f5f",
+          borderColor: "#5f5f5f",
+          borderWidth: 1,
+          yAxisID: "y1",
+        },
+      ],
+    };
+
     if (showModal) {
       fetchProductSales();
       fetchDailySales();
