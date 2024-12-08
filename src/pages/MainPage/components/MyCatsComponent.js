@@ -51,7 +51,7 @@ function MyCatsComponent() {
   const debouncedUpdate = debounce(updateSize, 300);
 
   useEffect(() => {
-    updateSize();
+    debouncedUpdate();
 
     window.addEventListener("resize", debouncedUpdate);
 
@@ -72,12 +72,12 @@ function MyCatsComponent() {
       catToUpdate.defaultPosition.x === newXY.x &&
       catToUpdate.defaultPosition.y === newXY.y
     ) {
-      console.log("위치가 동일하므로 업데이트하지 않음");
+      // console.log("위치가 동일하므로 업데이트하지 않음");
       return;
     }
 
     try {
-      console.log("화면 사이즈", size.width);
+      // console.log("화면 사이즈", size.width);
       await dispatch(
         updateChatbotJins({
           id,
@@ -181,6 +181,7 @@ function DraggableCat({
 
   const handleStart = () => {
     setLocalLoading(true);
+    lastRequestRef.current = Symbol("dragging");
   };
 
   const handleDragStopLoading = async (data) => {
