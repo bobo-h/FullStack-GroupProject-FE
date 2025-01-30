@@ -1,0 +1,60 @@
+.register-area {
+  max-width: 550px !important;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+
+  flex-direction: column;
+  .register-area__title {
+    text-align: center;
+  }
+  .form-group {
+    display: flex !important;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .email-form-style,
+  .name-form-style,
+  .birthday-form-style,
+  .password-form-style,
+  .confirmpassword-form-style {
+    border: 1px solid #ccc;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+  }
+
+  .form-label {
+    text-align: left;
+    font-weight: bolder;
+    margin-bottom: 5px;
+    color: gray;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    order: 1px solid #ccc;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    margin-bottom: 20px;
+  }
+
+  .form-check-label {
+    text-align: left;
+    font-weight: normal;
+    margin-left: 10px;
+    margin-bottom: 20px;
+  }
+
+  .register__button {
+    background-color: var(--primary-color-deepGreen);
+    border: var(--primary-color-deepGreen);
+  }
+}

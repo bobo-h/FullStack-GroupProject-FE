@@ -1,0 +1,53 @@
+.user-info-page {
+  .profile-image-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .upload-image-style {
+    margin-bottom: 5px;
+  }
+  .form-label-container {
+    text-align: center;
+    font-weight: bolder;
+    color: var(--primary-color-deepGreen);
+  }
+  .label-item-style {
+    color: var(--primary-color-deepGreen);
+    font-weight: bolder;
+    width: 60px;
+  }
+  .userInfo-form-style {
+    margin-top: 30px;
+    padding-left: 20px;
+  }
+  .form-item-style {
+    border: 1px solid #ccc;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    background-color: var(--primary-color-ivory);
+    width: 240px;
+  }
+  .userInfo-form__btnList {
+    width: 300px;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 30px;
+  }
+  .userInfo-form__btn__modify {
+    margin-right: 6px;
+  }
+
+  @media (max-width: 768px) {
+    .userInfo-form-style {
+      margin-top: 30px;
+      padding-left: 50px;
+    }
+    .userInfo-form__btnList {
+      display: flex;
+      justify-content: flex-start;
+    }
+  }
+}

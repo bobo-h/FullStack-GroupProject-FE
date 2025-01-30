@@ -1,0 +1,18 @@
+.chatbot-list-area {
+  margin-top: 50px;
+  max-width: 800px;
+  .chatbot-list__title {
+    margin-bottom: 30px;
+  }
+  .chatbot-list__userinfo {
+    margin-bottom: 60px;
+  }
+  .chatbot-list__btn-list {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: px;
+  }
+  .btn__selected-delete {
+    margin-right: 6px;
+  }
+}

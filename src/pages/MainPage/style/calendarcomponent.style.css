@@ -1,0 +1,124 @@
+.cat-calendar-container {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  width: 650px;
+  height: 650px;
+  background-color: var(--primary-color-ivory);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 0px 0px 20px 7px rgba(0, 0, 0, 0.4);
+  z-index: 31;
+}
+
+.fc {
+  width: 600px;
+  height: 600px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.fc-daygrid-day {
+  width: 80px !important;
+  height: 80px !important;
+  overflow: hidden;
+}
+
+.date-text {
+  color: var(--primary-color-brown);
+}
+
+.fc-col-header-cell-cushion {
+  color: black;
+  text-decoration: none;
+}
+
+.fc-col-header-cell {
+  background-color: var(--primary-color-brown);
+}
+
+.fc-button.fc-today-button,
+.fc-button.fc-prev-button,
+.fc-button.fc-next-button {
+  background-color: var(--primary-color-deepGreen);
+  color: var(--primary-color-ivory);
+  border-color: var(--primary-color-deepGreen);
+}
+
+.fc-button.fc-today-button:disabled,
+.fc-button.fc-today-button:disabled.fc-button-primary:active,
+.fc-button.fc-today-button:disabled:hover {
+  background-color: var(--primary-color-deepGreen);
+  border-color: var(--primary-color-deepGreen);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.fc-button.fc-today-button:hover,
+.fc-button.fc-prev-button:hover,
+.fc-button.fc-next-button:hover {
+  background-color: var(--primary-color-deepGreen);
+  border-color: var(--primary-color-deepGreen);
+  opacity: 0.6;
+}
+
+.fc-button.fc-today-button.fc-button-primary:active,
+.fc-button.fc-prev-button.fc-button-primary:active,
+.fc-button.fc-next-button.fc-button-primary:active {
+  background-color: var(--primary-color-deepGreen);
+  border-color: var(--primary-color-deepGreen);
+  opacity: 1;
+}
+
+.day-cell-content {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+.date-text {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.paw-mark {
+  display: block;
+  width: 55px;
+  height: 55px;
+  margin: 0 auto;
+  position: absolute;
+  top: 20px;
+  right: 11px;
+  object-fit: contain;
+  transform-origin: center;
+}
+
+@media (max-width: 700px) {
+  .cat-calendar-container {
+    width: 390px;
+    height: 600px;
+    top: 70px;
+    right: 0;
+  }
+
+  .fc {
+    width: 380px;
+    height: 550px;
+    max-width: 100%;
+  }
+
+  .fc-daygrid-day {
+    width: 30px !important;
+    height: 75px !important;
+  }
+
+  .paw-mark {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    position: absolute;
+    top: 20px;
+    right: -2.5px;
+  }
+}

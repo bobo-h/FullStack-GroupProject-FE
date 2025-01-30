@@ -1,0 +1,19 @@
+.diaries-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  margin: 20px 50px;
+}
+
+@media (max-width: 768px) {
+  .diaries-page {
+    margin: 15px 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .diaries-page {
+    margin: 10px 15px;
+  }
+}

@@ -1,0 +1,79 @@
+.admin-user-page {
+  .admin-user-page__btn {
+    font-size: 15px;
+    padding: 5px 10px;
+  }
+  .total-user-num {
+    text-align: end;
+    margin-top: 10px;
+    padding-right: 25px;
+    font-weight: bolder;
+  }
+  .user-table-name {
+    margin-top: 3%;
+    margin-bottom: 2%;
+    padding: 1%;
+  }
+
+  .user-table-name .user-table-content.container {
+    border-radius: 10px; 
+  }
+
+  .user-table-name .user-table-content .row {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .user-table-name .user-table-content .col {
+    display: flex;
+    align-items: center;
+    align-items: center;
+  }
+
+  .table-area {
+    margin-top: 3%;
+    background-color: #fff;
+    border-radius: 20px;
+  }
+
+  .user-table-name {
+    border-bottom: 2px solid #000;
+  }
+
+  
+  .nav-tabs .nav-link {
+    color: gray; 
+  }
+
+ 
+  .nav-tabs .nav-link.active {
+    color: black; 
+    font-weight: bold; 
+  }
+
+  
+  .nav-tabs .nav-link:hover {
+    color: darkgray; 
+  }
+
+  @media (max-width: 770px) {
+    .user-table-content__btn {
+      font-size: 12px;
+      padding: 5px 10px;
+    }
+    .email {
+      max-width: 100px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+.modal-content {
+  font-family: "HakgyoansimBunpilR";
+}
+
+.form-check-input:checked {
+  background-color: var(--primary-color-deepGreen);
+  border-color: var(--primary-color-deepGreen);
+}

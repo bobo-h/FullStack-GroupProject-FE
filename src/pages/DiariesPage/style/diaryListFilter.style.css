@@ -1,0 +1,128 @@
+.diary-filter-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-left: auto;
+  gap: 30px;
+  padding-right: 20px;
+}
+
+.diary-filter__new-entry {
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.diary-filter__new-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.diary-filter {
+  position: relative;
+  width: fit-content;
+}
+
+.diary-filter__label {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  cursor: pointer;
+  user-select: none;
+  color: #333;
+  background: transparent;
+}
+
+.diary-filter__label--disabled {
+  cursor: not-allowed;
+  color: #ccc;
+}
+
+.diary-filter__label span {
+  margin-right: 5px;
+}
+
+.diary-filter__icon {
+  width: 12px;
+  height: 12px;
+  fill: #333;
+}
+
+.diary-filter__list {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1000;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.diary-filter__item {
+  padding: 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.diary-filter__item:hover {
+  background-color: #f0f0f0;
+}
+
+@media (max-width: 768px) {
+  .diary-filter-container {
+    gap: 20px;
+    padding-right: 10px;
+  }
+
+  .diary-filter__label {
+    font-size: 14px;
+  }
+
+  .diary-filter__item {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .diary-filter__icon {
+    width: 10px;
+    height: 10px;
+  }
+
+  .diary-filter__new-icon {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .diary-filter-container {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    padding-right: 10px;
+  }
+
+  .diary-filter__label {
+    font-size: 16px;
+  }
+
+  .diary-filter__item {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .diary-filter__icon {
+    width: 12px;
+    height: 12px;
+  }
+
+  .diary-filter__new-icon {
+    width: 16px;
+    height: 16px;
+  }
+}

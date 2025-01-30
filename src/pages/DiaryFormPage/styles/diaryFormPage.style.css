@@ -1,0 +1,23 @@
+.diary-form__img-box {
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+}
+
+.diary-form__btn-box {
+  display: flex;
+  justify-content: end;
+}
+
+.diary-form__btn__img-remove {
+  width: 90px;
+  margin-left: 10px;
+  font-size: 14px;
+  padding: 5px 10px;
+}
+
+@media (max-width: 768px) {
+  .diary-form__group--responsive {
+    margin-bottom: 20px;
+  }
+}

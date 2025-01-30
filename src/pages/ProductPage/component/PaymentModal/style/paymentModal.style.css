@@ -1,0 +1,75 @@
+.payment-card-area{
+    border-radius: 8px;
+    padding: 3%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    margin: 1%;
+
+    .product-card{
+        margin-bottom: 5%;
+    }
+
+    .payment-modal-title {
+        font-size: 3vh;
+        margin-bottom: 3%; 
+        text-align: center; 
+    }
+
+    .payment-modal-area{
+      margin-top: 3%;
+    }
+
+      .cat-id {
+        font-size: 20px;
+        margin-bottom: 8px;
+        padding-bottom: 5%;
+      }
+      
+      .image-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      }
+      
+      .image {
+        width: 70%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .name {
+        font-weight: bold;
+        margin-bottom: 3%;
+      }
+      
+      .description {
+        margin-bottom: 3%;
+      }
+      
+      .price {
+        font-size: 16px;
+      }
+
+      .text-left {
+        text-align: left;
+      }
+      
+}
+
+@media (min-width: 1500px) {
+  .modal-backdrop {
+      .payment-modal-backdrop {
+          width: 65%;
+      }
+  }
+}
+@media (max-width: 375px) {
+  .payment-product-card {
+      width: 30%;
+  }
+  .text-left {
+    font-size:0.9rem;
+  }
+}
